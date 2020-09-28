@@ -10,14 +10,14 @@ import org.exponential.superclasses.UnitTester;
 public class WobbleGoalPlacerTester extends LinearOpMode implements UnitTester {
     WobbleGoalPlacer wobbleGoalPlacer;
     @Override
-    public void runTests() {
-
-    }
-
-    @Override
     public void runOpMode() throws InterruptedException {
         wobbleGoalPlacer = new WobbleGoalPlacer();
         wobbleGoalPlacer.initialize();
         runTests();
+    }
+
+    @Override
+    public void runTests() {
+
     }
 }

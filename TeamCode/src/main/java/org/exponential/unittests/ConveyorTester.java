@@ -10,14 +10,14 @@ import org.exponential.superclasses.UnitTester;
 public class ConveyorTester extends LinearOpMode implements UnitTester {
     Conveyor conveyor;
     @Override
-    public void runTests() {
-
-    }
-
-    @Override
     public void runOpMode() throws InterruptedException {
         conveyor = new Conveyor();
         conveyor.initialize();
         runTests();
+    }
+
+    @Override
+    public void runTests() {
+
     }
 }

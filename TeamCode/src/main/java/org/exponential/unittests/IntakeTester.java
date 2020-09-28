@@ -10,14 +10,14 @@ import org.exponential.superclasses.UnitTester;
 public class IntakeTester extends LinearOpMode implements UnitTester {
     Intake intake;
     @Override
-    public void runTests() {
-
-    }
-
-    @Override
     public void runOpMode() throws InterruptedException {
         intake = new Intake();
         intake.initialize();
         runTests();
+    }
+
+    @Override
+    public void runTests() {
+
     }
 }

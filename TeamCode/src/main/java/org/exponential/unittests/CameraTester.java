@@ -10,14 +10,14 @@ import org.exponential.superclasses.UnitTester;
 public class CameraTester extends LinearOpMode implements UnitTester {
     Camera camera;
     @Override
-    public void runTests() {
-
-    }
-
-    @Override
     public void runOpMode() throws InterruptedException {
         camera = new Camera();
         camera.initialize();
         runTests();
+    }
+
+    @Override
+    public void runTests() {
+
     }
 }

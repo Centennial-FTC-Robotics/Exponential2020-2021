@@ -10,14 +10,14 @@ import org.exponential.superclasses.UnitTester;
 public class DrivetrainTester extends LinearOpMode implements UnitTester {
     Drivetrain drivetrain;
     @Override
-    public void runTests() {
-
-    }
-
-    @Override
     public void runOpMode() throws InterruptedException {
         drivetrain = new Drivetrain();
         drivetrain.initialize();
         runTests();
+    }
+
+    @Override
+    public void runTests() {
+
     }
 }

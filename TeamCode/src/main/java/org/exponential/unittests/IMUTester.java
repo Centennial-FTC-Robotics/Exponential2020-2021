@@ -10,14 +10,14 @@ import org.exponential.superclasses.UnitTester;
 public class IMUTester extends LinearOpMode implements UnitTester {
     IMU imu;
     @Override
-    public void runTests() {
-
-    }
-
-    @Override
     public void runOpMode() throws InterruptedException {
         imu = new IMU();
         imu.initialize();
         runTests();
+    }
+
+    @Override
+    public void runTests() {
+
     }
 }

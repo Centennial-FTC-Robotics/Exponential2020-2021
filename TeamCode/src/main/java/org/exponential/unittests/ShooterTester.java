@@ -10,14 +10,14 @@ import org.exponential.superclasses.UnitTester;
 public class ShooterTester extends LinearOpMode implements UnitTester {
     Shooter shooter;
     @Override
-    public void runTests() {
-
-    }
-
-    @Override
     public void runOpMode() throws InterruptedException {
         shooter = new Shooter();
         shooter.initialize();
         runTests();
+    }
+
+    @Override
+    public void runTests() {
+
     }
 }

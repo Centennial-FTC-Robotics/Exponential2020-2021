@@ -25,7 +25,8 @@ public class BasicTeleOp extends LinearOpMode {
         powers.put("frontRight", x + y - rotate);
         powers.put("backRight", -x + y - rotate);
 
-        double maxPower = Math.max(Math.max(Math.max(powers.get("frontLeft"), powers.get("backLeft")), powers.get("frontRight")), powers.get("backRight"));
+        double maxPower = Math.max(Math.max(Math.max(Math.abs(powers.get("frontLeft")),
+                Math.abs(powers.get("backLeft"))), Math.abs(powers.get("frontRight"))), Math.abs(powers.get("backRight")));
         if (maxPower > 1) {
             for (Map.Entry<String, Double> mapElement : powers.entrySet()) {
                 powers.put(mapElement.getKey(), mapElement.getValue() / maxPower);

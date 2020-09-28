@@ -1,5 +1,5 @@
 package org.exponential.superclasses;
 
-public interface Robot {
+public interface Mechanism {
     public abstract void initialize();
 }

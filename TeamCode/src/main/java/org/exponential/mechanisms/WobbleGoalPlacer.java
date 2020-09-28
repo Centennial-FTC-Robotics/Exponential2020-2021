@@ -1,10 +1,12 @@
 package org.exponential.mechanisms;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
 import org.exponential.superclasses.Mechanism;
 
 public class WobbleGoalPlacer implements Mechanism {
     @Override
-    public void initialize() {
+    public void initialize(LinearOpMode opMode) {
 
     }
 }

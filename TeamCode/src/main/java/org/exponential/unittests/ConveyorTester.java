@@ -12,7 +12,7 @@ public class ConveyorTester extends LinearOpMode implements UnitTester {
     @Override
     public void runOpMode() throws InterruptedException {
         conveyor = new Conveyor();
-        conveyor.initialize();
+        conveyor.initialize(this);
         runTests();
     }
 

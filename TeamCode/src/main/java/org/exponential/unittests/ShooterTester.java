@@ -12,7 +12,7 @@ public class ShooterTester extends LinearOpMode implements UnitTester {
     @Override
     public void runOpMode() throws InterruptedException {
         shooter = new Shooter();
-        shooter.initialize();
+        shooter.initialize(this);
         runTests();
     }
 

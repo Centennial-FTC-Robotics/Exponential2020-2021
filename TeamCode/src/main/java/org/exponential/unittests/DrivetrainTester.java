@@ -12,7 +12,7 @@ public class DrivetrainTester extends LinearOpMode implements UnitTester {
     @Override
     public void runOpMode() throws InterruptedException {
         drivetrain = new Drivetrain();
-        drivetrain.initialize();
+        drivetrain.initialize(this);
         runTests();
     }
 

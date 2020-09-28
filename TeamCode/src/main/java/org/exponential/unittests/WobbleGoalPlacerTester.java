@@ -12,7 +12,7 @@ public class WobbleGoalPlacerTester extends LinearOpMode implements UnitTester {
     @Override
     public void runOpMode() throws InterruptedException {
         wobbleGoalPlacer = new WobbleGoalPlacer();
-        wobbleGoalPlacer.initialize();
+        wobbleGoalPlacer.initialize(this);
         runTests();
     }
 

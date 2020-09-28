@@ -12,7 +12,7 @@ public class CameraTester extends LinearOpMode implements UnitTester {
     @Override
     public void runOpMode() throws InterruptedException {
         camera = new Camera();
-        camera.initialize();
+        camera.initialize(this);
         runTests();
     }
 

@@ -12,7 +12,7 @@ public class IMUTester extends LinearOpMode implements UnitTester {
     @Override
     public void runOpMode() throws InterruptedException {
         imu = new IMU();
-        imu.initialize();
+        imu.initialize(this);
         runTests();
     }
 

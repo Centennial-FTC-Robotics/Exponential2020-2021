@@ -12,7 +12,7 @@ public class IntakeTester extends LinearOpMode implements UnitTester {
     @Override
     public void runOpMode() throws InterruptedException {
         intake = new Intake();
-        intake.initialize();
+        intake.initialize(this);
         runTests();
     }
 

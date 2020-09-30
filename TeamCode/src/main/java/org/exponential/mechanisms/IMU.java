@@ -27,8 +27,8 @@ public class IMU implements Mechanism {
     }
 
 
-    private double normalize(double angle){
-        // returns the angle equivalent to the input angle but between -180 and 180
+    public static double normalize(double angle){
+        // returns the angle geometrically equivalent to the input angle but between -180 and 180
         angle = angle % 360;
         if(angle > 180){
             angle-=360;
@@ -45,6 +45,4 @@ public class IMU implements Mechanism {
         angle += normalize(newAngle-lastIMUReading);
         lastIMUReading = newAngle;
     }
-
-
 }

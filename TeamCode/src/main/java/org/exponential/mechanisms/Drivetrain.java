@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.exponential.superclasses.Mechanism;
 
@@ -11,7 +12,7 @@ import java.util.HashMap;
 
 public class Drivetrain implements Mechanism {
 
-    class Odometry {
+    class Odometry implements Runnable{
         DcMotorEx forwardLeftEnc;
         DcMotorEx forwardRightEnc;
         DcMotorEx horizontalEnc;
@@ -22,6 +23,23 @@ public class Drivetrain implements Mechanism {
             this.forwardRightEnc = forwardRightEnc;
             this.horizontalEnc = horizontalEnc;
         }
+
+        @Override
+        public void run() {
+            ElapsedTime timer = new ElapsedTime();
+            while(opMode.opModeIsActive()){
+                update(timer.seconds());
+                timer.reset();
+            }
+        }
+
+        public void update(double timeElapsed){
+            // updates position, velocity, and angle according to how much time has elapsed
+
+
+
+
+        }
     }
 
     DcMotorEx frontLeft;
@@ -29,6 +47,8 @@ public class Drivetrain implements Mechanism {
     DcMotorEx frontRight;
     DcMotorEx backRight;
     IMU imu;
+    LinearOpMode opMode;
+
     public void initialize(LinearOpMode opMode) {
         frontLeft = opMode.hardwareMap.get(DcMotorEx.class, "frontLeft");
         backLeft = opMode.hardwareMap.get(DcMotorEx.class, "backLeft");
@@ -47,7 +67,7 @@ public class Drivetrain implements Mechanism {
         imu = new IMU();
         imu.initialize(opMode);
 
-
+        this.opMode = opMode;
 
     }
 
@@ -56,7 +76,5 @@ public class Drivetrain implements Mechanism {
         backLeft.setPower(powers.get("backLeft"));
         frontRight.setPower(powers.get("frontRight"));
         backRight.setPower(powers.get("backRight"));
-
-        
     }
 }

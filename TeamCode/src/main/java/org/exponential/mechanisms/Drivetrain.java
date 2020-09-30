@@ -12,7 +12,7 @@ import java.util.HashMap;
 
 public class Drivetrain implements Mechanism {
 
-    class Odometry implements Runnable{
+    class Odometry implements Runnable {
         DcMotorEx forwardLeftEnc;
         DcMotorEx forwardRightEnc;
         DcMotorEx horizontalEnc;

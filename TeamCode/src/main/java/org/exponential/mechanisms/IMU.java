@@ -23,6 +23,7 @@ public class IMU implements Mechanism {
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
         imu.initialize(parameters);
         while (opMode.opModeIsActive()&&!imu.isGyroCalibrated()) ;
+        lastIMUReading = imu.getAngularOrientation().firstAngle;
     }
 
 
@@ -37,9 +38,12 @@ public class IMU implements Mechanism {
         }
         return angle;
     }
+
+    private double lastIMUReading;
     public void update(){
         double newAngle = imu.getAngularOrientation().firstAngle;
-        angle += normalize(newAngle-angle);
+        angle += normalize(newAngle-lastIMUReading);
+        lastIMUReading = newAngle;
     }
 
 

@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.exponential.robots.OurRobot;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,22 +12,26 @@ import java.util.Map;
 public class FieldCentricTeleOp extends LinearOpMode {
     private double initialAngle;
     private double currentAngle;
+    private OurRobot ourRobot;
 
     @Override
     public void runOpMode() throws InterruptedException {
+        ourRobot = new OurRobot();
+        ourRobot.initialize(this);
+
         initialAngle = getInitialAngle();
 
         while (opModeIsActive()) {
             currentAngle = getAngle();
 
-            double x = gamepad1.left_stick_x;
-            double y = -gamepad1.left_stick_y;
+            double inputX = gamepad1.left_stick_x;
+            double inputY = -gamepad1.left_stick_y;
 
             double theta = currentAngle - initialAngle;
-            double rotatedX = x * Math.cos(theta) - y * Math.sin(theta);
-            double rotatedY = x * Math.sin(theta) + y * Math.cos(theta);
+            double rotatedX = inputX * Math.cos(theta) - inputY * Math.sin(theta);
+            double rotatedY = inputX * Math.sin(theta) + inputY * Math.cos(theta);
 
-            getMotorPowers(rotatedX, rotatedY, gamepad1.right_stick_x);
+            ourRobot.drivetrain.setPowerDriveMotors(getMotorPowers(rotatedX, rotatedY, gamepad1.right_stick_x));
         }
     }
 

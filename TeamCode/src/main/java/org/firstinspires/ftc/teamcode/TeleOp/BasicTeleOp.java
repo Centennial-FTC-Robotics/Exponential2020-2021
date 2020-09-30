@@ -3,18 +3,24 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.exponential.robots.OurRobot;
+
 import java.util.HashMap;
 import java.util.Map;
 
 @TeleOp(name = "BasicTeleOp", group = "TeleOp")
 public class BasicTeleOp extends LinearOpMode {
+    private OurRobot ourRobot;
+
     @Override
     public void runOpMode() throws InterruptedException {
+        ourRobot = new OurRobot();
+        ourRobot.initialize(this);
         while (opModeIsActive()) {
             double x = gamepad1.left_stick_x;
             double y = -gamepad1.left_stick_y;
 
-            getMotorPowers(x, y, gamepad1.right_stick_x);
+            ourRobot.drivetrain.setPowerDriveMotors(getMotorPowers(x, y, gamepad1.right_stick_x));
         }
     }
 

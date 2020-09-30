@@ -6,16 +6,41 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import java.util.HashMap;
 import java.util.Map;
 
-@TeleOp(name = "BasicTeleOp", group = "TeleOp")
-public class BasicTeleOp extends LinearOpMode {
+@TeleOp(name = "FieldCentricTeleOp", group = "TeleOp")
+public class FieldCentricTeleOp extends LinearOpMode {
+    private double initialAngle;
+    private double currentAngle;
+
     @Override
     public void runOpMode() throws InterruptedException {
+        initialAngle = getInitialAngle();
+
         while (opModeIsActive()) {
+            currentAngle = getAngle();
+
             double x = gamepad1.left_stick_x;
             double y = -gamepad1.left_stick_y;
 
-            getMotorPowers(x, y, gamepad1.right_stick_x);
+            double theta = currentAngle - initialAngle;
+            double rotatedX = x * Math.cos(theta) - y * Math.sin(theta);
+            double rotatedY = x * Math.sin(theta) + y * Math.cos(theta);
+
+            getMotorPowers(rotatedX, rotatedY, gamepad1.right_stick_x);
         }
+    }
+
+    public double getAngle() {
+        return 90;
+    }
+
+    public double getInitialAngle() {
+        return 90;
+    }
+
+    public static double[] rotatePoint(double x, double y, double theta) {
+        double newX = x * Math.cos(theta) - y * Math.sin(theta);
+        double newY = x * Math.sin(theta) + y * Math.cos(theta);
+        return new double[]{newX, newY};
     }
 
     public HashMap<String, Double> getMotorPowers(double x, double y, double rotate) {

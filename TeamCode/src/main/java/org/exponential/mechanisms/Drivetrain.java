@@ -11,12 +11,12 @@ import org.exponential.superclasses.Mechanism;
 import java.util.HashMap;
 
 public class Drivetrain implements Mechanism {
-    private DcMotorEx frontLeft;
-    private DcMotorEx backLeft;
-    private DcMotorEx frontRight;
-    private DcMotorEx backRight;
-    private IMU imu;
-    private LinearOpMode opMode;
+    DcMotorEx frontLeft;
+    DcMotorEx backLeft;
+    DcMotorEx frontRight;
+    DcMotorEx backRight;
+    IMU imu;
+    LinearOpMode opMode;
 
     public void initialize(LinearOpMode opMode) {
         frontLeft = opMode.hardwareMap.get(DcMotorEx.class, "frontLeft");

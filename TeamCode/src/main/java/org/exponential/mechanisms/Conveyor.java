@@ -15,4 +15,8 @@ public class Conveyor implements Mechanism {
     public void setPower(double power) {
         conveyorMotor.setPower(power);
     }
+
+    public void moveOneRing() {
+        // assuming the conveyor will be able to move a distance equal to 1 ring
+    }
 }

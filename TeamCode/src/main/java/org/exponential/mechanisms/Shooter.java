@@ -15,4 +15,8 @@ public class Shooter implements Mechanism {
     public void setPower(double power) {
         shooterMotor.setPower(power);
     }
+
+    public void shoot() {
+        setPower(.5);
+    }
 }

@@ -17,6 +17,8 @@ public class Camera implements Mechanism {
     OpenCvCamera camera;
     LinearOpMode opMode;
 
+    int numRings;
+
     @Override
     public void initialize(LinearOpMode opMode) {
         this.opMode = opMode;
@@ -40,12 +42,11 @@ public class Camera implements Mechanism {
     }
 
     public int getNumberOfRings() {
-        return 0;
+        return numRings;
     }
 
     class Pipeline extends OpenCvPipeline {
         Mat matrix = new Mat();
-
         public Mat processFrame(Mat input){
 
 
@@ -53,6 +54,7 @@ public class Camera implements Mechanism {
             double brightnessAvg = 0;
 
             //For each segment
+            numRings = -1;
 
             return matrix;
         }

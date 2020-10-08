@@ -21,6 +21,8 @@ public abstract class UnitTester extends LinearOpMode {
             } else if (gamepad1.a) {
                 runTest(testIndex);
             }
+            telemetry.addData("testIndex", testIndex);
+            telemetry.update();
         }
     }
     public abstract void runTest(int index);

@@ -7,17 +7,17 @@ import org.exponential.mechanisms.Conveyor;
 import org.exponential.superclasses.UnitTester;
 
 @Autonomous(name="ConveyorTester", group="Autonomous")
-public class ConveyorTester extends LinearOpMode implements UnitTester {
+public class ConveyorTester extends UnitTester {
     Conveyor conveyor;
     @Override
     public void runOpMode() throws InterruptedException {
         conveyor = new Conveyor();
         conveyor.initialize(this);
-        runTests();
+        trackIndex(0, 5);
     }
 
     @Override
-    public void runTests() {
+    public void runTest(int index) {
 
     }
 }

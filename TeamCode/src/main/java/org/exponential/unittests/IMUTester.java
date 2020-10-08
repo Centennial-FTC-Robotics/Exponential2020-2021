@@ -7,17 +7,17 @@ import org.exponential.mechanisms.IMU;
 import org.exponential.superclasses.UnitTester;
 
 @Autonomous(name="IMUTester", group="Autonomous")
-public class IMUTester extends LinearOpMode implements UnitTester {
+public class IMUTester extends UnitTester {
     IMU imu;
     @Override
     public void runOpMode() throws InterruptedException {
         imu = new IMU();
         imu.initialize(this);
-        runTests();
+        trackIndex(0, 5);
     }
 
     @Override
-    public void runTests() {
+    public void runTest(int index) {
 
     }
 }

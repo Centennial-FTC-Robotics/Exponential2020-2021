@@ -7,17 +7,17 @@ import org.exponential.mechanisms.Shooter;
 import org.exponential.superclasses.UnitTester;
 
 @Autonomous(name="ShooterTester", group="Autonomous")
-public class ShooterTester extends LinearOpMode implements UnitTester {
+public class ShooterTester extends UnitTester {
     Shooter shooter;
     @Override
     public void runOpMode() throws InterruptedException {
         shooter = new Shooter();
         shooter.initialize(this);
-        runTests();
+        trackIndex(0, 5);
     }
 
     @Override
-    public void runTests() {
+    public void runTest(int index) {
 
     }
 }

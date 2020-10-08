@@ -7,17 +7,17 @@ import org.exponential.mechanisms.WobbleGoalPlacer;
 import org.exponential.superclasses.UnitTester;
 
 @Autonomous(name="WobbleGoalPlacerTester", group="Autonomous")
-public class WobbleGoalPlacerTester extends LinearOpMode implements UnitTester {
+public class WobbleGoalPlacerTester extends UnitTester {
     WobbleGoalPlacer wobbleGoalPlacer;
     @Override
     public void runOpMode() throws InterruptedException {
         wobbleGoalPlacer = new WobbleGoalPlacer();
         wobbleGoalPlacer.initialize(this);
-        runTests();
+        trackIndex(0, 5);
     }
 
     @Override
-    public void runTests() {
+    public void runTest(int index) {
 
     }
 }

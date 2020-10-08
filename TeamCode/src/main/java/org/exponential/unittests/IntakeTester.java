@@ -7,17 +7,17 @@ import org.exponential.mechanisms.Intake;
 import org.exponential.superclasses.UnitTester;
 
 @Autonomous(name="IntakeTester", group="Autonomous")
-public class IntakeTester extends LinearOpMode implements UnitTester {
+public class IntakeTester extends UnitTester {
     Intake intake;
     @Override
     public void runOpMode() throws InterruptedException {
         intake = new Intake();
         intake.initialize(this);
-        runTests();
+        trackIndex(0, 5);
     }
 
     @Override
-    public void runTests() {
+    public void runTest(int index) {
 
     }
 }

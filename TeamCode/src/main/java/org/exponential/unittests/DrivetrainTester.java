@@ -7,17 +7,17 @@ import org.exponential.mechanisms.Drivetrain;
 import org.exponential.superclasses.UnitTester;
 
 @Autonomous(name="DrivetrainTester", group="Autonomous")
-public class DrivetrainTester extends LinearOpMode implements UnitTester {
+public class DrivetrainTester extends UnitTester {
     Drivetrain drivetrain;
     @Override
     public void runOpMode() throws InterruptedException {
         drivetrain = new Drivetrain();
         drivetrain.initialize(this);
-        runTests();
+        trackIndex(0, 5);
     }
 
     @Override
-    public void runTests() {
+    public void runTest(int index) {
 
     }
 }

@@ -7,17 +7,17 @@ import org.exponential.mechanisms.Camera;
 import org.exponential.superclasses.UnitTester;
 
 @Autonomous(name="CameraTester", group="Autonomous")
-public class CameraTester extends LinearOpMode implements UnitTester {
+public class CameraTester extends UnitTester {
     Camera camera;
     @Override
     public void runOpMode() throws InterruptedException {
         camera = new Camera();
         camera.initialize(this);
-        runTests();
+        trackIndex(0, 5);
     }
 
     @Override
-    public void runTests() {
+    public void runTest(int index) {
 
     }
 }

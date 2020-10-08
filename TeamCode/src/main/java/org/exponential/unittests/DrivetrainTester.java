@@ -13,11 +13,21 @@ public class DrivetrainTester extends UnitTester {
     public void runOpMode() throws InterruptedException {
         drivetrain = new Drivetrain();
         drivetrain.initialize(this);
-        trackIndex(0, 5);
+        trackIndex(0, 0);
     }
 
     @Override
     public void runTest(int index) {
+        switch (index) {
+            case 0:
+                regularStrafing();
+                break;
+            default:
+                break;
+        }
+    }
 
+    public void regularStrafing() {
+        //TODO: add code when move method is made
     }
 }

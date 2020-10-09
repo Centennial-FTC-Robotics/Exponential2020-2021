@@ -13,7 +13,7 @@ public class DrivetrainTester extends UnitTester {
     public void runOpMode() throws InterruptedException {
         drivetrain = new Drivetrain();
         drivetrain.initialize(this);
-        trackIndex(0, 0);
+        trackIndex(0, 3);
     }
 
     @Override
@@ -21,13 +21,30 @@ public class DrivetrainTester extends UnitTester {
         switch (index) {
             case 0:
                 regularStrafing();
-                break;
+            case 1:
+                fieldCentricStrafing45Degrees();
+            case 2:
+                fieldCentricStrafing202Degrees();
+            case 3:
+                odometricTracking();
             default:
                 break;
         }
     }
 
     public void regularStrafing() {
-        //TODO: add code when move method is made
+
+    }
+
+    public void fieldCentricStrafing45Degrees() {
+
+    }
+
+    public void fieldCentricStrafing202Degrees() {
+
+    }
+
+    public void odometricTracking() {
+
     }
 }

@@ -30,6 +30,8 @@ public class Odometry implements Runnable, Mechanism {
 
     private double horiEncPerDegree;
 
+    private ElapsedTime updateTimer;
+
     public Odometry(IMU imu) {
         this.imu = imu;
     }
@@ -49,6 +51,7 @@ public class Odometry implements Runnable, Mechanism {
 
         // TODO: make sure that the encoders are in the right directions, so maybe reverse directions if needed
         this.opMode = opMode;
+        updateTimer = new ElapsedTime();
     }
 
     @Override
@@ -82,6 +85,8 @@ public class Odometry implements Runnable, Mechanism {
     }
 
     public void update(double timeElapsed) {
+        updateTimer.reset();
+
         // updates position, velocity, and angle according to how much time has elapsed
 
         int leftEncChange = forwardLeftEnc.getCurrentPosition() - lastLeftEncPos;
@@ -98,10 +103,13 @@ public class Odometry implements Runnable, Mechanism {
         imu.update();
         double changeInAngle = imu.angle - angle;
         angleVel = changeInAngle / timeElapsed;
-        
+
         // currently in robot centric
-        double[] changeInPos = new double[]{encToInch(horiEncChange - horiEncPerDegree * changeInAngle),
-                encToInch((leftEncChange + rightEncChange) / 2)};
+        double[] changeInPos = new double[]{
+                encToInch(horiEncChange - horiEncPerDegree * changeInAngle),
+                encToInch((leftEncChange + rightEncChange) / 2)
+        };
+
         // changes to field centric displacement vector
         changeInPos = toFieldCentric(changeInPos[0], changeInPos[1]);
 
@@ -112,5 +120,10 @@ public class Odometry implements Runnable, Mechanism {
         angle += changeInAngle;
 
 
+    }
+
+    public void update(){
+        double timeElapsed = updateTimer.seconds();
+        update(timeElapsed);
     }
 }

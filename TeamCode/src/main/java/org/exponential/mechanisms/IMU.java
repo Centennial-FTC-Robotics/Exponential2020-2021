@@ -22,27 +22,28 @@ public class IMU implements Mechanism {
         parameters.loggingTag = "IMU";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
         imu.initialize(parameters);
-        while (opMode.opModeIsActive()&&!imu.isGyroCalibrated()) ;
+        while (opMode.opModeIsActive() && !imu.isGyroCalibrated()) ;
         lastIMUReading = imu.getAngularOrientation().firstAngle;
     }
 
 
-    public static double normalize(double angle){
+    public static double normalize(double angle) {
         // returns the angle geometrically equivalent to the input angle but between -180 and 180
         angle = angle % 360;
-        if(angle > 180){
-            angle-=360;
+        if (angle > 180) {
+            angle -= 360;
         }
-        if(angle < -180){
-            angle+=360;
+        if (angle < -180) {
+            angle += 360;
         }
         return angle;
     }
 
     private double lastIMUReading;
-    public void update(){
+
+    public void update() {
         double newAngle = imu.getAngularOrientation().firstAngle;
-        angle += normalize(newAngle-lastIMUReading);
+        angle += normalize(newAngle - lastIMUReading);
         lastIMUReading = newAngle;
     }
 }

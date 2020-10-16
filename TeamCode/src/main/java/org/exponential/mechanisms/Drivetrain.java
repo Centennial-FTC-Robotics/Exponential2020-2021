@@ -49,7 +49,7 @@ public class Drivetrain implements Mechanism {
 
         this.opMode = opMode;
 
-        positioning = new Odometry();
+        positioning = new Odometry(imu);
         positioning.initialize(opMode);
     }
 
@@ -99,11 +99,35 @@ public class Drivetrain implements Mechanism {
             velAngle = disAngle / intervalTime;
 
             // actually setting motor powers
-
+            double powerX = Kp*disX+Ki*areaX + Kd*velX;
+            double powerY = Kp*disY+Ki*areaY + Kd*velY;
+            double powerAngle = angleKp*disAngle+angleKi*areaAngle+angleKd*velAngle;
+            setPowerFieldCentric(powerX, powerY, powerAngle);
 
         }
     }
 
+
+    public void setPowerFieldCentric(double xVel, double yVel, double angleVel) {
+        double[] robotCentricVel = positioning.toRobotCentric(xVel, yVel);
+        double x = robotCentricVel[0];
+        double y = robotCentricVel[1];
+
+        double sum = Math.abs(x) + Math.abs(y) + Math.abs(angleVel);
+        if (sum > 1) {
+            frontRight.setPower((x + y - angleVel) / sum);
+            backRight.setPower((-x + y - angleVel) / sum);
+            backLeft.setPower((x + y + angleVel) / sum);
+            frontLeft.setPower((-x + y + angleVel) / sum);
+        } else {
+            frontRight.setPower((x + y - angleVel));
+            backRight.setPower((-x + y - angleVel));
+            backLeft.setPower((x + y + angleVel));
+            frontLeft.setPower((-x + y + angleVel));
+        }
+
+
+    }
 
 
     private double[] getMotorPowers(double triggerX, double triggerY, double rotate) {

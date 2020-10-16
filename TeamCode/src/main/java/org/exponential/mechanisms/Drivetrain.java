@@ -99,15 +99,15 @@ public class Drivetrain implements Mechanism {
             velAngle = disAngle / intervalTime;
 
             // actually setting motor powers
-            double powerX = Kp*disX+Ki*areaX + Kd*velX;
-            double powerY = Kp*disY+Ki*areaY + Kd*velY;
-            double powerAngle = angleKp*disAngle+angleKi*areaAngle+angleKd*velAngle;
+            double powerX = Kp * disX + Ki * areaX + Kd * velX;
+            double powerY = Kp * disY + Ki * areaY + Kd * velY;
+            double powerAngle = angleKp * disAngle + angleKi * areaAngle + angleKd * velAngle;
             setPowerFieldCentric(powerX, powerY, powerAngle);
 
         }
     }
 
-
+    // takes in velocity in terms of motor power
     public void setPowerFieldCentric(double xVel, double yVel, double angleVel) {
         double[] robotCentricVel = positioning.toRobotCentric(xVel, yVel);
         double x = robotCentricVel[0];
@@ -125,8 +125,6 @@ public class Drivetrain implements Mechanism {
             backLeft.setPower((x + y + angleVel));
             frontLeft.setPower((-x + y + angleVel));
         }
-
-
     }
 
 

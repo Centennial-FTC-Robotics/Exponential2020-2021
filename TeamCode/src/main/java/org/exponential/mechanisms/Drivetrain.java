@@ -78,12 +78,12 @@ public class Drivetrain implements Mechanism {
         double areaAngle = 0;
         double velAngle;
         ElapsedTime timer = new ElapsedTime();
+        double previousTime = 0;
 
         while (opMode.opModeIsActive() && distance(targetX, targetY, positioning.xPos, positioning.yPos) > tolerance) {
             positioning.update();
 
-            double intervalTime = timer.seconds();
-            timer.reset();
+            double intervalTime = -previousTime + (previousTime = timer.seconds());
 
             // linear PID calculations
             disX = (targetX - positioning.xPos);

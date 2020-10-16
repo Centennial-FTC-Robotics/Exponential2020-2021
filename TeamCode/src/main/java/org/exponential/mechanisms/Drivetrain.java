@@ -17,6 +17,17 @@ public class Drivetrain implements Mechanism {
     DcMotorEx backRight;
     IMU imu;
     LinearOpMode opMode;
+    Odometry positioning;
+
+    // PID constants
+    private double Kp = 0.1;
+    private double Ki = 0.01;
+    private double Kd = 0;
+    private double tolerance = 0.75;
+
+    private double angleKp = 0.02;
+    private double angleKi = 0.01;
+    private double angleKd = 0;
 
     public void initialize(LinearOpMode opMode) {
         frontLeft = opMode.hardwareMap.get(DcMotorEx.class, "frontLeft");
@@ -38,6 +49,8 @@ public class Drivetrain implements Mechanism {
 
         this.opMode = opMode;
 
+        positioning = new Odometry();
+        positioning.initialize(opMode);
     }
 
     public void setPowerDriveMotors(HashMap<String, Double> powers) {
@@ -45,5 +58,84 @@ public class Drivetrain implements Mechanism {
         backLeft.setPower(powers.get("backLeft"));
         frontRight.setPower(powers.get("frontRight"));
         backRight.setPower(powers.get("backRight"));
+    }
+
+    private double distance(double x1, double y1, double x2, double y2) {
+        return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+    }
+
+
+    public void moveTo(double targetX, double targetY, double targetAngle) {
+        // a lot of random PID variables
+        double areaX = 0;
+        double areaY = 0;
+        double velX;
+        double velY;
+        double disX;
+        double disY;
+
+        double disAngle;
+        double areaAngle = 0;
+        double velAngle;
+        ElapsedTime timer = new ElapsedTime();
+
+        while (opMode.opModeIsActive() && distance(targetX, targetY, positioning.xPos, positioning.yPos) > tolerance) {
+            positioning.update();
+
+            double intervalTime = timer.seconds();
+            timer.reset();
+
+            // linear PID calculations
+            disX = (targetX - positioning.xPos);
+            disY = (targetY - positioning.yPos);
+            areaX += disX * intervalTime;
+            areaY += disY * intervalTime;
+            velX = disX / intervalTime;
+            velY = disY / intervalTime;
+
+            // angle PID calculations
+            disAngle = IMU.normalize(targetAngle - imu.angle);
+            areaAngle = disAngle * intervalTime;
+            velAngle = disAngle / intervalTime;
+
+            // actually setting motor powers
+
+
+        }
+    }
+
+
+
+    private double[] getMotorPowers(double triggerX, double triggerY, double rotate) {
+        double[] motorPowers = new double[4];
+        double x;
+        double y;
+
+        if (triggerX == 0.0) {
+            x = 0.0;
+        } else {
+            x = triggerX / Math.abs(triggerX) * Math.sqrt(Math.pow(triggerX, 2) + Math.pow(triggerY, 2))
+                    * (Math.abs(triggerX)) / (Math.abs(triggerX) + Math.abs(triggerY));
+        }
+        if (triggerY == 0.0) {
+            y = 0.0;
+        } else {
+            y = triggerY / Math.abs(triggerY) * Math.sqrt(Math.pow(triggerX, 2) + Math.pow(triggerY, 2))
+                    * (Math.abs(triggerY)) / (Math.abs(triggerX) + Math.abs(triggerY));
+        }
+
+        double sum = Math.abs(x) + Math.abs(y) + Math.abs(rotate);
+        if (sum > 1) {
+            motorPowers[0] = (x + y - rotate) / sum;
+            motorPowers[1] = (-x + y - rotate) / sum;
+            motorPowers[2] = (x + y + rotate) / sum;
+            motorPowers[3] = (-x + y + rotate) / sum;
+        } else {
+            motorPowers[0] = (x + y - rotate);
+            motorPowers[1] = (-x + y - rotate);
+            motorPowers[2] = (x + y + rotate);
+            motorPowers[3] = (-x + y + rotate);
+        }
+        return motorPowers;
     }
 }

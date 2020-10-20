@@ -115,15 +115,15 @@ public class Drivetrain implements Mechanism {
 
         double sum = Math.abs(x) + Math.abs(y) + Math.abs(angleVel);
         if (sum > 1) {
-            frontRight.setPower((x + y - angleVel) / sum);
-            backRight.setPower((-x + y - angleVel) / sum);
-            backLeft.setPower((x + y + angleVel) / sum);
-            frontLeft.setPower((-x + y + angleVel) / sum);
+            frontRight.setPower((-x + y - angleVel) / sum);
+            backRight.setPower((x + y - angleVel) / sum);
+            backLeft.setPower((-x + y + angleVel) / sum);
+            frontLeft.setPower((x + y + angleVel) / sum);
         } else {
-            frontRight.setPower((x + y - angleVel));
-            backRight.setPower((-x + y - angleVel));
-            backLeft.setPower((x + y + angleVel));
-            frontLeft.setPower((-x + y + angleVel));
+            frontRight.setPower((-x + y - angleVel));
+            backRight.setPower((x + y - angleVel));
+            backLeft.setPower((-x + y + angleVel));
+            frontLeft.setPower((x + y + angleVel));
         }
     }
 

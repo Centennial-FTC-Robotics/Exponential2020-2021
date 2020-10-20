@@ -9,10 +9,11 @@ public class DriveTrainParametric extends Drivetrain {
     // with motion profiling
 
     // feedforward constants
-    private final static double alphaDeg = 45; // degree
-    private final static double wheelVel = 10; // inch per sec per motor power
+    private final static double xVelMax = 12; // inch per sec per motor power
+    private final static double yVelMax = 10; // inch per sec per motor power
     private final static double rotate = 10; // degrees per sec per motor power
-    private final static double accelMax = 3; // inch per sec^2
+    private final static double xAccelMax = 4; // inch per sec^2
+    private final static double yAccelMax = 3; // inch per sec^2
 
     // feedback constants
     private final static double KPBACK = 0.5;
@@ -84,26 +85,24 @@ public class DriveTrainParametric extends Drivetrain {
     // if the velocity cannot be achieved, then it goes to the top vel it can in the given direction
     public void setVel(double xInchPerSec, double yInchPerSec, double degreePerSec) {
         double[] robotVel = positioning.toRobotCentric(xInchPerSec, yInchPerSec);
-        double sin = Math.sin(Math.toRadians(alphaDeg));
-        double cos = Math.cos(Math.toRadians(alphaDeg));
 
         // vertical component (robot centric)
-        double frontLeftPow = robotVel[1] / wheelVel / cos / 4;
-        double frontRightPow = robotVel[1] / wheelVel / cos / 4;
-        double backLeftPow = robotVel[1] / wheelVel / cos / 4;
-        double backRightPow = robotVel[1] / wheelVel / cos / 4;
+        double frontLeftPow = robotVel[1] / yVelMax;
+        double frontRightPow = robotVel[1] / yVelMax;
+        double backLeftPow = robotVel[1] / yVelMax;
+        double backRightPow = robotVel[1] / yVelMax;
 
         // horizontal component (robot centric)
-        frontLeftPow += robotVel[0] / wheelVel / sin / 4;
-        frontRightPow -= robotVel[0] / wheelVel / sin / 4;
-        backRightPow += robotVel[0] / wheelVel / sin / 4;
-        backLeftPow -= robotVel[0] / wheelVel / sin / 4;
+        frontLeftPow += robotVel[0] / xVelMax;
+        frontRightPow -= robotVel[0] / xVelMax;
+        backRightPow += robotVel[0] / xVelMax;
+        backLeftPow -= robotVel[0] / xVelMax;
 
         // rotational component
-        frontLeftPow -= degreePerSec / rotate / 4;
-        frontRightPow += degreePerSec / rotate / 4;
-        backRightPow += degreePerSec / rotate / 4;
-        backLeftPow -= degreePerSec / rotate / 4;
+        frontLeftPow -= degreePerSec / rotate;
+        frontRightPow += degreePerSec / rotate;
+        backRightPow += degreePerSec / rotate;
+        backLeftPow -= degreePerSec / rotate;
 
         double sum = Math.max(Math.max(Math.max(Math.abs(frontLeftPow), Math.abs(frontRightPow)), Math.abs(backLeftPow)), Math.abs(backRightPow));
 

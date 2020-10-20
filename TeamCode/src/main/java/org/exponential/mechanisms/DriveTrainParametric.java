@@ -100,10 +100,10 @@ public class DriveTrainParametric extends Drivetrain {
         backLeftPow -= robotVel[0] / wheelVel / sin / 4;
 
         // rotational component
-        frontLeftPow -= robotVel[0] / rotate / 4;
-        frontRightPow += robotVel[0] / rotate / 4;
-        backRightPow += robotVel[0] / rotate / 4;
-        backLeftPow -= robotVel[0] / rotate / 4;
+        frontLeftPow -= degreePerSec / rotate / 4;
+        frontRightPow += degreePerSec / rotate / 4;
+        backRightPow += degreePerSec / rotate / 4;
+        backLeftPow -= degreePerSec / rotate / 4;
 
         double sum = Math.max(Math.max(Math.max(Math.abs(frontLeftPow), Math.abs(frontRightPow)), Math.abs(backLeftPow)), Math.abs(backRightPow));
 

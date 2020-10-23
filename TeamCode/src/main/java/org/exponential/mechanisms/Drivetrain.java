@@ -113,6 +113,7 @@ public class Drivetrain implements Mechanism {
         double x = robotCentricVel[0];
         double y = robotCentricVel[1];
 
+        // TODO: I think I made a mistake here
         double sum = Math.abs(x) + Math.abs(y) + Math.abs(angleVel);
         if (sum > 1) {
             frontRight.setPower((-x + y - angleVel) / sum);

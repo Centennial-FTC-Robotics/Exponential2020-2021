@@ -118,11 +118,11 @@ public class Odometry implements Runnable, Mechanism {
         xVel = changeInPos[0] / timeElapsed;
         yVel = changeInPos[1] / timeElapsed;
         angle += changeInAngle;
-
+        angleVel = changeInAngle / timeElapsed;
 
     }
 
-    public void update(){
+    public void update() {
         double timeElapsed = updateTimer.seconds();
         update(timeElapsed);
     }

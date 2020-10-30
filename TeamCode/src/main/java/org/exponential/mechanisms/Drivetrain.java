@@ -7,7 +7,11 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.exponential.superclasses.Mechanism;
+import org.exponential.utility.Coordinate;
+import org.exponential.utility.Line;
+import org.exponential.utility.Path;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Drivetrain implements Mechanism {
@@ -29,6 +33,13 @@ public class Drivetrain implements Mechanism {
     private double angleKi = 0.01;
     private double angleKd = 0;
 
+    double targetX = 0;
+    double targetY = 0;
+    double targetAngle = 90;
+
+    public static final double LOOK_AHEAD_RADIUS = 12;
+    Path path;
+    Coordinate finalPathCoordinate;
     public void initialize(LinearOpMode opMode) {
         frontLeft = opMode.hardwareMap.get(DcMotorEx.class, "frontLeft");
         backLeft = opMode.hardwareMap.get(DcMotorEx.class, "backLeft");
@@ -64,8 +75,82 @@ public class Drivetrain implements Mechanism {
         return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
     }
 
+    public void runPath(Path path) {
+        this.path = path;
 
-    public void moveTo(double targetX, double targetY, double targetAngle) {
+        finalPathCoordinate = path.getCoordinates().get(path.getCoordinates().size() - 1);
+        new Thread(new Runnable() {
+            public void run() {
+                moveToPurePursuit();
+            }
+        }).start();
+
+    }
+    public void moveToPurePursuit() {
+        double disAngle;
+        double areaAngle = 0;
+        double velAngle;
+        ElapsedTime timer = new ElapsedTime();
+        double previousTime = 0;
+
+        double areaX = 0;
+        double areaY = 0;
+        double velX;
+        double velY;
+        double disX;
+        double disY;
+
+        while (opMode.opModeIsActive() && distance(targetX, targetY, positioning.xPos, positioning.yPos) > tolerance) {
+            positioning.update();
+
+            ArrayList<Coordinate> intersectionPoints = new ArrayList<Coordinate>();
+            ArrayList<Line> lines = path.getLines();
+            for (Line line: lines) {
+                if (line.intersectsCircle(positioning.xPos, positioning.yPos, 12)) {
+                    Coordinate[] points = line.intersectionPoints();
+                    intersectionPoints.add(points[0]);
+                    intersectionPoints.add(points[1]);
+                }
+            }
+            Coordinate finalIntersection = intersectionPoints.get(intersectionPoints.size() - 1);
+            targetX = finalIntersection.x;
+            targetY = finalIntersection.y;
+
+            double intervalTime = -previousTime + (previousTime = timer.seconds());
+
+            disX = (targetX - positioning.xPos);
+            disY = (targetY - positioning.yPos);
+
+            // angle PID calculations
+            disAngle = IMU.normalize(targetAngle - imu.angle);
+            areaAngle = disAngle * intervalTime;
+            velAngle = disAngle / intervalTime;
+
+            double disXFromFinalPoint = Math.abs(targetX - finalPathCoordinate.x);
+            double disYFromFinalPoint = Math.abs(targetY - finalPathCoordinate.y);
+            if (disXFromFinalPoint < 1 && disYFromFinalPoint < 1) {
+                // linear PID calculations
+
+                areaX += disX * intervalTime;
+                areaY += disY * intervalTime;
+                velX = disX / intervalTime;
+                velY = disY / intervalTime;
+
+                double powerX = Kp * disX + Ki * areaX + Kd * velX;
+                double powerY = Kp * disY + Ki * areaY + Kd * velY;
+                double powerAngle = angleKp * disAngle + angleKi * areaAngle + angleKd * velAngle;
+                setPowerFieldCentric(powerX, powerY, powerAngle);
+            } else {
+                // actually setting motor powers
+                double powerX = disX;
+                double powerY = disY;
+                double powerAngle = angleKp * disAngle + angleKi * areaAngle + angleKd * velAngle;
+                setPowerFieldCentric(powerX, powerY, powerAngle);
+            }
+
+        }
+    }
+    public void moveToTargetPosition() {
         // a lot of random PID variables
         double areaX = 0;
         double areaY = 0;
@@ -105,6 +190,20 @@ public class Drivetrain implements Mechanism {
             setPowerFieldCentric(powerX, powerY, powerAngle);
 
         }
+    }
+
+
+    public void moveTo(double targetX, double targetY, double targetAngle) {
+        this.targetX = targetX;
+        this.targetY = targetY;
+        this.targetAngle = targetAngle;
+        moveToTargetPosition();
+    }
+
+    public void setTargetPosition(double targetX, double targetY, double targetAngle) {
+        this.targetX = targetX;
+        this.targetY = targetY;
+        this.targetAngle = targetAngle;
     }
 
     // takes in velocity in terms of motor power

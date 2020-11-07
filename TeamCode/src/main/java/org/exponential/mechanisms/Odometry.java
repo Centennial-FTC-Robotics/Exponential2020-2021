@@ -24,13 +24,15 @@ public class Odometry implements Runnable, Mechanism {
     double angleVel;
 
     // encapsulated variables (yuhwan: why make these private and not everything else?)
-    private int lastLeftEncPos;
-    private int lastRightEncPos;
-    private int lastHoriEncPos;
+    // eric: cause everything above are stuff you wanna access in drivetrain class, I didn't make an getters
+    // or at least that was the intention until I had to specialize it, ur right
+    int lastLeftEncPos;
+    int lastRightEncPos;
+    int lastHoriEncPos;
 
-    private double horiEncPerDegree;
+    double horiEncPerDegree = 0; //TODO: Find this value
 
-    private ElapsedTime updateTimer;
+    ElapsedTime updateTimer;
 
     public Odometry(IMU imu) {
         this.imu = imu;

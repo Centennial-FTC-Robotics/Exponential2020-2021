@@ -133,11 +133,4 @@ public class DriveTrainParametric extends Drivetrain {
         ParametricEq line = new StraightLine(x,y,angle, positioning.xPos, positioning.yPos, positioning.angle, portionOfMaxAccel);
         moveAlongParametricEq(line);
     }
-
-
-
-
-
-
-
 }

@@ -35,7 +35,7 @@ public class ArcOdometry extends Odometry {
             };
         } else {
             // I know there's supposed to be an abs, just don't worry about it
-            double radius = ((leftEncChange + rightEncChange) / (2 * Math.toRadians(changeInAngle)));
+            double radius = (encToInch(leftEncChange + rightEncChange) / (2 * Math.toRadians(changeInAngle)));
 
             changeInPos = new double[]{
                     encToInch(radius * (1 - Math.cos(Math.toRadians(changeInAngle)))),

@@ -1,4 +1,4 @@
-# DrivetrainTester
+# IntakeTester
 ### Test case 0: Autonomous Intaking
 Runs the intake() method, meant for autonomous usage, on the intake for 3 seconds.
 

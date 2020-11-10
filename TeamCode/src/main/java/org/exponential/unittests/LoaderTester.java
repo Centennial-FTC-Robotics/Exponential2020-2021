@@ -1,6 +1,5 @@
 package org.exponential.unittests;
 
-import org.exponential.mechanisms.Conveyor;
 import org.exponential.mechanisms.Loader;
 import org.exponential.superclasses.UnitTester;
 

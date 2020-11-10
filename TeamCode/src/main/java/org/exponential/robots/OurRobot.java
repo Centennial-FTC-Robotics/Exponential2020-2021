@@ -8,6 +8,7 @@ import org.exponential.mechanisms.Drivetrain;
 import org.exponential.mechanisms.Intake;
 import org.exponential.mechanisms.Loader;
 import org.exponential.mechanisms.Shooter;
+import org.exponential.mechanisms.WobbleGoalMover;
 import org.exponential.superclasses.Robot;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class OurRobot implements Robot {
     public Intake intake;
     public Loader loader;
     public Shooter shooter;
+    public WobbleGoalMover wobbleGoalMover;
     @Override
     public void initialize(LinearOpMode opMode) {
         List<LynxModule> allHubs = opMode.hardwareMap.getAll(LynxModule.class);
@@ -36,5 +38,7 @@ public class OurRobot implements Robot {
         loader.initialize(opMode);
         shooter = new Shooter();
         shooter.initialize(opMode);
+        wobbleGoalMover = new WobbleGoalMover();
+        wobbleGoalMover.initialize(opMode);
     }
 }

@@ -13,11 +13,20 @@ public class ShooterTester extends UnitTester {
     public void runOpMode() throws InterruptedException {
         shooter = new Shooter();
         shooter.initialize(this);
-        trackIndex(0, 5);
+        trackIndex(0, 0);
     }
 
     @Override
     public void runTest(int index) {
+        switch (index) {
+            case 0:
+                runShooter();
+            default:
+                break;
+        }
+    }
 
+    public void runShooter() {
+        shooter.shoot();
     }
 }

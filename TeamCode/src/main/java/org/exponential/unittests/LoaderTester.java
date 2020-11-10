@@ -15,6 +15,21 @@ public class LoaderTester extends UnitTester {
 
     @Override
     public void runTest(int index) {
+        switch (index) {
+            case 0:
+                loadPositionTest();
+            case 1:
+                unloadPositionTest();
+            default:
+                break;
+        }
+    }
 
+    public void loadPositionTest() {
+        loader.load();
+    }
+
+    public void unloadPositionTest() {
+        loader.unload();
     }
 }

@@ -31,14 +31,14 @@ public class OurRobot implements Robot {
         drivetrain = new Drivetrain();
         drivetrain.initialize(opMode);
         camera = new Camera();
-        camera.initialize(opMode);
-        intake = new Intake();
-        intake.initialize(opMode);
-        loader = new Loader();
-        loader.initialize(opMode);
-        shooter = new Shooter();
-        shooter.initialize(opMode);
-        wobbleGoalMover = new WobbleGoalMover();
-        wobbleGoalMover.initialize(opMode);
+        // camera.initialize(opMode);
+        // intake = new Intake();
+        // intake.initialize(opMode);
+        // loader = new Loader();
+        // loader.initialize(opMode);
+        // shooter = new Shooter();
+        // shooter.initialize(opMode);
+        // wobbleGoalMover = new WobbleGoalMover();
+        // wobbleGoalMover.initialize(opMode);
     }
 }

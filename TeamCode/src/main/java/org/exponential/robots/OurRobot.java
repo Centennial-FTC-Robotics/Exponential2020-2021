@@ -5,8 +5,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.exponential.mechanisms.Camera;
 import org.exponential.mechanisms.Drivetrain;
+import org.exponential.mechanisms.IMU;
 import org.exponential.mechanisms.Intake;
 import org.exponential.mechanisms.Loader;
+import org.exponential.mechanisms.Odometry;
 import org.exponential.mechanisms.Shooter;
 import org.exponential.mechanisms.WobbleGoalMover;
 import org.exponential.superclasses.Robot;
@@ -17,6 +19,8 @@ import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.har
 
 public class OurRobot implements Robot {
     public Drivetrain drivetrain;
+    public Odometry odometry;
+    public IMU imu;
     public Camera camera;
     public Intake intake;
     public Loader loader;
@@ -31,14 +35,18 @@ public class OurRobot implements Robot {
         drivetrain = new Drivetrain();
         drivetrain.initialize(opMode);
         camera = new Camera();
-        // camera.initialize(opMode);
-        // intake = new Intake();
-        // intake.initialize(opMode);
-        // loader = new Loader();
-        // loader.initialize(opMode);
-        // shooter = new Shooter();
-        // shooter.initialize(opMode);
-        // wobbleGoalMover = new WobbleGoalMover();
-        // wobbleGoalMover.initialize(opMode);
+        camera.initialize(opMode);
+        intake = new Intake();
+        intake.initialize(opMode);
+        loader = new Loader();
+        loader.initialize(opMode);
+        shooter = new Shooter();
+        shooter.initialize(opMode);
+        wobbleGoalMover = new WobbleGoalMover();
+        wobbleGoalMover.initialize(opMode);
+        imu = new IMU();
+        imu.initialize(opMode);
+        odometry = new Odometry(imu);
+        odometry.initialize(opMode);
     }
 }

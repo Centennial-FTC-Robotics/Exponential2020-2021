@@ -3,8 +3,12 @@ package org.exponential.mechanisms;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.ReadWriteFile;
 
 import org.exponential.superclasses.Mechanism;
+import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
+
+import java.io.File;
 
 public class Odometry implements Runnable, Mechanism {
     DcMotorEx forwardLeftEnc;
@@ -127,5 +131,19 @@ public class Odometry implements Runnable, Mechanism {
     public void update() {
         double timeElapsed = updateTimer.seconds();
         update(timeElapsed);
+    }
+
+    public void savePosition() {
+        File file = AppUtil.getInstance().getSettingsFile("RobotPosition.txt");
+        String contents = xPos + ":" + yPos + ":" + angle;
+        ReadWriteFile.writeFile(file, contents);
+    }
+
+    public void loadPosition() {
+        File file = AppUtil.getInstance().getSettingsFile("RobotPosition.txt");
+        String[] contents = ReadWriteFile.readFile(file).trim().split(":");
+        xPos = Double.parseDouble(contents[0]);
+        yPos = Double.parseDouble(contents[1]);
+        angle = Double.parseDouble(contents[2]);
     }
 }

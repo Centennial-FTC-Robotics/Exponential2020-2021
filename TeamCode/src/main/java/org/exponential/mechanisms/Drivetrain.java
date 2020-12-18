@@ -189,6 +189,15 @@ public class Drivetrain implements Mechanism {
             double powerAngle = angleKp * disAngle + angleKi * areaAngle + angleKd * velAngle;
             setPowerFieldCentric(powerX, powerY, powerAngle);
 
+
+
+            opMode.telemetry.addData("dis X", disX);
+            opMode.telemetry.addData("dis Y", disY);
+            opMode.telemetry.addData("dis angle", disAngle);
+            opMode.telemetry.addData("x", positioning.getxPos());
+            opMode.telemetry.addData("y", positioning.getyPos());
+            opMode.telemetry.addData("angle", positioning.getAngle());
+            opMode.telemetry.update();
         }
     }
 
@@ -212,7 +221,6 @@ public class Drivetrain implements Mechanism {
         double x = robotCentricVel[0];
         double y = robotCentricVel[1];
 
-        // TODO: I think I made a mistake here
         double sum = Math.abs(x) + Math.abs(y) + Math.abs(angleVel);
         if (sum > 1) {
             frontRight.setPower((-x + y - angleVel) / sum);

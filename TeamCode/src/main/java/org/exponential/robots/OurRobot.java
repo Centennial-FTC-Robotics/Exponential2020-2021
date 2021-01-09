@@ -33,7 +33,10 @@ public class OurRobot implements Robot {
         for (LynxModule module : allHubs) {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
-        drivetrain = new Drivetrain();
+
+        odometry = new ArcOdometry(imu);
+        odometry.initialize(opMode);
+        drivetrain = new Drivetrain(odometry);
         drivetrain.initialize(opMode);
         camera = new Camera();
         camera.initialize(opMode);
@@ -47,7 +50,5 @@ public class OurRobot implements Robot {
         wobbleGoalMover.initialize(opMode);
         imu = new IMU();
         imu.initialize(opMode);
-        odometry = new ArcOdometry(imu);
-        odometry.initialize(opMode);
     }
 }

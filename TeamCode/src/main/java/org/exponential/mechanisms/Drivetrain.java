@@ -21,7 +21,7 @@ public class Drivetrain implements Mechanism {
     DcMotorEx backRight;
     IMU imu;
     LinearOpMode opMode;
-    Odometry positioning;
+    public Odometry positioning;
 
     // PID constants
     private double Kp = 0.1;
@@ -40,6 +40,11 @@ public class Drivetrain implements Mechanism {
     public static final double LOOK_AHEAD_RADIUS = 12;
     Path path;
     Coordinate finalPathCoordinate;
+
+    public Drivetrain(Odometry positioning){
+        this.positioning= positioning;
+    }
+
     public void initialize(LinearOpMode opMode) {
         frontLeft = opMode.hardwareMap.get(DcMotorEx.class, "frontLeft");
         backLeft = opMode.hardwareMap.get(DcMotorEx.class, "backLeft");
@@ -60,9 +65,9 @@ public class Drivetrain implements Mechanism {
 
         this.opMode = opMode;
 
-        positioning = new Odometry(imu);
-        positioning.initialize(opMode);
     }
+
+
 
     public void setPowerDriveMotors(HashMap<String, Double> powers) {
         frontLeft.setPower(powers.get("frontLeft"));
@@ -230,6 +235,9 @@ public class Drivetrain implements Mechanism {
         double[] robotCentricVel = positioning.toRobotCentric(xVel, yVel);
         double x = robotCentricVel[0];
         double y = robotCentricVel[1];
+
+        opMode.telemetry.addData("xVelField", x);
+        opMode.telemetry.addData("yVelField", y);
 
         double sum = Math.abs(x) + Math.abs(y) + Math.abs(angleVel);
         if (sum > 1) {

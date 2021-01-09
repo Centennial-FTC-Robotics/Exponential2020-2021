@@ -30,17 +30,58 @@ public class ArcOdometry extends Odometry {
 
         if (changeInAngle == 0) {
             changeInPos = new double[]{
-                    encToInch(horiEncChange - horiEncPerDegree * changeInAngle),
+                    encToInch(horiEncChange),
                     encToInch((leftEncChange + rightEncChange) / 2)
             };
         } else {
-            // I know there's supposed to be an abs, just don't worry about it
-            double radius = (encToInch(leftEncChange + rightEncChange) / (2 * Math.toRadians(changeInAngle)));
+            double radius = Math.abs(encToInch(leftEncChange + rightEncChange) / (2 * Math.toRadians(changeInAngle)));
 
-            changeInPos = new double[]{
-                    encToInch(radius * (1 - Math.cos(Math.toRadians(changeInAngle)))),
-                    encToInch(radius * Math.sin(Math.toRadians(changeInAngle)))
-            };
+            if (leftEncChange + rightEncChange > 0) {
+                if (changeInAngle > 0) {
+                    changeInPos = new double[]{
+                            encToInch(radius * (Math.cos(Math.toRadians(changeInAngle)) - 1)),
+                            encToInch(radius * Math.sin(Math.toRadians(changeInAngle)))
+                    };
+                } else {
+                    changeInPos = new double[]{
+                            encToInch(-radius * (Math.cos(Math.toRadians(changeInAngle)) - 1)),
+                            encToInch(radius * Math.sin(Math.toRadians(changeInAngle)))
+                    };
+                }
+            } else {
+                if (changeInAngle > 0) {
+                    changeInPos = new double[]{
+                            encToInch(-radius * (Math.cos(Math.toRadians(changeInAngle)) - 1)),
+                            encToInch(-radius * Math.sin(Math.toRadians(changeInAngle)))
+                    };
+                } else {
+                    changeInPos = new double[]{
+                            encToInch(radius * (Math.cos(Math.toRadians(changeInAngle)) - 1)),
+                            encToInch(-radius * Math.sin(Math.toRadians(changeInAngle)))
+                    };
+                }
+            }
+            radius = Math.abs(encToInch(horiEncChange - horiEncPerDegree * changeInAngle) / changeInAngle);
+
+
+            if (changeInAngle > 0) {
+                if (horiEncChange - horiEncPerDegree * changeInAngle > 0) {
+                    changeInPos[0]+=radius*Math.sin(Math.toRadians(changeInAngle));
+                    changeInPos[1]+=radius*(1-Math.cos(Math.toRadians(changeInAngle)));
+
+                } else {
+                    changeInPos[0]+=-radius*Math.sin(Math.toRadians(changeInAngle));
+                    changeInPos[1]+=-radius*(1-Math.cos(Math.toRadians(changeInAngle)));
+                }
+            } else if (changeInAngle - horiEncPerDegree * changeInAngle < 0) {
+                if (horiEncChange > 0) {
+                    changeInPos[0]+=-radius*Math.sin(Math.toRadians(changeInAngle));
+                    changeInPos[1]+=radius*(1-Math.cos(Math.toRadians(changeInAngle)));
+                } else {
+                    changeInPos[0]+=radius*Math.sin(Math.toRadians(changeInAngle));
+                    changeInPos[1]+=-radius*(1-Math.cos(Math.toRadians(changeInAngle)));
+                }
+            }
         }
 
         // changes to field centric displacement vector

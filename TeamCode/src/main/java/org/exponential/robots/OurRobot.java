@@ -3,6 +3,7 @@ package org.exponential.robots;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.exponential.mechanisms.ArcOdometry;
 import org.exponential.mechanisms.Camera;
 import org.exponential.mechanisms.Drivetrain;
 import org.exponential.mechanisms.IMU;
@@ -46,7 +47,7 @@ public class OurRobot implements Robot {
         wobbleGoalMover.initialize(opMode);
         imu = new IMU();
         imu.initialize(opMode);
-        odometry = new Odometry(imu);
+        odometry = new ArcOdometry(imu);
         odometry.initialize(opMode);
     }
 }

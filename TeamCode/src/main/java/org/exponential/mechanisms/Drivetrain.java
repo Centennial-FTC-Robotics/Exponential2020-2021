@@ -29,8 +29,8 @@ public class Drivetrain implements Mechanism {
     private double Kd = 0;
     private double tolerance = 0.75;
 
-    private double angleKp = 0.02;
-    private double angleKi = 0.01;
+    private double angleKp = 0.01;
+    private double angleKi = 0.00;
     private double angleKd = 0;
 
     double targetX = 0;
@@ -194,10 +194,20 @@ public class Drivetrain implements Mechanism {
             opMode.telemetry.addData("dis X", disX);
             opMode.telemetry.addData("dis Y", disY);
             opMode.telemetry.addData("dis angle", disAngle);
+            opMode.telemetry.addData("power x", powerX);
+            opMode.telemetry.addData("power Y", powerY);
+            opMode.telemetry.addData("power angle", powerAngle);
+
+
+
+            /*
             opMode.telemetry.addData("x", positioning.getxPos());
             opMode.telemetry.addData("y", positioning.getyPos());
             opMode.telemetry.addData("angle", positioning.getAngle());
+             */
+
             opMode.telemetry.update();
+
         }
     }
 

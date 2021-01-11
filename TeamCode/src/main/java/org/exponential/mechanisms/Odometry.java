@@ -150,6 +150,12 @@ public class Odometry implements Runnable, Mechanism {
         angle = Double.parseDouble(contents[2]);
     }
 
+    public void setPosition(double x, double y, double angle){
+        this.xPos = x;
+        this.yPos = y;
+        this.angle = angle;
+    }
+
     public double getxPos() {
         return xPos;
     }

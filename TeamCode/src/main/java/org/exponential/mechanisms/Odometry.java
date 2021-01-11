@@ -1,7 +1,9 @@
 package org.exponential.mechanisms;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.ReadWriteFile;
 
@@ -53,7 +55,9 @@ public class Odometry implements Runnable, Mechanism {
         horizontalEnc.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         forwardLeftEnc.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         forwardRightEnc.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        forwardRightEnc.setDirection(DcMotorSimple.Direction.REVERSE);
         horizontalEnc.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+
 
         // TODO: make sure that the encoders are in the right directions, so maybe reverse directions if needed
         this.opMode = opMode;
@@ -86,8 +90,7 @@ public class Odometry implements Runnable, Mechanism {
     }
 
     public double encToInch(double encoders) {
-        //TODO: change once builders have actual measurements
-        return 0;
+        return 2*Math.PI*0.984252/8192 * encoders;
     }
 
     public void update(double timeElapsed) {
@@ -145,5 +148,29 @@ public class Odometry implements Runnable, Mechanism {
         xPos = Double.parseDouble(contents[0]);
         yPos = Double.parseDouble(contents[1]);
         angle = Double.parseDouble(contents[2]);
+    }
+
+    public double getxPos() {
+        return xPos;
+    }
+
+    public double getyPos() {
+        return yPos;
+    }
+
+    public double getAngle() {
+        return angle;
+    }
+
+    public double getxVel() {
+        return xVel;
+    }
+
+    public double getyVel() {
+        return yVel;
+    }
+
+    public double getAngleVel() {
+        return angleVel;
     }
 }

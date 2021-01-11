@@ -21,7 +21,7 @@ public class Drivetrain implements Mechanism {
     DcMotorEx backRight;
     IMU imu;
     LinearOpMode opMode;
-    Odometry positioning;
+    public Odometry positioning;
 
     // PID constants
     private double Kp = 0.1;
@@ -29,8 +29,8 @@ public class Drivetrain implements Mechanism {
     private double Kd = 0;
     private double tolerance = 0.75;
 
-    private double angleKp = 0.02;
-    private double angleKi = 0.01;
+    private double angleKp = 0.01;
+    private double angleKi = 0.00;
     private double angleKd = 0;
 
     double targetX = 0;
@@ -40,6 +40,11 @@ public class Drivetrain implements Mechanism {
     public static final double LOOK_AHEAD_RADIUS = 12;
     Path path;
     Coordinate finalPathCoordinate;
+
+    public Drivetrain(Odometry positioning){
+        this.positioning= positioning;
+    }
+
     public void initialize(LinearOpMode opMode) {
         frontLeft = opMode.hardwareMap.get(DcMotorEx.class, "frontLeft");
         backLeft = opMode.hardwareMap.get(DcMotorEx.class, "backLeft");
@@ -60,9 +65,9 @@ public class Drivetrain implements Mechanism {
 
         this.opMode = opMode;
 
-        positioning = new Odometry(imu);
-        positioning.initialize(opMode);
     }
+
+
 
     public void setPowerDriveMotors(HashMap<String, Double> powers) {
         frontLeft.setPower(powers.get("frontLeft"));
@@ -189,6 +194,25 @@ public class Drivetrain implements Mechanism {
             double powerAngle = angleKp * disAngle + angleKi * areaAngle + angleKd * velAngle;
             setPowerFieldCentric(powerX, powerY, powerAngle);
 
+
+
+            opMode.telemetry.addData("dis X", disX);
+            opMode.telemetry.addData("dis Y", disY);
+            opMode.telemetry.addData("dis angle", disAngle);
+            opMode.telemetry.addData("power x", powerX);
+            opMode.telemetry.addData("power Y", powerY);
+            opMode.telemetry.addData("power angle", powerAngle);
+
+
+
+            /*
+            opMode.telemetry.addData("x", positioning.getxPos());
+            opMode.telemetry.addData("y", positioning.getyPos());
+            opMode.telemetry.addData("angle", positioning.getAngle());
+             */
+
+            opMode.telemetry.update();
+
         }
     }
 
@@ -212,7 +236,9 @@ public class Drivetrain implements Mechanism {
         double x = robotCentricVel[0];
         double y = robotCentricVel[1];
 
-        // TODO: I think I made a mistake here
+        opMode.telemetry.addData("xVelField", x);
+        opMode.telemetry.addData("yVelField", y);
+
         double sum = Math.abs(x) + Math.abs(y) + Math.abs(angleVel);
         if (sum > 1) {
             frontRight.setPower((-x + y - angleVel) / sum);

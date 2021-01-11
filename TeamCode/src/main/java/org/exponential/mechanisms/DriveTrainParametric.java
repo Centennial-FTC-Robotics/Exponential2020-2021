@@ -28,6 +28,10 @@ public class DriveTrainParametric extends Drivetrain {
     private final static double KIBACKANGLE = 0.1;
     private final static double KDBACKANGLE = 0;
 
+    public DriveTrainParametric(Odometry positioning) {
+        super(positioning);
+    }
+
     public void moveAlongParametricEq(ParametricEq equation) {
 
         // a lot of random PID variables

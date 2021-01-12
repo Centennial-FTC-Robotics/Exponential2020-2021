@@ -35,14 +35,14 @@ public class Drivetrain implements Mechanism {
 
     double targetX = 0;
     double targetY = 0;
-    double targetAngle = 90;
+    double targetAngle = 0;
 
     public static final double LOOK_AHEAD_RADIUS = 12;
     Path path;
     Coordinate finalPathCoordinate;
 
-    public Drivetrain(Odometry positioning){
-        this.positioning= positioning;
+    public Drivetrain(Odometry positioning) {
+        this.positioning = positioning;
     }
 
     public void initialize(LinearOpMode opMode) {
@@ -60,13 +60,18 @@ public class Drivetrain implements Mechanism {
         frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
+
+        frontLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        backLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        frontRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        backRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+
         imu = new IMU();
         imu.initialize(opMode);
 
         this.opMode = opMode;
 
     }
-
 
 
     public void setPowerDriveMotors(HashMap<String, Double> powers) {
@@ -91,6 +96,7 @@ public class Drivetrain implements Mechanism {
         }).start();
 
     }
+
     public void moveToPurePursuit() {
         double disAngle;
         double areaAngle = 0;
@@ -110,7 +116,7 @@ public class Drivetrain implements Mechanism {
 
             ArrayList<Coordinate> intersectionPoints = new ArrayList<Coordinate>();
             ArrayList<Line> lines = path.getLines();
-            for (Line line: lines) {
+            for (Line line : lines) {
                 if (line.intersectsCircle(positioning.xPos, positioning.yPos, 12)) {
                     Coordinate[] points = line.intersectionPoints();
                     intersectionPoints.add(points[0]);
@@ -155,6 +161,7 @@ public class Drivetrain implements Mechanism {
 
         }
     }
+
     public void moveToTargetPosition() {
         // a lot of random PID variables
         double areaX = 0;
@@ -170,7 +177,7 @@ public class Drivetrain implements Mechanism {
         ElapsedTime timer = new ElapsedTime();
         double previousTime = 0;
 
-        while (opMode.opModeIsActive() && distance(targetX, targetY, positioning.xPos, positioning.yPos) > tolerance) {
+        while (opMode.opModeIsActive() && (distance(targetX, targetY, positioning.xPos, positioning.yPos) > tolerance)) {
             positioning.update();
 
             double intervalTime = -previousTime + (previousTime = timer.seconds());
@@ -184,7 +191,7 @@ public class Drivetrain implements Mechanism {
             velY = disY / intervalTime;
 
             // angle PID calculations
-            disAngle = IMU.normalize(targetAngle - imu.angle);
+            disAngle = IMU.normalize(targetAngle - positioning.angle);
             areaAngle = disAngle * intervalTime;
             velAngle = disAngle / intervalTime;
 
@@ -195,21 +202,23 @@ public class Drivetrain implements Mechanism {
             setPowerFieldCentric(powerX, powerY, powerAngle);
 
 
-
             opMode.telemetry.addData("dis X", disX);
             opMode.telemetry.addData("dis Y", disY);
             opMode.telemetry.addData("dis angle", disAngle);
+
+            opMode.telemetry.addData("target X", targetX);
+            opMode.telemetry.addData("target Y", targetY);
+            opMode.telemetry.addData("target angle", targetAngle);
+
+            /*
             opMode.telemetry.addData("power x", powerX);
             opMode.telemetry.addData("power Y", powerY);
             opMode.telemetry.addData("power angle", powerAngle);
+            */
 
-
-
-            /*
             opMode.telemetry.addData("x", positioning.getxPos());
             opMode.telemetry.addData("y", positioning.getyPos());
             opMode.telemetry.addData("angle", positioning.getAngle());
-             */
 
             opMode.telemetry.update();
 
@@ -236,20 +245,20 @@ public class Drivetrain implements Mechanism {
         double x = robotCentricVel[0];
         double y = robotCentricVel[1];
 
-        opMode.telemetry.addData("xVelField", x);
-        opMode.telemetry.addData("yVelField", y);
+        // opMode.telemetry.addData("xVelField", x);
+        // opMode.telemetry.addData("yVelField", y);
 
         double sum = Math.abs(x) + Math.abs(y) + Math.abs(angleVel);
         if (sum > 1) {
-            frontRight.setPower((-x + y - angleVel) / sum);
-            backRight.setPower((x + y - angleVel) / sum);
-            backLeft.setPower((-x + y + angleVel) / sum);
-            frontLeft.setPower((x + y + angleVel) / sum);
+            frontRight.setPower((-x + y + angleVel) / sum);
+            backRight.setPower((x + y + angleVel) / sum);
+            backLeft.setPower((-x + y - angleVel) / sum);
+            frontLeft.setPower((x + y - angleVel) / sum);
         } else {
-            frontRight.setPower((-x + y - angleVel));
-            backRight.setPower((x + y - angleVel));
-            backLeft.setPower((-x + y + angleVel));
-            frontLeft.setPower((x + y + angleVel));
+            frontRight.setPower((-x + y + angleVel));
+            backRight.setPower((x + y + angleVel));
+            backLeft.setPower((-x + y - angleVel));
+            frontLeft.setPower((x + y - angleVel));
         }
     }
 
@@ -285,5 +294,11 @@ public class Drivetrain implements Mechanism {
             motorPowers[3] = (-x + y + rotate);
         }
         return motorPowers;
+    }
+    public void performBreak(){
+        frontLeft.setPower(0);
+        frontRight.setPower(0);
+        backLeft.setPower(0);
+        backRight.setPower(0);
     }
 }

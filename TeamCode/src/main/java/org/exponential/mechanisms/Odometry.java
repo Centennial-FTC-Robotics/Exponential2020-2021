@@ -36,7 +36,7 @@ public class Odometry implements Runnable, Mechanism {
     int lastRightEncPos;
     int lastHoriEncPos;
 
-    double horiEncPerDegree = 0; //TODO: Find this value
+    double horiEncPerDegree = 31; //TODO: Find this value
 
     ElapsedTime updateTimer;
 
@@ -59,7 +59,6 @@ public class Odometry implements Runnable, Mechanism {
         horizontalEnc.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
 
-        // TODO: make sure that the encoders are in the right directions, so maybe reverse directions if needed
         this.opMode = opMode;
         updateTimer = new ElapsedTime();
     }
@@ -134,6 +133,7 @@ public class Odometry implements Runnable, Mechanism {
     public void update() {
         double timeElapsed = updateTimer.seconds();
         update(timeElapsed);
+        // opMode.telemetry.addData("ratio", horizontalEnc.getCurrentPosition()/angle);
     }
 
     public void savePosition() {
@@ -148,6 +148,12 @@ public class Odometry implements Runnable, Mechanism {
         xPos = Double.parseDouble(contents[0]);
         yPos = Double.parseDouble(contents[1]);
         angle = Double.parseDouble(contents[2]);
+    }
+
+    public void setPosition(double x, double y, double angle){
+        this.xPos = x;
+        this.yPos = y;
+        this.angle = angle;
     }
 
     public double getxPos() {

@@ -36,7 +36,7 @@ public class Odometry implements Runnable, Mechanism {
     int lastRightEncPos;
     int lastHoriEncPos;
 
-    double horiEncPerDegree = 0; //TODO: Find this value
+    double horiEncPerDegree = 31; //TODO: Find this value
 
     ElapsedTime updateTimer;
 
@@ -134,6 +134,7 @@ public class Odometry implements Runnable, Mechanism {
     public void update() {
         double timeElapsed = updateTimer.seconds();
         update(timeElapsed);
+        opMode.telemetry.addData("ratio", horizontalEnc.getCurrentPosition()/angle);
     }
 
     public void savePosition() {

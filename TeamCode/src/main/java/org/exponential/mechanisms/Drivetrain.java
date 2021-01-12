@@ -196,6 +196,7 @@ public class Drivetrain implements Mechanism {
 
 
 
+            /*
             opMode.telemetry.addData("dis X", disX);
             opMode.telemetry.addData("dis Y", disY);
             opMode.telemetry.addData("dis angle", disAngle);
@@ -205,7 +206,6 @@ public class Drivetrain implements Mechanism {
 
 
 
-            /*
             opMode.telemetry.addData("x", positioning.getxPos());
             opMode.telemetry.addData("y", positioning.getyPos());
             opMode.telemetry.addData("angle", positioning.getAngle());
@@ -236,8 +236,8 @@ public class Drivetrain implements Mechanism {
         double x = robotCentricVel[0];
         double y = robotCentricVel[1];
 
-        opMode.telemetry.addData("xVelField", x);
-        opMode.telemetry.addData("yVelField", y);
+        // opMode.telemetry.addData("xVelField", x);
+        // opMode.telemetry.addData("yVelField", y);
 
         double sum = Math.abs(x) + Math.abs(y) + Math.abs(angleVel);
         if (sum > 1) {

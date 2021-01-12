@@ -38,25 +38,25 @@ public class ArcOdometry extends Odometry {
             if (leftEncChange + rightEncChange > 0) {
                 if (changeInAngle > 0) {
                     changeInPos = new double[]{
-                            encToInch(radius * (Math.cos(Math.toRadians(changeInAngle)) - 1)),
-                            encToInch(radius * Math.sin(Math.toRadians(changeInAngle)))
+                            encToInch(radius * (Math.cos(Math.toRadians(Math.abs(changeInAngle))) - 1)),
+                            encToInch(radius * Math.sin(Math.toRadians(Math.abs(changeInAngle))))
                     };
                 } else {
                     changeInPos = new double[]{
-                            encToInch(-radius * (Math.cos(Math.toRadians(changeInAngle)) - 1)),
-                            encToInch(radius * Math.sin(Math.toRadians(changeInAngle)))
+                            encToInch(-radius * (Math.cos(Math.toRadians(Math.abs(changeInAngle))) - 1)),
+                            encToInch(radius * Math.sin(Math.toRadians(Math.abs(changeInAngle))))
                     };
                 }
             } else {
                 if (changeInAngle > 0) {
                     changeInPos = new double[]{
-                            encToInch(-radius * (Math.cos(Math.toRadians(changeInAngle)) - 1)),
-                            encToInch(-radius * Math.sin(Math.toRadians(changeInAngle)))
+                            encToInch(-radius * (Math.cos(Math.toRadians(Math.abs(changeInAngle))) - 1)),
+                            encToInch(-radius * Math.sin(Math.toRadians(Math.abs(changeInAngle))))
                     };
                 } else {
                     changeInPos = new double[]{
-                            encToInch(radius * (Math.cos(Math.toRadians(changeInAngle)) - 1)),
-                            encToInch(-radius * Math.sin(Math.toRadians(changeInAngle)))
+                            encToInch(radius * (Math.cos(Math.toRadians(Math.abs(changeInAngle))) - 1)),
+                            encToInch(-radius * Math.sin(Math.toRadians(Math.abs(changeInAngle))))
                     };
                 }
             }
@@ -64,20 +64,20 @@ public class ArcOdometry extends Odometry {
             radius = Math.abs(encToInch(horiEncChange - horiEncPerDegree * changeInAngle) / changeInAngle);
             if (changeInAngle > 0) {
                 if (horiEncChange - horiEncPerDegree * changeInAngle > 0) {
-                    changeInPos[0] += radius * Math.sin(Math.toRadians(changeInAngle));
-                    changeInPos[1] += radius * (1 - Math.cos(Math.toRadians(changeInAngle)));
+                    changeInPos[0] += radius * Math.sin(Math.toRadians(Math.abs(changeInAngle)));
+                    changeInPos[1] += radius * (1 - Math.cos(Math.toRadians(Math.abs(changeInAngle))));
 
                 } else {
-                    changeInPos[0] += -radius * Math.sin(Math.toRadians(changeInAngle));
-                    changeInPos[1] += -radius * (1 - Math.cos(Math.toRadians(changeInAngle)));
+                    changeInPos[0] += -radius * Math.sin(Math.toRadians(Math.abs(changeInAngle)));
+                    changeInPos[1] += -radius * (1 - Math.cos(Math.toRadians(Math.abs(changeInAngle))));
                 }
             } else if (changeInAngle - horiEncPerDegree * changeInAngle < 0) {
                 if (horiEncChange > 0) {
-                    changeInPos[0] += -radius * Math.sin(Math.toRadians(changeInAngle));
-                    changeInPos[1] += radius * (1 - Math.cos(Math.toRadians(changeInAngle)));
+                    changeInPos[0] += -radius * Math.sin(Math.toRadians(Math.abs(changeInAngle)));
+                    changeInPos[1] += radius * (1 - Math.cos(Math.toRadians(Math.abs(changeInAngle))));
                 } else {
-                    changeInPos[0] += radius * Math.sin(Math.toRadians(changeInAngle));
-                    changeInPos[1] += -radius * (1 - Math.cos(Math.toRadians(changeInAngle)));
+                    changeInPos[0] += radius * Math.sin(Math.toRadians(Math.abs(changeInAngle)));
+                    changeInPos[1] += -radius * (1 - Math.cos(Math.toRadians(Math.abs(changeInAngle))));
                 }
             }
         }

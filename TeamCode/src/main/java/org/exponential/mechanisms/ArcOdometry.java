@@ -5,6 +5,7 @@ public class ArcOdometry extends Odometry {
         super(imu);
     }
 
+
     public void update(double timeElapsed) {
         updateTimer.reset();
 
@@ -38,30 +39,31 @@ public class ArcOdometry extends Odometry {
             if (leftEncChange + rightEncChange > 0) {
                 if (changeInAngle > 0) {
                     changeInPos = new double[]{
-                            encToInch(radius * (Math.cos(Math.toRadians(Math.abs(changeInAngle))) - 1)),
-                            encToInch(radius * Math.sin(Math.toRadians(Math.abs(changeInAngle))))
+                            (radius * (Math.cos(Math.toRadians(Math.abs(changeInAngle))) - 1)),
+                            (radius * Math.sin(Math.toRadians(Math.abs(changeInAngle))))
                     };
                 } else {
                     changeInPos = new double[]{
-                            encToInch(-radius * (Math.cos(Math.toRadians(Math.abs(changeInAngle))) - 1)),
-                            encToInch(radius * Math.sin(Math.toRadians(Math.abs(changeInAngle))))
+                            (-radius * (Math.cos(Math.toRadians(Math.abs(changeInAngle))) - 1)),
+                            (radius * Math.sin(Math.toRadians(Math.abs(changeInAngle))))
                     };
                 }
             } else {
                 if (changeInAngle > 0) {
                     changeInPos = new double[]{
-                            encToInch(-radius * (Math.cos(Math.toRadians(Math.abs(changeInAngle))) - 1)),
-                            encToInch(-radius * Math.sin(Math.toRadians(Math.abs(changeInAngle))))
+                            (radius * (Math.cos(Math.toRadians(Math.abs(changeInAngle))) - 1)),
+                            (-radius * Math.sin(Math.toRadians(Math.abs(changeInAngle))))
                     };
                 } else {
                     changeInPos = new double[]{
-                            encToInch(radius * (Math.cos(Math.toRadians(Math.abs(changeInAngle))) - 1)),
-                            encToInch(-radius * Math.sin(Math.toRadians(Math.abs(changeInAngle))))
+                            (-radius * (Math.cos(Math.toRadians(Math.abs(changeInAngle))) - 1)),
+                            (-radius * Math.sin(Math.toRadians(Math.abs(changeInAngle))))
                     };
                 }
             }
 
-            radius = Math.abs(encToInch(horiEncChange - horiEncPerDegree * changeInAngle) / changeInAngle);
+
+            radius = Math.abs(encToInch(horiEncChange - horiEncPerDegree * changeInAngle) / Math.toRadians(changeInAngle));
             if (changeInAngle > 0) {
                 if (horiEncChange - horiEncPerDegree * changeInAngle > 0) {
                     changeInPos[0] += radius * Math.sin(Math.toRadians(Math.abs(changeInAngle)));
@@ -71,16 +73,21 @@ public class ArcOdometry extends Odometry {
                     changeInPos[0] += -radius * Math.sin(Math.toRadians(Math.abs(changeInAngle)));
                     changeInPos[1] += -radius * (1 - Math.cos(Math.toRadians(Math.abs(changeInAngle))));
                 }
-            } else if (changeInAngle - horiEncPerDegree * changeInAngle < 0) {
-                if (horiEncChange > 0) {
-                    changeInPos[0] += -radius * Math.sin(Math.toRadians(Math.abs(changeInAngle)));
-                    changeInPos[1] += radius * (1 - Math.cos(Math.toRadians(Math.abs(changeInAngle))));
-                } else {
+            } else if (changeInAngle < 0) {
+                if (horiEncChange - horiEncPerDegree * changeInAngle > 0) {
                     changeInPos[0] += radius * Math.sin(Math.toRadians(Math.abs(changeInAngle)));
                     changeInPos[1] += -radius * (1 - Math.cos(Math.toRadians(Math.abs(changeInAngle))));
+                } else {
+                    changeInPos[0] += -radius * Math.sin(Math.toRadians(Math.abs(changeInAngle)));
+                    changeInPos[1] += radius * (1 - Math.cos(Math.toRadians(Math.abs(changeInAngle))));
                 }
             }
         }
+
+
+        // opMode.telemetry.addData("delta angle: ", changeInAngle);
+        // opMode.telemetry.addData("delta x: ", changeInPos[0]);
+        // opMode.telemetry.addData("delta y: ", changeInPos[1]);
 
         // changes to field centric displacement vector
         changeInPos = toFieldCentric(changeInPos[0], changeInPos[1], imu.angle - changeInAngle);
@@ -91,6 +98,7 @@ public class ArcOdometry extends Odometry {
         yVel = changeInPos[1] / timeElapsed;
         angle += changeInAngle;
         angleVel = changeInAngle / timeElapsed;
+
     }
 
     public double[] toFieldCentric(double robotX, double robotY, double angleBetween) {

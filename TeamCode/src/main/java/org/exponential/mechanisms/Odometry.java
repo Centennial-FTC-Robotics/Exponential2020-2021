@@ -154,6 +154,7 @@ public class Odometry implements Runnable, Mechanism {
         this.xPos = x;
         this.yPos = y;
         this.angle = angle;
+        imu.angle = angle;
     }
 
     public double getxPos() {

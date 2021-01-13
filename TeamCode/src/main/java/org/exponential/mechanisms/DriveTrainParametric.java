@@ -14,11 +14,11 @@ public class DriveTrainParametric extends Drivetrain {
     // with motion profiling
 
     // feedforward constants
-    public final static double xVelMax = 12; // inch per sec per motor power
-    public final static double yVelMax = 10; // inch per sec per motor power
-    public final static double rotate = 10; // degrees per sec per motor power
-    public final static double xAccelMax = 4; // inch per sec^2
-    public final static double yAccelMax = 3; // inch per sec^2
+    public final static double xVelMax = 59.17; // inch per sec per motor power
+    public final static double yVelMax = 63.016; // inch per sec per motor power
+    public final static double rotate = 404.76; // degrees per sec per motor power
+    public final static double xAccelMax =1761.22334; // inch per sec^2
+    public final static double yAccelMax = 2459.2876; // inch per sec^2
 
     // feedback constants
     private final static double KPBACK = 0.5;
@@ -86,7 +86,17 @@ public class DriveTrainParametric extends Drivetrain {
             // sets the velocity using encapsulated velocity method that uses motion profiling
             setVel(xNew, yNew, angleNew);
 
+            opMode.telemetry.addData("X: ",positioning.xPos);
+            opMode.telemetry.addData("Y: ", positioning.yPos);
+            opMode.telemetry.addData("Angle: ", positioning.angle);
+            opMode.telemetry.addData("Dis X: ", disX);
+            opMode.telemetry.addData("Dis Y: ", disY);
+            opMode.telemetry.addData("Dis Angle: ", disAngle);
+
+            opMode.telemetry.update();
         }
+
+
     }
 
 

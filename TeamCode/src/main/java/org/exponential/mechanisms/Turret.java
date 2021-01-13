@@ -18,14 +18,14 @@ public class Turret implements Mechanism {
     public void initialize(LinearOpMode opMode) {
     }
 
-    public Turret (Odometry odometry){
+    public Turret (Odometry odometry, LinearOpMode opMode){
         positioning = odometry;
         turretMotor = opMode.hardwareMap.get(DcMotorEx.class, "turretMotor");//TODO wtf
         turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         // 59 in x, 236.22 in y.
     }
-    public void moveTurret(double targetPosition, Odometry odometry){
-        odometry.update();
+    public void moveTurret(double targetPosition){
+        positioning.update();
         turretDegreeToEncoder(IMU.normalize(findingTurretAngle(targetPosition)));//TODO SET Motor to go to this position
 
     }

@@ -34,7 +34,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
             if (gamepad2.a == true){
                 targetNumber = targetNumber + 1;
             }
-            Turret.moveTurret(toggleTarget(targetNumber));//TODO Eric pls fix this
+            ourRobot.turret.moveTurret(toggleTarget(targetNumber));//TODO Eric pls fix this
             //--------------
 
             double theta = currentAngle - initialAngle;

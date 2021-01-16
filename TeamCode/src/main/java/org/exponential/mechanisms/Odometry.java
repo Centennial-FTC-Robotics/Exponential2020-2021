@@ -36,7 +36,7 @@ public class Odometry implements Runnable, Mechanism {
     int lastRightEncPos;
     int lastHoriEncPos;
 
-    double horiEncPerDegree = 31; //TODO: Find this value
+    double horiEncPerDegree = 31;
 
     ElapsedTime updateTimer;
 
@@ -145,9 +145,7 @@ public class Odometry implements Runnable, Mechanism {
     public void loadPosition() {
         File file = AppUtil.getInstance().getSettingsFile("RobotPosition.txt");
         String[] contents = ReadWriteFile.readFile(file).trim().split(":");
-        xPos = Double.parseDouble(contents[0]);
-        yPos = Double.parseDouble(contents[1]);
-        angle = Double.parseDouble(contents[2]);
+        setPosition(Double.parseDouble(contents[0]), Double.parseDouble(contents[1]), Double.parseDouble(contents[2]));
     }
 
     public void setPosition(double x, double y, double angle){

@@ -20,11 +20,14 @@ public class Turret implements Mechanism {
 
     public Turret (Odometry odometry, LinearOpMode opMode){
         positioning = odometry;
-        turretMotor = opMode.hardwareMap.get(DcMotorEx.class, "turretMotor");//TODO wtf
-        turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        turretMotor = opMode.hardwareMap.get(DcMotorEx.class, "turretMotor");
+        turretMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        turretMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         // 59 in x, 236.22 in y.
     }
     public void moveTurret(double targetPosition){
+
         positioning.update();
         turretDegreeToEncoder(IMU.normalize(findingTurretAngle(targetPosition)));//TODO SET Motor to go to this position
 
@@ -44,7 +47,7 @@ public class Turret implements Mechanism {
     public double findingTurretAngle (double targetX){
         atanAngle = IMU.normalize(Math.toDegrees(Math.atan2(yGoal - positioning.getyPos(), targetX - positioning.getxPos())));
         double robotAngle = IMU.normalize(positioning.getAngle());
-        turretAngle = atanAngle - robotAngle + shooterInaccuracy; //This is probably the first place you wanna check if there's something wrong.
+        turretAngle = atanAngle - robotAngle + shooterInaccuracy;
         return turretAngle;
     }
 }

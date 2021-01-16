@@ -55,10 +55,10 @@ public class Drivetrain implements Mechanism {
         backRight.setDirection(DcMotor.Direction.REVERSE);
 
         // TODO: maybe not set to run with encoders if these encoders will be connected to odometry encoders
-        frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        frontLeft.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        backLeft.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        frontRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        backRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
 
 
         frontLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
@@ -295,7 +295,7 @@ public class Drivetrain implements Mechanism {
         }
         return motorPowers;
     }
-    public void performBreak(){
+    public void performBrake(){
         frontLeft.setPower(0);
         frontRight.setPower(0);
         backLeft.setPower(0);

@@ -38,6 +38,7 @@ public class OurRobot implements Robot {
 
         odometry = new ArcOdometry(imu);
         odometry.initialize(opMode);
+
         drivetrain = new Drivetrain(odometry);
         drivetrain.initialize(opMode);
         camera = new Camera();
@@ -52,5 +53,11 @@ public class OurRobot implements Robot {
         wobbleGoalMover.initialize(opMode);
         imu = new IMU();
         imu.initialize(opMode);
+        turret = new Turret(odometry, opMode);
+        turret.initialize(opMode);
+
+
+
+
     }
 }

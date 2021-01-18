@@ -2,8 +2,11 @@ package org.exponential.mechanisms;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.exponential.superclasses.Mechanism;
+
+import static java.lang.Thread.sleep;
 
 public class Intake implements Mechanism {
     public static final double INTAKE_POWER = -.6;
@@ -11,10 +14,16 @@ public class Intake implements Mechanism {
 
     public static final double INTAKE_FACTOR = .6;
 
+    public static final double LEFT_SERVO_POSITION = 0;
+    public static final double RIGHT_SERVO_POSITION = 0;
     DcMotorEx intakeMotor;
+    Servo leftIntakeServo;
+    public Servo rightIntakeServo;
     @Override
     public void initialize(LinearOpMode opMode) {
         intakeMotor = opMode.hardwareMap.get(DcMotorEx.class, "intakeMotor");
+        leftIntakeServo = opMode.hardwareMap.servo.get("leftIntakeServo");
+        rightIntakeServo = opMode.hardwareMap.servo.get("rightIntakeServo");
     }
 
     public void setPower(double power) {
@@ -38,5 +47,10 @@ public class Intake implements Mechanism {
 
     public void stop() {
         setPower(0);
+    }
+
+    public void setServoPositions() {
+        // leftIntakeServo.setPosition(LEFT_SERVO_POSITION);
+        rightIntakeServo.setPosition(RIGHT_SERVO_POSITION);
     }
 }

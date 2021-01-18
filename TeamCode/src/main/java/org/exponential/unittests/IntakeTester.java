@@ -15,7 +15,7 @@ public class IntakeTester extends UnitTester {
         waitForStart();
         intake = new Intake();
         intake.initialize(this);
-        trackIndex(0, 3);
+        trackIndex(0, 4);
     }
 
     @Override
@@ -32,6 +32,9 @@ public class IntakeTester extends UnitTester {
                 break;
             case 3:
                 teleopOuttakeTest();
+                break;
+            case 4:
+                servoPositionTest();
                 break;
             default:
                 break;
@@ -68,5 +71,13 @@ public class IntakeTester extends UnitTester {
         intake.setPowerInput(1);  // -1 because "down" should be
         while (timer.seconds() < 3.0);
         intake.stop();
+    }
+
+    public void servoPositionTest() {
+        // intake.setServoPositions();
+        for (double i = 0; i < 1; i += .1) {
+            intake.rightIntakeServo.setPosition(i);
+            sleep(500);
+        }
     }
 }

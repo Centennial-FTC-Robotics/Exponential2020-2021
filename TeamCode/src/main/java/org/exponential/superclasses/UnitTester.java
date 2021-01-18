@@ -23,8 +23,11 @@ public abstract class UnitTester extends LinearOpMode {
             } else if (gamepad1.a) {
                 runTest(testIndex);
             }
-            telemetry.addData("testIndex", testIndex);
-            telemetry.update();
+            // this is to hopefully not override camera telemetry
+            //if (gamepad1.dpad_up || gamepad1.dpad_down || gamepad1.dpad_left || gamepad1.dpad_right) {
+                telemetry.addData("testIndex", testIndex);
+                telemetry.update();
+            //}
         }
     }
     public abstract void runTest(int index);

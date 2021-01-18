@@ -22,12 +22,16 @@ public class WobbleGoalMoverTester extends UnitTester {
         switch (index) {
             case 0:
                 raise();
+                break;
             case 1:
                 lower();
+                break;
             case 2:
                 clamp();
+                break;
             case 3:
                 release();
+                break;
             default:
                 break;
         }

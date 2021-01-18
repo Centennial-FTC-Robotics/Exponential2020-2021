@@ -22,6 +22,7 @@ public class ShooterTester extends UnitTester {
         switch (index) {
             case 0:
                 runShooter();
+                break;
             default:
                 break;
         }

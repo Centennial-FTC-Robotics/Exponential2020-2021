@@ -1,8 +1,11 @@
 package org.exponential.unittests;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
 import org.exponential.mechanisms.Loader;
 import org.exponential.superclasses.UnitTester;
 
+@Autonomous(name="LoaderTester", group="Autonomous")
 public class LoaderTester extends UnitTester {
     Loader loader;
     @Override
@@ -18,8 +21,10 @@ public class LoaderTester extends UnitTester {
         switch (index) {
             case 0:
                 loadPositionTest();
+                break;
             case 1:
                 unloadPositionTest();
+                break;
             default:
                 break;
         }

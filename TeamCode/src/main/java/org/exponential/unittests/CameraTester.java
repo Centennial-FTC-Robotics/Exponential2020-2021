@@ -14,11 +14,27 @@ public class CameraTester extends UnitTester {
         waitForStart();
         camera = new Camera();
         camera.initialize(this);
-        trackIndex(0, 5);
+        trackIndex(0, 1);
     }
 
     @Override
     public void runTest(int index) {
+        switch (index) {
+            case 0:
+                activateCamera();
+                break;
+            case 1:
+                deactivateCamera();
+                break;
+            default:
+                break;
+        }
+    }
+    public void activateCamera() {
+        camera.activate();
+    }
 
+    public void deactivateCamera() {
+        camera.deactivate();
     }
 }

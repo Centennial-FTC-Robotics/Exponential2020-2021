@@ -25,12 +25,16 @@ public class DrivetrainTester extends UnitTester {
         switch (index) {
             case 0:
                 regularStrafing();
+                break;
             case 1:
                 fieldCentricStrafing45Degrees();
+                break;
             case 2:
                 fieldCentricStrafing202Degrees();
+                break;
             case 3:
                 odometricTracking();
+                break;
             default:
                 break;
         }

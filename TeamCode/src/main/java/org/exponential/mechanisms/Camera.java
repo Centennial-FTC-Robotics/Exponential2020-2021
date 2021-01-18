@@ -36,7 +36,7 @@ public class Camera implements Mechanism {
 
 
     public void activate(){
-        camera.startStreaming(1280, 720, OpenCvCameraRotation.SIDEWAYS_RIGHT);
+        camera.startStreaming(1280, 720, /*OpenCvCameraRotation.SIDEWAYS_LEFT*/OpenCvCameraRotation.UPRIGHT);
 
     }
 
@@ -54,7 +54,31 @@ public class Camera implements Mechanism {
         Mat blackAndWhite = new Mat();
         Mat thresholded = new Mat();
         Mat contourImage = new Mat();
-        public Mat processFrame(Mat input){   // http://creativemorphometrics.co.vu/blog/2014/08/05/automated-outlines-with-opencv-in-python/
+        public Mat processFrame(Mat input){
+            // Imgproc.cvtColor(input, gray, Imgproc.COLOR_BGR2GRAY);
+            // cropping the input to the following dimensions
+            // x: 0 -> 720
+            // y: 0 -> 1280
+            // (0, 0): top right
+            // lets say the orange rings are around hex 184, 104, 0
+            // if robot is located on right red strip, the rings are located near the top of the middle.
+            Rect imageCrop = new Rect(new Point(250, 20), new Point(410, 300));
+            croppedImage = new Mat(input, imageCrop);
+
+            for (int y = 0; y < croppedImage.rows(); y += 2) {
+                for (int x = 0; x < croppedImage.cols(); x += 2) {
+                    croppedImage.get(y, x);
+                }
+            }
+            // converting the cropped image to black and whtie and storing it in blackAndWhite
+            // Imgproc.cvtColor(croppedImage, blackAndWhite, Imgproc.COLOR_BGR2GRAY);
+
+            opMode.telemetry.addData("numRings", numRings);
+            opMode.telemetry.update();
+
+            return blackAndWhite;  // what gets returned is showed on the robot phone screen
+        }
+        /*public Mat processFrame(Mat input){   // http://creativemorphometrics.co.vu/blog/2014/08/05/automated-outlines-with-opencv-in-python/
 
             // cropping image
             // TODO: change the cropping dimensions
@@ -84,7 +108,7 @@ public class Camera implements Mechanism {
             }
 
             return matrix;
-        }
+        }*/
 
     }
 }

@@ -5,36 +5,38 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.exponential.superclasses.Mechanism;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-
 public class WobbleGoalMover implements Mechanism {
-    Servo leftMoverServo;
-    Servo rightMoverServo;
+    /*Servo leftMoverServo;
+    Servo rightMoverServo;*/
+    Servo raiseServo;
     Servo clampServo;
 
+    public static final double RAISE_POSITION = .45;
+    public static final double LOWER_POSITION = .8;
+    public static final double CLAMP_POSITION = 0;
+    public static final double RELEASE_POSITION = 0;
     @Override
     public void initialize(LinearOpMode opMode) {
-        leftMoverServo = hardwareMap.servo.get("leftMoverServo");
-        rightMoverServo = hardwareMap.servo.get("rightMoverServo");
-        clampServo = hardwareMap.servo.get("clampServo");
+        /*leftMoverServo = hardwareMap.servo.get("leftMoverServo");
+        rightMoverServo = hardwareMap.servo.get("rightMoverServo");*/
+        raiseServo = opMode.hardwareMap.servo.get("raiseServo");
+        clampServo = opMode.hardwareMap.servo.get("clampServo");
     }
 
     //assuming the mover will be a clamp/arm system
     public void clamp() {
-        clampServo.setPosition(1);
+        clampServo.setPosition(CLAMP_POSITION);
     }
 
     public void release() {
-        clampServo.setPosition(0);
+        clampServo.setPosition(RELEASE_POSITION);
     }
 
     public void raise() {
-        leftMoverServo.setPosition(0);
-        rightMoverServo.setPosition(0);
+        raiseServo.setPosition(RAISE_POSITION);
     }
 
     public void lower() {
-        leftMoverServo.setPosition(0);
-        rightMoverServo.setPosition(0);
+        raiseServo.setPosition(LOWER_POSITION);
     }
 }

@@ -12,9 +12,10 @@ public class IntakeTester extends UnitTester {
     Intake intake;
     @Override
     public void runOpMode() throws InterruptedException {
+        waitForStart();
         intake = new Intake();
         intake.initialize(this);
-        trackIndex(0, 1);
+        trackIndex(0, 3);
     }
 
     @Override
@@ -22,12 +23,16 @@ public class IntakeTester extends UnitTester {
         switch (index) {
             case 0:
                 autonomousIntakeTest();
+                break;
             case 1:
                 autonomousOuttakeTest();
+                break;
             case 2:
                 teleopIntakeTest();
+                break;
             case 3:
                 teleopOuttakeTest();
+                break;
             default:
                 break;
         }

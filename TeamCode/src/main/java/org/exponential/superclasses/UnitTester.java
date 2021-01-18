@@ -9,10 +9,12 @@ public abstract class UnitTester extends LinearOpMode {
             if (gamepad1.dpad_up) {
                 if (testIndex != maxIndex) {
                     testIndex++;
+                    sleep(500);  // so that the cases don't increment instantly
                 }
             } else if (gamepad1.dpad_down) {
                 if (testIndex != minIndex) {
                     testIndex--;
+                    sleep(500);
                 }
             } else if (gamepad1.dpad_left) {
                 testIndex = minIndex;

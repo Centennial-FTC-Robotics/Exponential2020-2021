@@ -6,10 +6,10 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.exponential.superclasses.Mechanism;
 
 public class Intake implements Mechanism {
-    public static final double INTAKE_POWER = .5;
-    public static final double OUTTAKE_POWER = -.5;
+    public static final double INTAKE_POWER = -.6;
+    public static final double OUTTAKE_POWER = .6;
 
-    public static final double INTAKE_FACTOR = .5;
+    public static final double INTAKE_FACTOR = .6;
 
     DcMotorEx intakeMotor;
     @Override

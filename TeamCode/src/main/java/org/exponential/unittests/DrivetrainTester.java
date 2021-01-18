@@ -13,6 +13,7 @@ public class DrivetrainTester extends UnitTester {
     Drivetrain drivetrain;
     @Override
     public void runOpMode() throws InterruptedException {
+        waitForStart();
         IMU imu = new IMU();
         drivetrain = new Drivetrain(new Odometry(imu));
         drivetrain.initialize(this);

@@ -11,6 +11,7 @@ public class IMUTester extends UnitTester {
     IMU imu;
     @Override
     public void runOpMode() throws InterruptedException {
+        waitForStart();
         imu = new IMU();
         imu.initialize(this);
         trackIndex(0, 5);

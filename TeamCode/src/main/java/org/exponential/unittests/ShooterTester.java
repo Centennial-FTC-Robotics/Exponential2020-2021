@@ -11,6 +11,7 @@ public class ShooterTester extends UnitTester {
     Shooter shooter;
     @Override
     public void runOpMode() throws InterruptedException {
+        waitForStart();
         shooter = new Shooter();
         shooter.initialize(this);
         trackIndex(0, 0);

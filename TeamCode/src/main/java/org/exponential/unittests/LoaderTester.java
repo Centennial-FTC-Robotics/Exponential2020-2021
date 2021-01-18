@@ -7,6 +7,7 @@ public class LoaderTester extends UnitTester {
     Loader loader;
     @Override
     public void runOpMode() throws InterruptedException {
+        waitForStart();
         loader = new Loader();
         loader.initialize(this);
         trackIndex(0, 1);

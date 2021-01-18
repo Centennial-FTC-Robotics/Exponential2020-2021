@@ -11,6 +11,7 @@ public class CameraTester extends UnitTester {
     Camera camera;
     @Override
     public void runOpMode() throws InterruptedException {
+        waitForStart();
         camera = new Camera();
         camera.initialize(this);
         trackIndex(0, 5);

@@ -74,10 +74,29 @@ public class IntakeTester extends UnitTester {
     }
 
     public void servoPositionTest() {
+        intake.setServoPositions();
+        /*intake.leftIntakeServo.setPosition(1);
+        intake.rightIntakeServo.setPosition(0);
+        sleep(1000);
+        intake.leftIntakeServo.setPosition(0);
+        intake.rightIntakeServo.setPosition(1);
+        sleep(1000);
+        *//*intake.leftIntakeServo.setPosition(.92);
+        intake.rightIntakeServo.setPosition(.1);*//*
         // intake.setServoPositions();
-        for (double i = 0; i < 1; i += .1) {
+        for (double i = .1; i <= 1; i += .1) {
+            intake.leftIntakeServo.setPosition(1 - i);
             intake.rightIntakeServo.setPosition(i);
+
             sleep(500);
         }
+        intake.leftIntakeServo.setPosition(.9);
+        intake.rightIntakeServo.setPosition(.1);
+        sleep(500);
+        intake.leftIntakeServo.setPosition(.9);
+        intake.rightIntakeServo.setPosition(.1);
+        sleep(500);
+        intake.leftIntakeServo.setPosition(.85);
+        intake.rightIntakeServo.setPosition(.15);*/
     }
 }

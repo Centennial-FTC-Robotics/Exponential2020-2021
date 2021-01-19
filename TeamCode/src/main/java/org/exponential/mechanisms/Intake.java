@@ -9,15 +9,15 @@ import org.exponential.superclasses.Mechanism;
 import static java.lang.Thread.sleep;
 
 public class Intake implements Mechanism {
-    public static final double INTAKE_POWER = -.6;
-    public static final double OUTTAKE_POWER = .6;
+    public static final double INTAKE_POWER = -.45;
+    public static final double OUTTAKE_POWER = .45;
 
-    public static final double INTAKE_FACTOR = .6;
+    public static final double INTAKE_FACTOR = .45;
 
-    public static final double LEFT_SERVO_POSITION = 0;
+    public static final double LEFT_SERVO_POSITION = 1;
     public static final double RIGHT_SERVO_POSITION = 0;
     DcMotorEx intakeMotor;
-    Servo leftIntakeServo;
+    public Servo leftIntakeServo;
     public Servo rightIntakeServo;
     @Override
     public void initialize(LinearOpMode opMode) {
@@ -50,7 +50,7 @@ public class Intake implements Mechanism {
     }
 
     public void setServoPositions() {
-        // leftIntakeServo.setPosition(LEFT_SERVO_POSITION);
+        leftIntakeServo.setPosition(LEFT_SERVO_POSITION);
         rightIntakeServo.setPosition(RIGHT_SERVO_POSITION);
     }
 }

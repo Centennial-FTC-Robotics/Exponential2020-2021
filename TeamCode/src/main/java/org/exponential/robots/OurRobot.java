@@ -4,7 +4,7 @@ import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.exponential.mechanisms.ArcOdometry;
-import org.exponential.mechanisms.Camera;
+import org.exponential.mechanisms.CameraOpenCVOld;
 import org.exponential.mechanisms.Drivetrain;
 import org.exponential.mechanisms.IMU;
 import org.exponential.mechanisms.Intake;
@@ -17,13 +17,11 @@ import org.exponential.superclasses.Robot;
 
 import java.util.List;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-
 public class OurRobot implements Robot {
     public Drivetrain drivetrain;
     public Odometry odometry;
     public IMU imu;
-    public Camera camera;
+    public CameraOpenCVOld camera;
     public Intake intake;
     public Loader loader;
     public Shooter shooter;
@@ -41,7 +39,7 @@ public class OurRobot implements Robot {
 
         drivetrain = new Drivetrain(odometry);
         drivetrain.initialize(opMode);
-        camera = new Camera();
+        camera = new CameraOpenCVOld();
         camera.initialize(opMode);
         intake = new Intake();
         intake.initialize(opMode);

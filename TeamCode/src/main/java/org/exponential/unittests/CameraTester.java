@@ -1,9 +1,9 @@
 package org.exponential.unittests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.exponential.mechanisms.Camera;
+import org.exponential.mechanisms.CameraOpenCVOld;
 import org.exponential.superclasses.UnitTester;
 
 @Autonomous(name="CameraTester", group="Autonomous")

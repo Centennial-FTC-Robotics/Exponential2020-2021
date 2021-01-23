@@ -39,4 +39,16 @@ public class WobbleGoalMover implements Mechanism {
     public void lower() {
         raiseServo.setPosition(LOWER_POSITION);
     }
+
+    public void placeGoal() {
+        lower();
+        release();
+        raise();
+    }
+
+    public void pickupGoal() {
+        lower();
+        clamp();
+        raise();
+    }
 }

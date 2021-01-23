@@ -31,17 +31,13 @@ public class RedPath extends LinearOpMode {
         } else { //zone C
             ourRobot.drivetrain.moveTo(48, 60, 270);
         }
-        ourRobot.wobbleGoalMover.lower();
-        ourRobot.wobbleGoalMover.release();
-        ourRobot.wobbleGoalMover.raise();
+        ourRobot.wobbleGoalMover.placeGoal();
         //move to gap between half field and rings
         ourRobot.drivetrain.moveTo(-12, -24, 270);
 
         //pick up second goal
         ourRobot.drivetrain.moveTo(24, -36, 0);
-        ourRobot.wobbleGoalMover.lower();
-        ourRobot.wobbleGoalMover.clamp();
-        ourRobot.wobbleGoalMover.raise();
+        ourRobot.wobbleGoalMover.pickupGoal();
 
         //move to the same gap
         ourRobot.drivetrain.moveTo(-12, -24, 270);
@@ -54,12 +50,10 @@ public class RedPath extends LinearOpMode {
         } else { //zone C
             ourRobot.drivetrain.moveTo(48, 60, 270);
         }
-        ourRobot.wobbleGoalMover.lower();
-        ourRobot.wobbleGoalMover.release();
-        ourRobot.wobbleGoalMover.raise();
+        ourRobot.wobbleGoalMover.placeGoal();
 
         //move to some position on field to start shooting
         ourRobot.drivetrain.moveTo(12, 0, 90);
-        
+
     }
 }

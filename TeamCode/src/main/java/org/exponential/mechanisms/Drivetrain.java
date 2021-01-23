@@ -57,8 +57,8 @@ public class Drivetrain implements Mechanism {
         // TODO: maybe not set to run with encoders if these encoders will be connected to odometry encoders
         frontLeft.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         backLeft.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
-        frontRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        backRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        frontRight.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        backRight.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
 
         frontLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);

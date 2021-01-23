@@ -14,6 +14,7 @@ public class BasicTeleOp extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        waitForStart();
         ourRobot = new OurRobot();
         ourRobot.initialize(this);
         while (opModeIsActive()) {

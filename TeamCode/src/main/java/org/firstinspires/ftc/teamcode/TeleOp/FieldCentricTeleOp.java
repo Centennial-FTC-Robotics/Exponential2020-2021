@@ -19,10 +19,15 @@ public class FieldCentricTeleOp extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
+        waitForStart();
+
         ourRobot = new OurRobot();
         ourRobot.initialize(this);
 
         initialAngle = getInitialAngle();
+
+        ourRobot.intake.setServoPositions();
+        ourRobot.wobbleGoalMover.raise();
 
         while (opModeIsActive()) {
             currentAngle = getAngle();
@@ -30,17 +35,36 @@ public class FieldCentricTeleOp extends LinearOpMode {
             double inputX = gamepad1.left_stick_x;
             double inputY = -gamepad1.left_stick_y;
 
-            //John's targeting thing
+/*            //John's targeting thing
             if (gamepad2.a == true){
                 targetNumber = targetNumber + 1;
             }
             ourRobot.turret.moveTurret(toggleTarget(targetNumber));//TODO Eric pls fix this
-            //--------------
+            //--------------*/
 
             double theta = currentAngle - initialAngle;
             double rotatedX = inputX * Math.cos(theta) - inputY * Math.sin(theta);
             double rotatedY = inputX * Math.sin(theta) + inputY * Math.cos(theta);
 
+            if (gamepad1.right_trigger > 0) {
+                ourRobot.intake.setPowerInput(gamepad1.right_trigger);
+            } else if (gamepad1.left_trigger > 0) {
+                ourRobot.intake.setPowerInput(-gamepad1.left_trigger);
+            } else {
+                ourRobot.intake.setPowerInput(0);
+            }
+
+            if (gamepad1.a) {
+                ourRobot.loader.load();
+            } else if (gamepad1.b) {
+                ourRobot.loader.unload();
+            }
+
+            if (gamepad1.right_bumper) {
+                ourRobot.shooter.shoot();
+            } else {
+                ourRobot.shooter.stopShooting();
+            }
             ourRobot.drivetrain.setPowerDriveMotors(getMotorPowers(rotatedX, rotatedY, gamepad1.right_stick_x));
         }
     }

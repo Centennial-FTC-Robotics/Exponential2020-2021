@@ -8,14 +8,14 @@ import org.exponential.mechanisms.IMU;
 import org.exponential.mechanisms.Odometry;
 import org.exponential.superclasses.UnitTester;
 
-@Autonomous(name="DrivetrainTester", group="Autonomous")
+//@Autonomous(name="DrivetrainTester", group="Autonomous")
 public class DrivetrainTester extends UnitTester {
     Drivetrain drivetrain;
     @Override
     public void runOpMode() throws InterruptedException {
         waitForStart();
         IMU imu = new IMU();
-        drivetrain = new Drivetrain(new Odometry(imu));
+        //drivetrain = new Drivetrain(new Odometry(imu));
         drivetrain.initialize(this);
         trackIndex(0, 3);
     }

@@ -17,13 +17,13 @@ import java.util.Map;
 @TeleOp
 public class PrintLocation extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
+        waitForStart();
+
         OurRobot expo = new OurRobot();
-        expo.imu = new IMU();
-        expo.imu.initialize(this);
-        expo.odometry = new ArcOdometry(expo.imu);
-        expo.odometry.initialize(this);
-        expo.drivetrain = new Drivetrain(expo.odometry);
-        expo.drivetrain.initialize(this);
+        expo.initialize(this);
+
+        expo.intake.setServoPositions();
+        expo.wobbleGoalMover.raise();
 
         boolean fieldCentric = false;
         while(opModeIsActive()){

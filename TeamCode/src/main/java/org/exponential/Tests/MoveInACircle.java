@@ -13,14 +13,14 @@ import org.exponential.robots.OurRobot;
 
 import java.io.IOException;
 
-@Autonomous
+//@Autonomous
 public class MoveInACircle extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
         OurRobot expo = new OurRobot();
         expo.imu = new IMU();
         expo.imu.initialize(this);
-        expo.odometry = new ArcOdometry(expo.imu);
+        //expo.odometry = new ArcOdometry(expo.imu);
         expo.odometry.initialize(this);
         DriveTrainParametric drive = (DriveTrainParametric) (expo.drivetrain = new DriveTrainParametric(expo.odometry));
         expo.drivetrain.initialize(this);

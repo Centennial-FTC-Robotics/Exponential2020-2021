@@ -7,7 +7,7 @@ import org.exponential.superclasses.Mechanism;
 
 public class Loader implements Mechanism {
     public static final double LOAD_POSITION = 0;
-    public static final double UNLOAD_POSITION = .5;
+    public static final double UNLOAD_POSITION = .45;
     Servo loaderServo;
     @Override
     public void initialize(LinearOpMode opMode) {

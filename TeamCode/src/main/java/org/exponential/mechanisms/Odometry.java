@@ -40,15 +40,23 @@ public class Odometry implements Runnable, Mechanism {
 
     ElapsedTime updateTimer;
 
+    /*public Odometry(IMU imu, DcMotorEx leftEncoder, DcMotorEx backEncoder, DcMotorEx rightEncoder) {
+        forwardLeftEnc = leftEncoder;
+        forwardRightEnc = rightEncoder;
+        horizontalEnc = backEncoder;
+        this.imu = imu;
+    }*/
     public Odometry(IMU imu) {
         this.imu = imu;
     }
-
     @Override
     public void initialize(LinearOpMode opMode) {
-        forwardLeftEnc = opMode.hardwareMap.get(DcMotorEx.class, "leftOdometry");
+        /*forwardLeftEnc = opMode.hardwareMap.get(DcMotorEx.class, "leftOdometry");
         forwardRightEnc = opMode.hardwareMap.get(DcMotorEx.class, "rightOdometry");
-        horizontalEnc = opMode.hardwareMap.get(DcMotorEx.class, "backOdometry");
+        horizontalEnc = opMode.hardwareMap.get(DcMotorEx.class, "backOdometry");*/
+        forwardLeftEnc = opMode.hardwareMap.get(DcMotorEx.class, "leftOdometry");
+        horizontalEnc = opMode.hardwareMap.get(DcMotorEx.class, "frontLeft");
+        forwardRightEnc = opMode.hardwareMap.get(DcMotorEx.class, "intakeMotor");
 
         forwardLeftEnc.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         forwardRightEnc.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
@@ -63,6 +71,11 @@ public class Odometry implements Runnable, Mechanism {
         updateTimer = new ElapsedTime();
     }
 
+    public void setEncoders(DcMotorEx leftEncoder, DcMotorEx backEncoder, DcMotorEx rightEncoder) {
+        forwardLeftEnc = leftEncoder;
+        forwardRightEnc = rightEncoder;
+        horizontalEnc = backEncoder;
+    }
     @Override
     public void run() {
         ElapsedTime timer = new ElapsedTime();

@@ -22,7 +22,7 @@ public class Turret implements Mechanism {
         positioning = odometry;
         turretMotor = opMode.hardwareMap.get(DcMotorEx.class, "turretMotor");
         turretMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        turretMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        //turretMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         // 59 in x, 236.22 in y.
     }

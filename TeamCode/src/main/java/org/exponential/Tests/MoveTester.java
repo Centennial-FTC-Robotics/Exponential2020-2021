@@ -9,14 +9,14 @@ import org.exponential.mechanisms.IMU;
 import org.exponential.mechanisms.Odometry;
 import org.exponential.robots.OurRobot;
 
-@Autonomous
+//@Autonomous
 public class MoveTester extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         OurRobot expo = new OurRobot();
         expo.imu = new IMU();
         expo.imu.initialize(this);
 
-        expo.odometry = new ArcOdometry(expo.imu);
+        //expo.odometry = new ArcOdometry(expo.imu);
         expo.odometry.initialize(this);
         expo.odometry.setPosition(0,0,0);
         expo.drivetrain = new Drivetrain(expo.odometry);

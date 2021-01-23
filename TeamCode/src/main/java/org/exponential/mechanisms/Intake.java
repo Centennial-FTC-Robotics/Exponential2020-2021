@@ -16,7 +16,7 @@ public class Intake implements Mechanism {
 
     public static final double LEFT_SERVO_POSITION = 1;
     public static final double RIGHT_SERVO_POSITION = 0;
-    DcMotorEx intakeMotor;
+    public DcMotorEx intakeMotor;
     public Servo leftIntakeServo;
     public Servo rightIntakeServo;
     @Override

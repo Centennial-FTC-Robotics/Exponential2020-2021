@@ -2,6 +2,7 @@ package org.exponential.robots;
 
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.exponential.mechanisms.ArcOdometry;
 import org.exponential.mechanisms.CameraOpenCVOld;
@@ -34,11 +35,7 @@ public class OurRobot implements Robot {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
 
-        odometry = new ArcOdometry(imu);
-        odometry.initialize(opMode);
 
-        drivetrain = new Drivetrain(odometry);
-        drivetrain.initialize(opMode);
         camera = new CameraOpenCVOld();
         camera.initialize(opMode);
         intake = new Intake();
@@ -55,6 +52,18 @@ public class OurRobot implements Robot {
         turret.initialize(opMode);
 
 
+        /*odometry = new ArcOdometry(imu, opMode.hardwareMap.get(DcMotorEx.class, "leftOdometry"),
+                opMode.hardwareMap.get(DcMotorEx.class, "frontLeft"),
+                intake.intakeMotor);*/
+        odometry = new ArcOdometry(imu);
+        odometry.initialize(opMode);
+
+        drivetrain = new Drivetrain(odometry);
+        drivetrain.initialize(opMode);
+  /*      //right odometry: intake motor
+        odometry.setEncoders(opMode.hardwareMap.get(DcMotorEx.class, "leftOdometry"),
+                opMode.hardwareMap.get(DcMotorEx.class, "backOdometry"),
+                intake.intakeMotor);*/
 
 
     }

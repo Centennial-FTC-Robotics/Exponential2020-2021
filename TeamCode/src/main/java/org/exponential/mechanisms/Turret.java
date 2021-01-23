@@ -13,6 +13,7 @@ public class Turret implements Mechanism {
     double shooterInaccuracy = 10;
     double atanAngle;
     double yGoal = 236.22;
+    double compensationTurning;
 
 
     public void initialize(LinearOpMode opMode) {
@@ -22,24 +23,24 @@ public class Turret implements Mechanism {
         positioning = odometry;
         turretMotor = opMode.hardwareMap.get(DcMotorEx.class, "turretMotor");
         turretMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        //turretMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        turretMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        turretMotor.setPower(1);
         turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         // 59 in x, 236.22 in y.
     }
     public void moveTurret(double targetPosition){
-
         positioning.update();
-        turretDegreeToEncoder(IMU.normalize(findingTurretAngle(targetPosition)));//TODO SET Motor to go to this position
+        turretMotor.setTargetPosition((int) Math.round(turretDegreeToEncoder(IMU.normalize(findingTurretAngle(targetPosition)))));//TODO SET Motor to go to this position
 
     }
     //Motor Degrees to Encoders
     public double turretDegreeToEncoder (double degToEnc){
-        degToEnc = degToEnc * 1;//TODO find this conversion rate
+        degToEnc = degToEnc * (537.6 * 2)/360;//TODO find this conversion rate
         return degToEnc;
     }
 
     public double turretEncoderToDegree (double encToDeg){
-        encToDeg = encToDeg * 1;//whatever the number is FIND THIS OUT LATER
+        encToDeg = encToDeg * 360/(537.6 * 2);//whatever the number is FIND THIS OUT LATER
         return encToDeg;
     }
 
@@ -49,5 +50,18 @@ public class Turret implements Mechanism {
         double robotAngle = IMU.normalize(positioning.getAngle());
         turretAngle = atanAngle - robotAngle + shooterInaccuracy;
         return turretAngle;
+    }
+
+    public double limitTurretAngle (double unlimitedAngle){
+        //angles are in the perspective of the motor. ccw is 160 deg | cw is 130 deg
+        if (unlimitedAngle > 160) {
+            compensationTurning = unlimitedAngle - 160;
+            unlimitedAngle = 160;
+        } else if (unlimitedAngle < -130){
+            compensationTurning = unlimitedAngle + 130;
+            unlimitedAngle = -130;
+        }
+        //TODO need to add rotate method here to actually compensate for the angle.
+        return unlimitedAngle;
     }
 }

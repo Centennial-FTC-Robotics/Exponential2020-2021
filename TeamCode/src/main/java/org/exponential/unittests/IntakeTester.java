@@ -12,9 +12,10 @@ public class IntakeTester extends UnitTester {
     Intake intake;
     @Override
     public void runOpMode() throws InterruptedException {
+        waitForStart();
         intake = new Intake();
         intake.initialize(this);
-        trackIndex(0, 1);
+        trackIndex(0, 4);
     }
 
     @Override
@@ -22,12 +23,19 @@ public class IntakeTester extends UnitTester {
         switch (index) {
             case 0:
                 autonomousIntakeTest();
+                break;
             case 1:
                 autonomousOuttakeTest();
+                break;
             case 2:
                 teleopIntakeTest();
+                break;
             case 3:
                 teleopOuttakeTest();
+                break;
+            case 4:
+                servoPositionTest();
+                break;
             default:
                 break;
         }
@@ -63,5 +71,32 @@ public class IntakeTester extends UnitTester {
         intake.setPowerInput(1);  // -1 because "down" should be
         while (timer.seconds() < 3.0);
         intake.stop();
+    }
+
+    public void servoPositionTest() {
+        intake.setServoPositions();
+        /*intake.leftIntakeServo.setPosition(1);
+        intake.rightIntakeServo.setPosition(0);
+        sleep(1000);
+        intake.leftIntakeServo.setPosition(0);
+        intake.rightIntakeServo.setPosition(1);
+        sleep(1000);
+        *//*intake.leftIntakeServo.setPosition(.92);
+        intake.rightIntakeServo.setPosition(.1);*//*
+        // intake.setServoPositions();
+        for (double i = .1; i <= 1; i += .1) {
+            intake.leftIntakeServo.setPosition(1 - i);
+            intake.rightIntakeServo.setPosition(i);
+
+            sleep(500);
+        }
+        intake.leftIntakeServo.setPosition(.9);
+        intake.rightIntakeServo.setPosition(.1);
+        sleep(500);
+        intake.leftIntakeServo.setPosition(.9);
+        intake.rightIntakeServo.setPosition(.1);
+        sleep(500);
+        intake.leftIntakeServo.setPosition(.85);
+        intake.rightIntakeServo.setPosition(.15);*/
     }
 }

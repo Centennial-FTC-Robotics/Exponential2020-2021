@@ -13,6 +13,7 @@ public class DrivetrainTester extends UnitTester {
     Drivetrain drivetrain;
     @Override
     public void runOpMode() throws InterruptedException {
+        waitForStart();
         IMU imu = new IMU();
         drivetrain = new Drivetrain(new Odometry(imu));
         drivetrain.initialize(this);
@@ -24,12 +25,16 @@ public class DrivetrainTester extends UnitTester {
         switch (index) {
             case 0:
                 regularStrafing();
+                break;
             case 1:
                 fieldCentricStrafing45Degrees();
+                break;
             case 2:
                 fieldCentricStrafing202Degrees();
+                break;
             case 3:
                 odometricTracking();
+                break;
             default:
                 break;
         }

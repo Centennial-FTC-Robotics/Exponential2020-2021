@@ -10,6 +10,7 @@ public class Shooter implements Mechanism {
     @Override
     public void initialize(LinearOpMode opMode) {
         shooterMotor = opMode.hardwareMap.get(DcMotorEx.class, "shooterMotor");
+        shooterMotor.setDirection(DcMotorEx.Direction.REVERSE);
     }
 
     public void setPower(double power) {
@@ -18,5 +19,9 @@ public class Shooter implements Mechanism {
 
     public void shoot() {
         setPower(.5);
+    }
+
+    public void stopShooting() {
+        setPower(0);
     }
 }

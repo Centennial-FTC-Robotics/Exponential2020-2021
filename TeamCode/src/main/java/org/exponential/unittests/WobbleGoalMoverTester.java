@@ -11,6 +11,7 @@ public class WobbleGoalMoverTester extends UnitTester {
     WobbleGoalMover wobbleGoalMover;
     @Override
     public void runOpMode() throws InterruptedException {
+        waitForStart();
         wobbleGoalMover = new WobbleGoalMover();
         wobbleGoalMover.initialize(this);
         trackIndex(0, 3);
@@ -21,12 +22,16 @@ public class WobbleGoalMoverTester extends UnitTester {
         switch (index) {
             case 0:
                 raise();
+                break;
             case 1:
                 lower();
+                break;
             case 2:
                 clamp();
+                break;
             case 3:
                 release();
+                break;
             default:
                 break;
         }

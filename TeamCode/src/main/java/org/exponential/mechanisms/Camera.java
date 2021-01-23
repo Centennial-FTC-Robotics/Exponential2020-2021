@@ -1,90 +1,96 @@
 package org.exponential.mechanisms;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.exponential.superclasses.Mechanism;
-import org.opencv.core.Mat;
-import org.opencv.core.MatOfPoint;
-import org.opencv.core.Point;
-import org.opencv.core.Rect;
-import org.opencv.imgproc.Imgproc;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
-import org.openftc.easyopencv.OpenCvInternalCamera;
-import org.openftc.easyopencv.OpenCvPipeline;
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Camera implements Mechanism {
-    OpenCvCamera camera;
-    LinearOpMode opMode;
+    private LinearOpMode opMode;
+    private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
+    private static final String LABEL_FIRST_ELEMENT = "Quad";
+    private static final String LABEL_SECOND_ELEMENT = "Single";
 
-    int numRings;
+    private static final String VUFORIA_KEY =
+            "AQmuIUP/////AAAAGR6dNDzwEU07h7tcmZJ6YVoz5iaF8njoWsXQT5HnCiI/oFwiFmt4HHTLtLcEhHCU5ynokJgYSvbI32dfC2rOvqmw81MMzknAwxKxMitf8moiK62jdqxNGADODm/SUvu5a5XrAnzc7seCtD2/d5bAIv1ZuseHcK+oInFHZTi+3BvhbUyYNvnVb0tQEAv8oimzjiQW18dSUcEcB/d6QNGDvaDHpxuRCJXt8U3ShJfBWWQEex0Vp6rrb011z8KxU+dRMvGjaIy+P2p5GbWXGJn/yJS9oxuwDn3zU6kcQoAwI7mUgAw5zBGxxM+P35DoDqiOja6ST6HzDszHxClBm2dvTRP7C4DEj0gPkhX3LtBgdolt";
+
+
+     private VuforiaLocalizer vuforia; //Vuforia localization engine
+     private TFObjectDetector tfod; //Tensor Flow Object Detection engine
+     //tfod uses camera frames from vuforia
 
     @Override
     public void initialize(LinearOpMode opMode) {
         this.opMode = opMode;
-        int cameraMonitorViewId = opMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", opMode.hardwareMap.appContext.getPackageName());
-        camera = OpenCvCameraFactory.getInstance().createInternalCamera(OpenCvInternalCamera.CameraDirection.BACK, cameraMonitorViewId);
+        initVuforia();
+        initTfod();
 
-        //Open connection to camera
-        camera.openCameraDevice();
-
-        camera.setPipeline(new Pipeline());
+        if (tfod != null) {
+            tfod.activate();
+        }
     }
 
+    public void activate() {
 
-    public void activate(){
-        camera.startStreaming(1280, 720, OpenCvCameraRotation.SIDEWAYS_RIGHT);
+        while (opMode.opModeIsActive()) {
+            if (tfod != null) {
+                tfod.setZoom(2.5, 1.78);
 
+                // getUpdatedRecognitions() will return null if no new information is available since
+                // the last time that call was made.
+                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+                if (updatedRecognitions != null) {
+                    opMode.telemetry.addData("# Object Detected", updatedRecognitions.size());
+
+                    // step through the list of recognitions and display boundary info.
+                    int i = 0;
+                    for (Recognition recognition : updatedRecognitions) {
+                        opMode.telemetry.addData(String.format("label (%d)", i), recognition.getLabel());
+                        opMode.telemetry.addData(String.format("  left,top (%d)", i), "%.03f , %.03f",
+                                recognition.getLeft(), recognition.getTop());
+                        opMode.telemetry.addData(String.format("  right,bottom (%d)", i), "%.03f , %.03f",
+                                recognition.getRight(), recognition.getBottom());
+                    }
+                    opMode.telemetry.update();
+                }
+            }
+        }
     }
 
     public void deactivate() {
-        camera.stopStreaming();
+        tfod.deactivate();
     }
 
-    public int getNumberOfRings() {
-        return numRings;
+    private void initVuforia() {
+        /*
+         * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
+         */
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
+
+        //  Instantiate the Vuforia engine
+        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+
+        // Loading trackables is not necessary for the TensorFlow Object Detection engine.
     }
 
-    class Pipeline extends OpenCvPipeline {
-        Mat matrix = new Mat();
-        Mat croppedImage = new Mat();
-        Mat blackAndWhite = new Mat();
-        Mat thresholded = new Mat();
-        Mat contourImage = new Mat();
-        public Mat processFrame(Mat input){   // http://creativemorphometrics.co.vu/blog/2014/08/05/automated-outlines-with-opencv-in-python/
-
-            // cropping image
-            // TODO: change the cropping dimensions
-            Rect crop = new Rect(new Point(0, 0), new Point(1280, 720));
-            croppedImage = new Mat(input, crop);
-
-            // Turn image to black and white
-            Imgproc.cvtColor(input, blackAndWhite, Imgproc.COLOR_BGR2GRAY);
-
-            // Get the "binary image" using a color threshold
-            // https://stackoverflow.com/questions/31289895/threshold-image-using-opencv-java
-            // TODO: change thresh (15) val to something during testing
-            Imgproc.threshold(blackAndWhite, thresholded, 15, 225, Imgproc.THRESH_BINARY);
-            ArrayList<MatOfPoint> listOfContours = new ArrayList<MatOfPoint>();
-
-            // find contours from binary image, https://docs.opencv.org/3.4/d3/dc0/group__imgproc__shape.html#ga17ed9f5d79ae97bd4c7cf18403e1689a
-            // RETR_TREE: https://docs.opencv.org/3.4/d3/dc0/group__imgproc__shape.html#ga819779b9857cc2f8601e6526a3a5bc71 (retrieval modes)
-            // RETR_TREE and CHAIN_APPROX_SIMPLE from the article clink above
-            Imgproc.findContours(thresholded, listOfContours, contourImage, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
-
-            // TODO: Determine size of contour to see how many rings there are
-            //  (if there are multiple contours, you gotta get rid of them somehow by (or by more cropping)
-            numRings = -1;
-            for (MatOfPoint contour: listOfContours) {
-                double area = Imgproc.contourArea(contour);
-                // do stuff with this :)
-            }
-
-            return matrix;
-        }
-
+    /**
+     * Initialize the TensorFlow Object Detection engine.
+     */
+    private void initTfod() {
+        int tfodMonitorViewId = opMode.hardwareMap.appContext.getResources().getIdentifier(
+                "tfodMonitorViewId", "id", opMode.hardwareMap.appContext.getPackageName());
+        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+        tfodParameters.minResultConfidence = 0.8f;
+        tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+        tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_FIRST_ELEMENT, LABEL_SECOND_ELEMENT);
     }
 }

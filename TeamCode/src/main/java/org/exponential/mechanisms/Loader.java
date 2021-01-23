@@ -5,15 +5,13 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.exponential.superclasses.Mechanism;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-
 public class Loader implements Mechanism {
-    public static final double LOAD_POSITION = 1;
-    public static final double UNLOAD_POSITION = 0;
+    public static final double LOAD_POSITION = 0;
+    public static final double UNLOAD_POSITION = .5;
     Servo loaderServo;
     @Override
     public void initialize(LinearOpMode opMode) {
-        loaderServo = hardwareMap.servo.get("loaderServo");
+        loaderServo = opMode.hardwareMap.servo.get("loaderServo");
         loaderServo.setPosition(UNLOAD_POSITION);
     }
 

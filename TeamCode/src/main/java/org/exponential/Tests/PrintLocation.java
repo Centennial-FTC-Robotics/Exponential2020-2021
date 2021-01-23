@@ -21,7 +21,6 @@ public class PrintLocation extends LinearOpMode {
 
         OurRobot expo = new OurRobot();
         expo.initialize(this);
-
         expo.intake.setServoPositions();
         expo.wobbleGoalMover.raise();
 

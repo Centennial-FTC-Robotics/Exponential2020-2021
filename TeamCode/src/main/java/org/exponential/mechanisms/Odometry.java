@@ -106,19 +106,22 @@ public class Odometry implements Runnable, Mechanism {
     }
 
     public void update(double timeElapsed) {
+        opMode.telemetry.addData("left",encToInch(-1 * forwardLeftEnc.getCurrentPosition()));
+        opMode.telemetry.addData("right",encToInch(-1 * forwardRightEnc.getCurrentPosition()));
+        opMode.telemetry.addData("hori",encToInch(horizontalEnc.getCurrentPosition()));
         updateTimer.reset();
 
         // updates position, velocity, and angle according to how much time has elapsed
 
-        int leftEncChange = forwardLeftEnc.getCurrentPosition() - lastLeftEncPos;
-        int rightEncChange = forwardRightEnc.getCurrentPosition() - lastRightEncPos;
-        int horiEncChange = horizontalEnc.getCurrentPosition() - lastHoriEncPos;
+        int leftEncChange = -(forwardLeftEnc.getCurrentPosition() - lastLeftEncPos);
+        int rightEncChange = -(forwardRightEnc.getCurrentPosition() - lastRightEncPos);
+        int horiEncChange = -(horizontalEnc.getCurrentPosition() - lastHoriEncPos);
 
         // does not call getCurrentPosition a second time because you would not account for encoder
         // readings from the time between the two calls
-        lastLeftEncPos += leftEncChange;
-        lastRightEncPos += rightEncChange;
-        lastHoriEncPos += horiEncChange;
+        lastLeftEncPos -= leftEncChange;
+        lastRightEncPos -= rightEncChange;
+        lastHoriEncPos -= horiEncChange;
 
         // updates angle
         imu.update();

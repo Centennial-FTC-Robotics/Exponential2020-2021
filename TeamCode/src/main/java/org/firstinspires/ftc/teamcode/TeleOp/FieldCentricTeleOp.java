@@ -31,7 +31,6 @@ public class FieldCentricTeleOp extends LinearOpMode {
 
         while (opModeIsActive()) {
             currentAngle = getAngle();
-
             double inputX = gamepad1.left_stick_x;
             double inputY = -gamepad1.left_stick_y;
 

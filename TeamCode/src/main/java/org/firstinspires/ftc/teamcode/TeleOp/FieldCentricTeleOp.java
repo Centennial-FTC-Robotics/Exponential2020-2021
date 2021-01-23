@@ -13,8 +13,7 @@ import java.util.Map;
 public class FieldCentricTeleOp extends LinearOpMode {
     private double initialAngle;
     private double currentAngle;
-    private int targetNumber = 1;//John added this
-    private double [] goalXCoords = {85.3, 98.42, 111.54}; //Change these up please (I'll do it)
+
     private OurRobot ourRobot;
 
     @Override
@@ -35,9 +34,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
             double inputY = -gamepad1.left_stick_y;
 
 /*            //John's targeting thing
-            if (gamepad2.a == true){
-                targetNumber = targetNumber + 1;
-            }
+
             ourRobot.turret.moveTurret(toggleTarget(targetNumber));//TODO Eric pls fix this
             //--------------*/
 
@@ -99,9 +96,5 @@ public class FieldCentricTeleOp extends LinearOpMode {
         return powers;
     }
 
-    //John's targeting method
-    public double toggleTarget(double targetXCoords){
-        targetXCoords = goalXCoords [targetNumber];
-        return targetXCoords;
-    }
+
 }

@@ -12,8 +12,10 @@ public class Turret implements Mechanism {
     double turretAngle;
     double shooterInaccuracy = 10;
     double atanAngle;
-    double yGoal = 236.22;
+    double xGoal = 236.22;
     double compensationTurning;
+    int targetNumber = 0;
+    double [] goalYCoords = {85.3, 98.42, 111.54};
 
 
     public void initialize(LinearOpMode opMode) {
@@ -28,9 +30,9 @@ public class Turret implements Mechanism {
         turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         // 59 in x, 236.22 in y.
     }
-    public void moveTurret(double targetPosition){
+    public void moveTurret(int toggleInput, int previousTarget){
         positioning.update();
-        turretMotor.setTargetPosition((int) Math.round(turretDegreeToEncoder(IMU.normalize(findingTurretAngle(targetPosition)))));//TODO SET Motor to go to this position
+        turretMotor.setTargetPosition((int) Math.round(turretDegreeToEncoder(limitTurretAngle(IMU.normalize(findingTurretAngle(toggleGoal(toggleInput, previousTarget)))))));//TODO SET Motor to go to this position
 
     }
     //Motor Degrees to Encoders
@@ -45,8 +47,8 @@ public class Turret implements Mechanism {
     }
 
     //Finds the angle for the turret to shoot at in relation to the rest of the robot
-    public double findingTurretAngle (double targetX){
-        atanAngle = IMU.normalize(Math.toDegrees(Math.atan2(yGoal - positioning.getyPos(), targetX - positioning.getxPos())));
+    public double findingTurretAngle (double targetY){
+        atanAngle = IMU.normalize(Math.toDegrees(Math.atan2(targetY- positioning.getyPos(), xGoal - positioning.getxPos())));
         double robotAngle = IMU.normalize(positioning.getAngle());
         turretAngle = atanAngle - robotAngle + shooterInaccuracy;
         return turretAngle;
@@ -63,5 +65,19 @@ public class Turret implements Mechanism {
         }
         //TODO need to add rotate method here to actually compensate for the angle.
         return unlimitedAngle;
+    }
+
+    public double toggleGoal(int toggle, int targetNumber){
+        double targetYCoords;
+
+        //Toggling
+        if (toggle == 1 && targetNumber < 4) {
+            targetNumber = targetNumber + 1;
+        } else if (toggle == 1 & targetNumber == 5) {
+            targetNumber = 0;
+        }
+
+        targetYCoords = goalYCoords [targetNumber];
+        return targetYCoords;
     }
 }

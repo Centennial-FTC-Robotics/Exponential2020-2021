@@ -21,10 +21,10 @@ public class Shooter implements Mechanism {
     }
 
     public void shoot() {
-        setPower(.675);
+        setPower(.405);
     }
     public void loadShoot() {
-        setPower(1);
+        setPower(.49);
     }
 
 

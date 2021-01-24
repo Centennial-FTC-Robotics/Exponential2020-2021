@@ -12,6 +12,7 @@ public class Shooter implements Mechanism {
     public void initialize(LinearOpMode opMode) {
         shooterMotor = opMode.hardwareMap.get(DcMotorEx.class, "shooterMotor");
         shooterMotor.setDirection(DcMotorEx.Direction.REVERSE);
+        shooterMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         shooterMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 

@@ -2,10 +2,9 @@ package org.exponential.robots;
 
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.exponential.mechanisms.ArcOdometry;
-import org.exponential.mechanisms.CameraOpenCVOld;
+import org.exponential.mechanisms.CameraOpenCV;
 import org.exponential.mechanisms.Drivetrain;
 import org.exponential.mechanisms.IMU;
 import org.exponential.mechanisms.Intake;
@@ -22,7 +21,7 @@ public class OurRobot implements Robot {
     public Drivetrain drivetrain;
     public Odometry odometry;
     public IMU imu;
-    public CameraOpenCVOld camera;
+    public CameraOpenCV camera;
     public Intake intake;
     public Loader loader;
     public Shooter shooter;
@@ -36,7 +35,7 @@ public class OurRobot implements Robot {
         }
 
 
-        camera = new CameraOpenCVOld();
+        camera = new CameraOpenCV();
         camera.initialize(opMode);
         intake = new Intake();
         intake.initialize(opMode);

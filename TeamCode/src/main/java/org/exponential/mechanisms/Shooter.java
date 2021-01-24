@@ -18,7 +18,7 @@ public class Shooter implements Mechanism {
     }
 
     public void shoot() {
-        setPower(.5);
+        setPower(.75);
     }
 
     public void stopShooting() {

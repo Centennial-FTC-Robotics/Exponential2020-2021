@@ -11,7 +11,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
 
-public class Camera implements Mechanism {
+public class CameraTensorFlow implements Mechanism {
     private LinearOpMode opMode;
     private static final String TFOD_MODEL_ASSET = "UltimateGoal.tflite";
     private static final String LABEL_FIRST_ELEMENT = "Quad";
@@ -40,7 +40,7 @@ public class Camera implements Mechanism {
 
         while (opMode.opModeIsActive()) {
             if (tfod != null) {
-                tfod.setZoom(2.5, 1.78);
+                //tfod.setZoom(2.5, 1.78);
 
                 // getUpdatedRecognitions() will return null if no new information is available since
                 // the last time that call was made.

@@ -23,6 +23,8 @@ public class Turret implements Mechanism {
     public void initialize(LinearOpMode opMode) {
         turretMotor = opMode.hardwareMap.get(DcMotorEx.class, "turretMotor");
         turretMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        turretMotor.setTargetPosition(turretMotor.getCurrentPosition());
+
         turretMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         turretMotor.setPower(.2);
         turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -32,10 +34,14 @@ public class Turret implements Mechanism {
     public Turret (Drivetrain drivetrain) {
         this.drivetrain = drivetrain;
     }
-    public void rotateTurretToTarget(int targetXValue){
+
+    public void rotateTurretToTarget(double targetXValue) {
+        rotateTurretToTarget(targetXValue, targetYPosition);
+    }
+    public void rotateTurretToTarget(double targetXValue, double targetYValue){
         drivetrain.positioning.update();
 
-        double angleToRotate = IMU.normalize(getAngleToRotate(targetXValue));
+        double angleToRotate = IMU.normalize(getAngleToRotate(targetXValue, targetYValue));
         double normalizedAngle = IMU.normalize(angleToRotate);
         //double clippedAngle = limitTurretAngle(normalizedAngle);
         double clippedAngleToRotate = Range.clip(angleToRotate, -130 - lastAngle, 160 - lastAngle);
@@ -57,7 +63,7 @@ public class Turret implements Mechanism {
     }
 
     //Finds the number of degrees to rotate the turret
-    public double getAngleToRotate(double targetXPosition){
+    public double getAngleToRotate(double targetXPosition, double targetYPosition){
         atanAngle = IMU.normalize(Math.toDegrees(Math.atan2(targetYPosition - drivetrain.positioning.getyPos(), targetXPosition - drivetrain.positioning.getxPos())));
         double robotAngle = IMU.normalize(drivetrain.positioning.getAngle());
         turretAngle = atanAngle - robotAngle + shooterOffset;

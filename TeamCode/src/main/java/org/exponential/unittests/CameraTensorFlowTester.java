@@ -2,18 +2,19 @@ package org.exponential.unittests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.exponential.mechanisms.Camera;
-import org.exponential.mechanisms.CameraOpenCVOld;
+import org.exponential.mechanisms.CameraTensorFlow;
 import org.exponential.superclasses.UnitTester;
 
-@Autonomous(name="CameraTester", group="Autonomous")
-public class CameraTester extends UnitTester {
-    Camera camera;
+@Autonomous(name="CameraTensorFlowTester", group="Autonomous")
+public class CameraTensorFlowTester extends UnitTester {
+    CameraTensorFlow camera;
     @Override
     public void runOpMode() throws InterruptedException {
         waitForStart();
-        camera = new Camera();
+        camera = new CameraTensorFlow();
+
         camera.initialize(this);
+        camera.activate();
         trackIndex(0, 1);
     }
 

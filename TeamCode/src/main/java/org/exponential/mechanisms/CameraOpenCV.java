@@ -3,10 +3,12 @@ package org.exponential.mechanisms;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.exponential.superclasses.Mechanism;
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
@@ -16,7 +18,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
 
-public class CameraOpenCVOld implements Mechanism {
+public class CameraOpenCV implements Mechanism {
     OpenCvCamera camera;
     LinearOpMode opMode;
 
@@ -51,10 +53,16 @@ public class CameraOpenCVOld implements Mechanism {
     class Pipeline extends OpenCvPipeline {
         Mat matrix = new Mat();
         Mat croppedImage = new Mat();
+        Mat croppedImageUpper = new Mat();
+        Mat croppedImageLower = new Mat();
+        Mat HSVImage = new Mat();
+        Mat mergedImage = new Mat();
+
+        Mat maskedImage = new Mat();
         Mat blackAndWhite = new Mat();
         Mat thresholded = new Mat();
         Mat contourImage = new Mat();
-       /* public Mat processFrame(Mat input){
+        public Mat processFrame(Mat input){
             // Imgproc.cvtColor(input, gray, Imgproc.COLOR_BGR2GRAY);
             // cropping the input to the following dimensions
             // x: 0 -> 720
@@ -65,11 +73,34 @@ public class CameraOpenCVOld implements Mechanism {
             Rect imageCrop = new Rect(new Point(250, 160), new Point(410, 440));
             croppedImage = new Mat(input, imageCrop);
 
+            Rect upperCrop = new Rect(new Point(330,160), new Point(410, 440));
+            croppedImageUpper = new Mat(input, upperCrop);
+
+            Rect lowerCrop = new Rect(new Point(250, 160), new Point(330, 440));
+            croppedImageLower = new Mat(input, lowerCrop);
             double avgR = 0;
             double avgG = 0;
             double avgB = 0;
             int numPixels = 0;
-            for (int y = 0; y < croppedImage.rows(); y += 2) {
+
+            Imgproc.cvtColor(croppedImage, HSVImage, Imgproc.COLOR_BGR2HSV);
+            // https://stackoverflow.com/questions/48528754/what-are-recommended-color-spaces-for-detecting-orange-color-in-open-cv
+            // h value: [8, 25]
+            // s value: [100, 255]
+            // v value: [20, 255]
+            //Core.inRange(HSVImage, new Scalar(8, 100, 20), new Scalar(25, 255, 255), maskedImage);
+            ArrayList<Mat> split = new ArrayList<Mat>();
+            // from my understand, split gives an arraylist of 3 matrices, each that just contain scalars for each channel
+            Core.split(HSVImage, split);
+            // https://stackoverflow.com/questions/38998402/opencv-split-and-change-value-in-that-channel-in-android
+            // add to saturation (S of HSV)
+            Mat changedSChannel = new Mat();
+            Core.add(split.get(1), new Scalar(50), changedSChannel);
+            split.set(1, changedSChannel);
+            // https://stackoverflow.com/questions/52107379/intensify-or-increase-saturation-of-an-image
+            Core.merge(split, mergedImage);
+
+            /*for (int y = 0; y < croppedImage.rows(); y += 2) {
                 for (int x = 0; x < croppedImage.cols(); x += 2) {
                     double[] rgb = croppedImage.get(y, x);  // NOTE:: apparently, the double[] returned by get is [r, g, b]
                     avgR += rgb[0];
@@ -89,11 +120,56 @@ public class CameraOpenCVOld implements Mechanism {
             opMode.telemetry.addData("b", avgB);
             opMode.telemetry.addData("all averages", (avgR + avgG + avgB) / 3);
             opMode.telemetry.addData("numRings", numRings);
-            opMode.telemetry.update();
+            opMode.telemetry.update();*/
 
-            return croppedImage;  // what gets returned is showed on the robot phone screen
-        }*/
-        int threshold = 70;
+          /*  for (int y = 0; y < croppedImageUpper.rows(); y += 2) {
+                for (int x = 0; x < croppedImageUpper.cols(); x += 2) {
+                    double[] rgb = croppedImageUpper.get(y, x);  // NOTE:: apparently, the double[] returned by get is [r, g, b]
+                    avgR += rgb[0];
+                    avgG += rgb[1];
+                    avgB += rgb[2];
+                    numPixels++;
+                }
+            }
+            avgR /= numPixels;
+            avgG /= numPixels;
+            avgB /= numPixels;
+            // converting the cropped image to black and whtie and storing it in blackAndWhite
+            // Imgproc.cvtColor(croppedImage, blackAndWhite, Imgproc.COLOR_BGR2GRAY);
+
+            opMode.telemetry.addData("r", avgR);
+            opMode.telemetry.addData("g", avgG);
+            opMode.telemetry.addData("b", avgB);
+            opMode.telemetry.addData("all averages", (avgR + avgG + avgB) / 3);
+            //opMode.telemetry.addData("numRings", numRings);
+            //---------------------------------------------------------------------------------------------------------------------
+            avgR = 0;
+            avgB = 0;
+            avgG = 0;
+            for (int y = 0; y < croppedImageLower.rows(); y += 2) {
+                for (int x = 0; x < croppedImageLower.cols(); x += 2) {
+                    double[] rgb = croppedImageLower.get(y, x);  // NOTE:: apparently, the double[] returned by get is [r, g, b]
+                    avgR += rgb[0];
+                    avgG += rgb[1];
+                    avgB += rgb[2];
+                    numPixels++;
+                }
+            }
+            avgR /= numPixels;
+            avgG /= numPixels;
+            avgB /= numPixels;
+            // converting the cropped image to black and whtie and storing it in blackAndWhite
+            // Imgproc.cvtColor(croppedImage, blackAndWhite, Imgproc.COLOR_BGR2GRAY);
+
+            opMode.telemetry.addData("r", avgR);
+            opMode.telemetry.addData("g", avgG);
+            opMode.telemetry.addData("b", avgB);
+            opMode.telemetry.addData("all averages", (avgR + avgG + avgB) / 3);
+            //opMode.telemetry.addData("numRings", numRings);
+            opMode.telemetry.update();*/
+            return mergedImage;  // what gets returned is showed on the robot phone screen
+        }
+       /* int threshold = 70;
         public Mat processFrame(Mat input){   // http://creativemorphometrics.co.vu/blog/2014/08/05/automated-outlines-with-opencv-in-python/
 
             // cropping image
@@ -129,7 +205,7 @@ public class CameraOpenCVOld implements Mechanism {
             opMode.telemetry.addData("threshold", threshold);
             opMode.telemetry.update();
             return thresholded;
-        }
+        }*/
 
     }
 }

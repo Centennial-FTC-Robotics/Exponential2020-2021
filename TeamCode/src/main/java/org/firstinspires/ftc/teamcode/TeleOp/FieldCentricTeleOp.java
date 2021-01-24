@@ -23,6 +23,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
         ourRobot = new OurRobot();
         ourRobot.initialize(this);
         // ourRobot.odometry.loadPosition();
+        ourRobot.odometry.setPosition(0, 0, 90);
         initialAngle = getInitialAngle();
 
         ourRobot.intake.setServoPositions();
@@ -49,12 +50,18 @@ public class FieldCentricTeleOp extends LinearOpMode {
                 ourRobot.intake.setPowerInput(0);
             }
 
+
             if (gamepad1.a) {
                 ourRobot.loader.load();
+                sleep(250);
+                ourRobot.loader.unload();
             } else if (gamepad1.b) {
                 ourRobot.loader.unload();
             }
 
+            if (gamepad1.x) {
+                ourRobot.turret.rotateTurretToTarget(25, 25);
+            }
             if (gamepad1.right_bumper) {
                 ourRobot.shooter.shoot();
             } else {

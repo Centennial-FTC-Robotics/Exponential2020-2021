@@ -63,6 +63,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
 
             if (gamepad1.a) {
                 ourRobot.loader.load();
+                ourRobot.shooter.loadShoot();
                 sleep(250);
                 ourRobot.loader.unload();
             } else if (gamepad1.b) {

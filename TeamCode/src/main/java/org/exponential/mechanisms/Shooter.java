@@ -1,6 +1,7 @@
 package org.exponential.mechanisms;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.exponential.superclasses.Mechanism;
@@ -11,6 +12,7 @@ public class Shooter implements Mechanism {
     public void initialize(LinearOpMode opMode) {
         shooterMotor = opMode.hardwareMap.get(DcMotorEx.class, "shooterMotor");
         shooterMotor.setDirection(DcMotorEx.Direction.REVERSE);
+        shooterMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void setPower(double power) {
@@ -18,8 +20,12 @@ public class Shooter implements Mechanism {
     }
 
     public void shoot() {
-        setPower(.75);
+        setPower(.675);
     }
+    public void loadShoot() {
+        setPower(1);
+    }
+
 
     public void stopShooting() {
         setPower(0);

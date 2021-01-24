@@ -14,7 +14,7 @@ public class Intake implements Mechanism {
 
     public static final double INTAKE_FACTOR = .45;
 
-    public static final double LEFT_SERVO_POSITION = 1;
+    public static final double LEFT_SERVO_POSITION = .85;
     public static final double RIGHT_SERVO_POSITION = 0;
     public DcMotorEx intakeMotor;
     public Servo leftIntakeServo;

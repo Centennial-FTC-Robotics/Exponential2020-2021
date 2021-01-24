@@ -48,10 +48,6 @@ public class OurRobot implements Robot {
         wobbleGoalMover.initialize(opMode);
         imu = new IMU();
         imu.initialize(opMode);
-        turret = new Turret(odometry, opMode);
-        turret.initialize(opMode);
-
-
         /*odometry = new ArcOdometry(imu, opMode.hardwareMap.get(DcMotorEx.class, "leftOdometry"),
                 opMode.hardwareMap.get(DcMotorEx.class, "frontLeft"),
                 intake.intakeMotor);*/
@@ -60,6 +56,9 @@ public class OurRobot implements Robot {
 
         drivetrain = new Drivetrain(odometry);
         drivetrain.initialize(opMode);
+
+        turret = new Turret(drivetrain);
+        turret.initialize(opMode);
   /*      //right odometry: intake motor
         odometry.setEncoders(opMode.hardwareMap.get(DcMotorEx.class, "leftOdometry"),
                 opMode.hardwareMap.get(DcMotorEx.class, "backOdometry"),

@@ -22,7 +22,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
 
         ourRobot = new OurRobot();
         ourRobot.initialize(this);
-
+        // ourRobot.odometry.loadPosition();
         initialAngle = getInitialAngle();
 
         ourRobot.intake.setServoPositions();
@@ -33,10 +33,9 @@ public class FieldCentricTeleOp extends LinearOpMode {
             double inputX = gamepad1.left_stick_x;
             double inputY = -gamepad1.left_stick_y;
 
-/*            //John's targeting thing
+            //John's targeting thing
 
-            ourRobot.turret.moveTurret(toggleTarget(targetNumber));//TODO Eric pls fix this
-            //--------------*/
+            // ourRobot.turret.moveTurret();//TODO Eric pls fix this
 
             double theta = currentAngle - initialAngle;
             double rotatedX = inputX * Math.cos(theta) - inputY * Math.sin(theta);

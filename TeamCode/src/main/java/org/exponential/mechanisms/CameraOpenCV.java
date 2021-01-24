@@ -62,7 +62,80 @@ public class CameraOpenCV implements Mechanism {
         Mat blackAndWhite = new Mat();
         Mat thresholded = new Mat();
         Mat contourImage = new Mat();
-        public Mat processFrame(Mat input){
+
+        final Scalar BLUE = new Scalar(0, 0, 255);
+        final Scalar GREEN = new Scalar(0, 255, 0);
+
+        final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(160, 130);
+
+        static final int REGION_WIDTH = 50;
+        static final int REGION_HEIGHT = 50;
+
+        final int FOUR_RING_THRESHOLD = 150;
+        final int ONE_RING_THRESHOLD = 135;
+
+        Point region1_pointA = new Point(
+                REGION1_TOPLEFT_ANCHOR_POINT.x,
+                REGION1_TOPLEFT_ANCHOR_POINT.y);
+        Point region1_pointB = new Point(
+                REGION1_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
+                REGION1_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
+
+        Mat region1_Cb;
+        Mat YCrCb = new Mat();
+        Mat Cb = new Mat();
+        int avg1;
+
+        void inputToCb(Mat input) {
+            Imgproc.cvtColor(input, YCrCb, Imgproc.COLOR_RGB2YCrCb);
+            Core.extractChannel(YCrCb, Cb, 1);
+        }
+
+        @Override
+        public void init(Mat firstFrame) {
+            inputToCb(firstFrame);
+
+            region1_Cb = Cb.submat(new Rect(region1_pointA, region1_pointB));
+        }
+
+        @Override
+        public Mat processFrame(Mat input) {
+            inputToCb(input);
+
+            avg1 = (int) Core.mean(region1_Cb).val[0];
+
+            Imgproc.rectangle(
+                    input, // Buffer to draw on
+                    region1_pointA, // First point which defines the rectangle
+                    region1_pointB, // Second point which defines the rectangle
+                    BLUE, // The color the rectangle is drawn in
+                    2); // Thickness of the rectangle lines
+
+
+            numRings = -1; // Record our analysis
+            if(avg1 > FOUR_RING_THRESHOLD) {
+                numRings = 4;
+            } else if (avg1 > ONE_RING_THRESHOLD) {
+                numRings = 1;
+            } else{
+                numRings = 0;
+            }
+
+            opMode.telemetry.addData("value",avg1 );
+            opMode.telemetry.addData("rings", numRings);
+            opMode.telemetry.update();
+
+
+            Imgproc.rectangle(
+                    input, // Buffer to draw on
+                    region1_pointA, // First point which defines the rectangle
+                    region1_pointB, // Second point which defines the rectangle
+                    GREEN, // The color the rectangle is drawn in
+                    -1); // Negative thickness means solid fill
+
+            return input;
+        }
+        /*public Mat processFrame(Mat input){
             // Imgproc.cvtColor(input, gray, Imgproc.COLOR_BGR2GRAY);
             // cropping the input to the following dimensions
             // x: 0 -> 720
@@ -100,7 +173,7 @@ public class CameraOpenCV implements Mechanism {
             // https://stackoverflow.com/questions/52107379/intensify-or-increase-saturation-of-an-image
             Core.merge(split, mergedImage);
 
-            /*for (int y = 0; y < croppedImage.rows(); y += 2) {
+            *//*for (int y = 0; y < croppedImage.rows(); y += 2) {
                 for (int x = 0; x < croppedImage.cols(); x += 2) {
                     double[] rgb = croppedImage.get(y, x);  // NOTE:: apparently, the double[] returned by get is [r, g, b]
                     avgR += rgb[0];
@@ -120,9 +193,9 @@ public class CameraOpenCV implements Mechanism {
             opMode.telemetry.addData("b", avgB);
             opMode.telemetry.addData("all averages", (avgR + avgG + avgB) / 3);
             opMode.telemetry.addData("numRings", numRings);
-            opMode.telemetry.update();*/
+            opMode.telemetry.update();*//*
 
-          /*  for (int y = 0; y < croppedImageUpper.rows(); y += 2) {
+          *//*  for (int y = 0; y < croppedImageUpper.rows(); y += 2) {
                 for (int x = 0; x < croppedImageUpper.cols(); x += 2) {
                     double[] rgb = croppedImageUpper.get(y, x);  // NOTE:: apparently, the double[] returned by get is [r, g, b]
                     avgR += rgb[0];
@@ -166,9 +239,9 @@ public class CameraOpenCV implements Mechanism {
             opMode.telemetry.addData("b", avgB);
             opMode.telemetry.addData("all averages", (avgR + avgG + avgB) / 3);
             //opMode.telemetry.addData("numRings", numRings);
-            opMode.telemetry.update();*/
+            opMode.telemetry.update();*//*
             return mergedImage;  // what gets returned is showed on the robot phone screen
-        }
+        }*/
        /* int threshold = 70;
         public Mat processFrame(Mat input){   // http://creativemorphometrics.co.vu/blog/2014/08/05/automated-outlines-with-opencv-in-python/
 

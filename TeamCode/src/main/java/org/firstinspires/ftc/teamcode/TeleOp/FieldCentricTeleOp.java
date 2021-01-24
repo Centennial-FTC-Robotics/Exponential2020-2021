@@ -31,16 +31,26 @@ public class FieldCentricTeleOp extends LinearOpMode {
 
         while (opModeIsActive()) {
             currentAngle = getAngle();
-            double inputX = gamepad1.left_stick_x;
-            double inputY = -gamepad1.left_stick_y;
+            double inputLeftX = gamepad1.left_stick_x;
+            double inputLeftY = -gamepad1.left_stick_y;
+            double inputRightX = gamepad1.right_stick_x;
+            double inputRightY = gamepad1.right_stick_y;
+            double reductionFactor = .5;
+            // halve values
+            if (gamepad1.left_bumper) {
+                inputLeftX *= reductionFactor;
+                inputLeftY *= reductionFactor;
+                inputRightX *= reductionFactor;
+                inputRightY *= reductionFactor;
+            }
 
             //John's targeting thing
 
             // ourRobot.turret.moveTurret();//TODO Eric pls fix this
 
             double theta = currentAngle - initialAngle;
-            double rotatedX = inputX * Math.cos(theta) - inputY * Math.sin(theta);
-            double rotatedY = inputX * Math.sin(theta) + inputY * Math.cos(theta);
+            double rotatedX = inputLeftX * Math.cos(theta) - inputLeftY * Math.sin(theta);
+            double rotatedY = inputLeftX * Math.sin(theta) + inputLeftY * Math.cos(theta);
 
             if (gamepad1.right_trigger > 0) {
                 ourRobot.intake.setPowerInput(gamepad1.right_trigger);
@@ -67,7 +77,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
             } else {
                 ourRobot.shooter.stopShooting();
             }
-            ourRobot.drivetrain.setPowerDriveMotors(getMotorPowers(rotatedX, rotatedY, gamepad1.right_stick_x));
+            ourRobot.drivetrain.setPowerDriveMotors(getMotorPowers(rotatedX, rotatedY, inputRightX));
         }
     }
 

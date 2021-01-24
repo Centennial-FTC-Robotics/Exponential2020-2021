@@ -26,7 +26,7 @@ public class Turret implements Mechanism {
         turretMotor.setTargetPosition(turretMotor.getCurrentPosition());
 
         turretMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        turretMotor.setPower(.2);
+        turretMotor.setPower(.4);
         turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         // 59 in x, 236.22 in y.
     }
@@ -48,6 +48,7 @@ public class Turret implements Mechanism {
         double angleToRotateDrivetrain = angleToRotate - clippedAngleToRotate;
         int encoderToRotate = turretDegreeToEncoder(clippedAngleToRotate);
         turretMotor.setTargetPosition(turretMotor.getCurrentPosition() + encoderToRotate);//TODO SET Motor to go to this position
+        turretMotor.setPower(.4);
         lastAngle = lastAngle + clippedAngleToRotate;
 
     }

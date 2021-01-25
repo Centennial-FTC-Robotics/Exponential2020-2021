@@ -27,6 +27,14 @@ public class OurRobot implements Robot {
     public Shooter shooter;
     public WobbleGoalMover wobbleGoalMover;
     public Turret turret;
+    public OurRobot() {
+        camera = new CameraOpenCV();
+    }
+
+    public OurRobot(CameraOpenCV camera) {
+        this.camera = camera;
+    }
+
     @Override
     public void initialize(LinearOpMode opMode) {
         List<LynxModule> allHubs = opMode.hardwareMap.getAll(LynxModule.class);
@@ -35,7 +43,7 @@ public class OurRobot implements Robot {
         }
 
 
-        camera = new CameraOpenCV();
+        // camera = new CameraOpenCV();
         camera.initialize(opMode);
         intake = new Intake();
         intake.initialize(opMode);

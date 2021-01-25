@@ -24,6 +24,21 @@ public class CameraOpenCV implements Mechanism {
 
     int numRings;
 
+    int camX = 0;
+    int camY = 0;
+    int camWidth = 0;
+    int camHeight = 0;
+    public CameraOpenCV(int camX, int camY, int camWidth, int camHeight) {
+        this.camX = camX;
+        this.camY= camY;
+        this.camWidth = camWidth;
+        this.camHeight = camHeight;
+
+    }
+
+    public CameraOpenCV() {
+
+    }
     @Override
     public void initialize(LinearOpMode opMode) {
         this.opMode = opMode;
@@ -50,6 +65,13 @@ public class CameraOpenCV implements Mechanism {
         return numRings;
     }
 
+
+    /*public void setCameraBounds(int x, int y, int width, int height) {
+        camX = x;
+        camY = y;
+        camWidth = width;
+        camHeight = height;
+    }*/
     class Pipeline extends OpenCvPipeline {
         Mat matrix = new Mat();
         Mat croppedImage = new Mat();
@@ -66,21 +88,25 @@ public class CameraOpenCV implements Mechanism {
         final Scalar BLUE = new Scalar(0, 0, 255);
         final Scalar GREEN = new Scalar(0, 255, 0);
 
-        final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(160, 130);
+        final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(300, 250);
 
-        static final int REGION_WIDTH = 50;
-        static final int REGION_HEIGHT = 50;
+        static final int REGION_WIDTH = 150;
+        static final int REGION_HEIGHT = 150;
 
         final int FOUR_RING_THRESHOLD = 150;
         final int ONE_RING_THRESHOLD = 135;
 
-        Point region1_pointA = new Point(
+        /*Point region1_pointA = new Point(
                 REGION1_TOPLEFT_ANCHOR_POINT.x,
                 REGION1_TOPLEFT_ANCHOR_POINT.y);
         Point region1_pointB = new Point(
                 REGION1_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
-                REGION1_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
+                REGION1_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);*/
+        Point region1_pointA = new Point(camX, camY);
+        Point region1_pointB = new Point(camX + camWidth, camY + camHeight);
 
+        /*Point region1_pointA = new Point(300, 250);
+        Point region1_pointB = new Point(450, 400);*/
         Mat region1_Cb;
         Mat YCrCb = new Mat();
         Mat Cb = new Mat();
@@ -123,6 +149,11 @@ public class CameraOpenCV implements Mechanism {
 
             opMode.telemetry.addData("value",avg1 );
             opMode.telemetry.addData("rings", numRings);
+           /* opMode.telemetry.addData("x", camX);
+            opMode.telemetry.addData("y", camY);
+            opMode.telemetry.addData("w", camWidth);
+            opMode.telemetry.addData("h", camHeight);*/
+
             opMode.telemetry.update();
 
 

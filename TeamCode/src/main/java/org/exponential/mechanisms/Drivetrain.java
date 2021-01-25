@@ -163,6 +163,10 @@ public class Drivetrain implements Mechanism {
     }
 
     public void moveToTargetPosition() {
+        moveToTargetPosition(this.Kp, this.Ki, this.Kd);
+    }
+
+    public void moveToTargetPosition(double Kp, double Ki, double Kd) {
         // a lot of random PID variables
         double areaX = 0;
         double areaY = 0;
@@ -225,14 +229,25 @@ public class Drivetrain implements Mechanism {
         }
     }
 
-
     public void moveTo(double targetX, double targetY, double targetAngle) {
         this.targetX = targetX;
         this.targetY = targetY;
         this.targetAngle = targetAngle;
         moveToTargetPosition();
     }
+    public void moveTo(double targetX, double targetY, double targetAngle, double Kp, double Ki, double Kd) {
+        this.targetX = targetX;
+        this.targetY = targetY;
+        this.targetAngle = targetAngle;
+        moveToTargetPosition(Kp, Ki, Kd);
+    }
 
+    public void moveRelative(double dx, double dy) {
+        moveRelative(dx, dy, this.Kp, this.Ki, this.Kd);
+    }
+    public void moveRelative(double dx, double dy, double Kp, double Ki, double Kd) {
+        moveTo(positioning.getxPos() + dx, positioning.getyPos() + dy, positioning.getAngle(), Kp, Ki, Kd);
+    }
     public void setTargetPosition(double targetX, double targetY, double targetAngle) {
         this.targetX = targetX;
         this.targetY = targetY;

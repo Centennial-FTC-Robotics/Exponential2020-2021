@@ -310,10 +310,24 @@ public class Drivetrain implements Mechanism {
         }
         return motorPowers;
     }
-    public void performBrake(){
+
+    public void performBrake() {
         frontLeft.setPower(0);
         frontRight.setPower(0);
         backLeft.setPower(0);
         backRight.setPower(0);
     }
+
+    public void setKP(double P) {
+        Kp = P;
+    }
+
+    public void setKI(double I) {
+        Ki = I;
+    }
+
+    public void setKD(double D) {
+        Kd = D;
+    }
+
 }

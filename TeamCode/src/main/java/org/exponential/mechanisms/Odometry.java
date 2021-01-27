@@ -115,13 +115,13 @@ public class Odometry implements Runnable, Mechanism {
 
         int leftEncChange = -(forwardLeftEnc.getCurrentPosition() - lastLeftEncPos);
         int rightEncChange = -(forwardRightEnc.getCurrentPosition() - lastRightEncPos);
-        int horiEncChange = -(horizontalEnc.getCurrentPosition() - lastHoriEncPos);
+        int horiEncChange = (horizontalEnc.getCurrentPosition() - lastHoriEncPos);
 
         // does not call getCurrentPosition a second time because you would not account for encoder
         // readings from the time between the two calls
         lastLeftEncPos -= leftEncChange;
         lastRightEncPos -= rightEncChange;
-        lastHoriEncPos -= horiEncChange;
+        lastHoriEncPos = horiEncChange;
 
         // updates angle
         imu.update();

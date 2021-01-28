@@ -71,7 +71,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
             }
 
             if (gamepad1.x) {
-                ourRobot.turret.rotateTurretToTarget(25, 25);
+                ourRobot.turret.setTarget(25, 25);
             }
             if (gamepad1.right_bumper) {
                 ourRobot.shooter.shoot();

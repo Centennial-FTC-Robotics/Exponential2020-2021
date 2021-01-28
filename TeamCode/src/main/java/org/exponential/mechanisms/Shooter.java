@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import org.exponential.superclasses.Mechanism;
 
 public class Shooter implements Mechanism {
+
     DcMotorEx shooterMotor;
     @Override
     public void initialize(LinearOpMode opMode) {
@@ -20,9 +21,14 @@ public class Shooter implements Mechanism {
         shooterMotor.setPower(power);
     }
 
-    public void shoot() {
+    public void shootAtPowerShot() {
         setPower(.405);
     }
+
+    public void shootAtHighGoal() {
+        setPower(.45);
+    }
+
     public void speedBackUp() {
         setPower(.49);
     }

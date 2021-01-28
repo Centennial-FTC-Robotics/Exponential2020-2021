@@ -27,6 +27,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
 
         ourRobot.intake.setServoPositions();
         ourRobot.wobbleGoalMover.raise();
+        ourRobot.turret.setTarget(25, 25);
 
         while (opModeIsActive()) {
             currentAngle = getAngle();
@@ -70,10 +71,12 @@ public class FieldCentricTeleOp extends LinearOpMode {
             }
 
             if (gamepad1.x) {
-                ourRobot.turret.setTarget(25, 25);
+                ourRobot.shootAtHighGoal("red");
+            } else if (gamepad1.y) {
+                ourRobot.shootPowerShotTargets("red");
             }
             if (gamepad1.right_bumper) {
-                ourRobot.shooter.shoot();
+                ourRobot.shooter.shootAtPowerShot();
             } else {
                 ourRobot.shooter.stopShooting();
             }

@@ -84,13 +84,31 @@ public class OurRobot implements Robot {
         double robotX = odometry.getxPos();
         double robotY = odometry.getyPos();
         for (double targetXPosition: targetXPositions) {
-            double targetAngle = Math.toDegrees(Math.atan2(72 - drivetrain.positioning.getyPos(), targetXPosition - drivetrain.positioning.getxPos()));
+            double targetAngle = Math.toDegrees(Math.atan2(72 - robotY, targetXPosition - robotX));
             drivetrain.turnTo(targetAngle);
-            shooter.shoot();
+            shooter.shootAtPowerShot();
             sleep(500);
             loader.loadAndUnload();
         }
         shooter.stopShooting();
+    }
 
+    public void shootAtHighGoal(String side) {
+        double goalXPosition;
+        if (side.equals("red")) {
+            goalXPosition = 36;
+        } else {
+            goalXPosition = -36;
+        }
+        double robotX = odometry.getxPos();
+        double robotY = odometry.getyPos();
+        for (int i = 0; i < 3; i++) {
+            double targetAngle = Math.toDegrees(Math.atan2(72 - robotY, goalXPosition - robotX));
+            drivetrain.turnTo(targetAngle);
+            shooter.shootAtHighGoal();
+            sleep(500);
+            loader.loadAndUnload();
+        }
+        shooter.stopShooting();
     }
 }

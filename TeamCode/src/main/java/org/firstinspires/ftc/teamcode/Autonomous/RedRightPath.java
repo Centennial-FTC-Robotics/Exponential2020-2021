@@ -34,12 +34,15 @@ public class RedRightPath extends LinearOpMode {
         } else { //zone C
             ourRobot.drivetrain.moveTo(48, 60, 270);
         }
+        ourRobot.drivetrain.performBrake();
+
         ourRobot.wobbleGoalMover.placeGoal();
         //move to gap between half field and rings
         ourRobot.drivetrain.moveTo(-12, -24, 270);
 
         //pick up second goal
         ourRobot.drivetrain.moveTo(24, -36, 0);
+        ourRobot.drivetrain.performBrake();
         ourRobot.wobbleGoalMover.pickupGoal();
 
         //move to the same gap
@@ -53,10 +56,12 @@ public class RedRightPath extends LinearOpMode {
         } else { //zone C
             ourRobot.drivetrain.moveTo(48, 60, 270);
         }
+        ourRobot.drivetrain.performBrake();
         ourRobot.wobbleGoalMover.placeGoal();
 
         //move to some position on field to start shooting
         ourRobot.drivetrain.moveTo(12, 0, 90);
+        ourRobot.drivetrain.performBrake();
 
         ourRobot.shootPowerShotTargets("red");
     }

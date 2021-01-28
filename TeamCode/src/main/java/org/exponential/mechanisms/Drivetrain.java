@@ -235,6 +235,10 @@ public class Drivetrain implements Mechanism {
         }
     }
 
+    public void turnTo(double targetAngle) {
+        moveTo(positioning.getxPos(), positioning.getyPos(), targetAngle);
+    }
+
     public void moveTo(double targetX, double targetY, double targetAngle) {
         this.targetX = targetX;
         this.targetY = targetY;

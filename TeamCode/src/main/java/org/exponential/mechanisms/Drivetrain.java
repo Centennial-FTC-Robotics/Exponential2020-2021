@@ -24,12 +24,12 @@ public class Drivetrain implements Mechanism {
     public Odometry positioning;
 
     // PID constants
-    private double Kp = 0.1;
-    private double Ki = 0.01;
+    private double Kp = 0.035;
+    private double Ki = 0.1;
     private double Kd = 0;
     private double tolerance = 0.75;
 
-    private double angleKp = 0.01;
+    private double angleKp = 0.03;
     private double angleKi = 0.00;
     private double angleKd = 0;
 
@@ -189,11 +189,17 @@ public class Drivetrain implements Mechanism {
             // linear PID calculations
             disX = (targetX - positioning.xPos);
             disY = (targetY - positioning.yPos);
-            areaX += disX * intervalTime;
-            areaY += disY * intervalTime;
             velX = disX / intervalTime;
             velY = disY / intervalTime;
 
+            if(distance(targetX, targetY, positioning.xPos, positioning.yPos) < 4.0){
+
+                areaX += disX * intervalTime;
+                areaY += disY * intervalTime;
+            } else {
+                areaX = 0;
+                areaY = 0;
+            }
             // angle PID calculations
             disAngle = IMU.normalize(targetAngle - positioning.angle);
             areaAngle = disAngle * intervalTime;

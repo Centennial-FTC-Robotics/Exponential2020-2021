@@ -14,7 +14,7 @@ public class PIDCalibration extends LinearOpMode {
 
         double p = .1;
         double i = .01;
-        double d = .01;
+        double d = 0;
         int index = 0;
         int inches = 12;
         while (opModeIsActive()) {
@@ -54,7 +54,7 @@ public class PIDCalibration extends LinearOpMode {
                 ourRobot.drivetrain.moveRelative(0, inches);
                 sleep(100);
             } else if (gamepad1.b) {
-                ourRobot.drivetrain.moveRelative(0, -inches);
+                ourRobot.drivetrain.moveRelative(inches, 0);
                 sleep(100);
             }
             if (index == 0) {

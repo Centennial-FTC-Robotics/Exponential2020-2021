@@ -28,7 +28,7 @@ public class ArcOdometry extends Odometry {
         // readings from the time between the two calls
         lastLeftEncPos -= leftEncChange;
         lastRightEncPos -= rightEncChange;
-        lastHoriEncPos = horiEncChange;
+        lastHoriEncPos += horiEncChange;
 
         // updates angle
         imu.update();

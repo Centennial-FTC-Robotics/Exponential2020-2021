@@ -25,16 +25,16 @@ public class MoveTester extends LinearOpMode {
 
         double[] target = new double[3];
         boolean alreadyPressed = false;
-
+        target[0]=30;
 
         while (opModeIsActive()) {
             int currentIndex = 0;
-            while(currentIndex<3) {
+            while(currentIndex<3&&opModeIsActive()) {
                 if (gamepad1.dpad_up && !alreadyPressed) {
-                    target[currentIndex]++;
+                    target[currentIndex]+=3;
                     alreadyPressed = true;
                 } else if (gamepad1.dpad_down && !alreadyPressed) {
-                    target[currentIndex]--;
+                    target[currentIndex]-=3;
                     alreadyPressed = true;
                 } else if (gamepad1.a && !alreadyPressed) {
                     currentIndex++;

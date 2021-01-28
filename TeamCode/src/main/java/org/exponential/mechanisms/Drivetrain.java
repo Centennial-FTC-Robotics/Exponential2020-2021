@@ -233,6 +233,11 @@ public class Drivetrain implements Mechanism {
             opMode.telemetry.update();
 
         }
+
+        while(Math.abs(IMU.normalize(positioning.angle-targetAngle))>5){
+            positioning.update();
+            setPowerFieldCentric(0,0,Kp*IMU.normalize(targetAngle-positioning.angle));
+        }
     }
 
     public void turnTo(double targetAngle) {

@@ -234,7 +234,7 @@ public class Drivetrain implements Mechanism {
 
         }
 
-        while(Math.abs(IMU.normalize(positioning.angle-targetAngle))>5){
+        while(Math.abs(IMU.normalize(positioning.angle-targetAngle)) > 5) {
             positioning.update();
             setPowerFieldCentric(0,0,Kp*IMU.normalize(targetAngle-positioning.angle));
         }

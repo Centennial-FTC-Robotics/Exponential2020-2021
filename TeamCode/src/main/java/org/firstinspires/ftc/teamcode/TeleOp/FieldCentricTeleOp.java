@@ -22,12 +22,12 @@ public class FieldCentricTeleOp extends LinearOpMode {
         ourRobot = new OurRobot();
         ourRobot.initialize(this);
         // ourRobot.odometry.loadPosition();
-        ourRobot.odometry.setPosition(0, 0, 90);
+        ourRobot.odometry.setPosition(0, 60, 90);
         initialAngle = getInitialAngle();
 
         ourRobot.intake.setServoPositions();
         ourRobot.wobbleGoalMover.raise();
-        ourRobot.turret.setTarget(25, 25);
+        //ourRobot.turret.setTarget(25, 25);
 
         while (opModeIsActive()) {
             currentAngle = getAngle();

@@ -68,12 +68,18 @@ public class OurRobot implements Robot {
 
         turret = new Turret(drivetrain);
         turret.initialize(opMode);
+
+        setUpServos();
   /*      //right odometry: intake motor
         odometry.setEncoders(opMode.hardwareMap.get(DcMotorEx.class, "leftOdometry"),
                 opMode.hardwareMap.get(DcMotorEx.class, "backOdometry"),
                 intake.intakeMotor);*/
     }
 
+    public void setUpServos() {
+        intake.setServoPositions();
+        wobbleGoalMover.raise();
+    }
     public void shootPowerShotTargets(String side) {
         double[] targetXPositions;
         if (side.equals("red")) {
@@ -84,7 +90,9 @@ public class OurRobot implements Robot {
         double robotX = odometry.getxPos();
         double robotY = odometry.getyPos();
         for (double targetXPosition: targetXPositions) {
-            double targetAngle = Math.toDegrees(Math.atan2(72 - robotY, targetXPosition - robotX));
+            // +180 because we want the robot's front to be facing the exact opposite of the targets.
+            //robot shoots backwards
+            double targetAngle = 180 + Math.toDegrees(Math.atan2(72 - robotY, targetXPosition - robotX));
             drivetrain.turnTo(targetAngle);
             shooter.shootAtPowerShot();
             sleep(500);

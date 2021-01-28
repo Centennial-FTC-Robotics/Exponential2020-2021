@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.exponential.superclasses.Mechanism;
 
+import static org.exponential.utility.Utility.sleep;
+
 public class WobbleGoalMover implements Mechanism {
     /*Servo leftMoverServo;
     Servo rightMoverServo;*/
@@ -42,13 +44,17 @@ public class WobbleGoalMover implements Mechanism {
 
     public void placeGoal() {
         lower();
+        sleep(500);
         release();
+        sleep(500);
         raise();
     }
 
     public void pickupGoal() {
         lower();
+        sleep(500);
         clamp();
+        sleep(500);
         raise();
     }
 }

@@ -23,7 +23,7 @@ public class Shooter implements Mechanism {
     public void shoot() {
         setPower(.405);
     }
-    public void loadShoot() {
+    public void speedBackUp() {
         setPower(.49);
     }
 

@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.exponential.superclasses.Mechanism;
 
+import static org.exponential.utility.Utility.sleep;
+
 public class Loader implements Mechanism {
     public static final double LOAD_POSITION = 0;
     public static final double UNLOAD_POSITION = .45;
@@ -21,5 +23,11 @@ public class Loader implements Mechanism {
 
     public void unload() {
         loaderServo.setPosition(UNLOAD_POSITION);
+    }
+
+    public void loadAndUnload() {
+        load();
+        sleep(250);
+        unload();
     }
 }

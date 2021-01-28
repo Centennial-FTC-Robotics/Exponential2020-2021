@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.exponential.mechanisms.Turret;
 import org.exponential.robots.OurRobot;
 
 import java.util.HashMap;
@@ -63,7 +62,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
 
             if (gamepad1.a) {
                 ourRobot.loader.load();
-                ourRobot.shooter.loadShoot();
+                ourRobot.shooter.speedBackUp();
                 sleep(250);
                 ourRobot.loader.unload();
             } else if (gamepad1.b) {

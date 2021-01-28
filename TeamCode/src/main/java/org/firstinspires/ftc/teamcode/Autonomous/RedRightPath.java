@@ -58,5 +58,6 @@ public class RedRightPath extends LinearOpMode {
         //move to some position on field to start shooting
         ourRobot.drivetrain.moveTo(12, 0, 90);
 
+        ourRobot.shootPowerShotTargets("red");
     }
 }

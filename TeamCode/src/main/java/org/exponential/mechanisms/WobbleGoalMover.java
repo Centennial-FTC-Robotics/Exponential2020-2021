@@ -13,8 +13,8 @@ public class WobbleGoalMover implements Mechanism {
     Servo raiseServo;
     Servo clampServo;
 
-    public static final double RAISE_POSITION = .55;
-    public static final double LOWER_POSITION = .8;
+    public static final double RAISE_POSITION = .2;
+    public static final double LOWER_POSITION = .62;
     public static final double CLAMP_POSITION = .7;
     public static final double RELEASE_POSITION = .4;
     @Override

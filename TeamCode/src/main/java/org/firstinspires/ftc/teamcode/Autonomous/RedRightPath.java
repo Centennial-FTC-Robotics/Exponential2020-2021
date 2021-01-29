@@ -64,5 +64,7 @@ public class RedRightPath extends LinearOpMode {
         ourRobot.drivetrain.performBrake();
 
         ourRobot.shootPowerShotTargets("red");
+
+        ourRobot.odometry.savePosition();
     }
 }

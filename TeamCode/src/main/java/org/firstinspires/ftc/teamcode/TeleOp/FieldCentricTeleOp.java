@@ -23,14 +23,21 @@ public class FieldCentricTeleOp extends LinearOpMode {
         ourRobot.initialize(this);
         // ourRobot.odometry.loadPosition();
         ourRobot.odometry.setPosition(0, 0, 90);
-        initialAngle = getInitialAngle();
+        initialAngle = ourRobot.odometry.getAngle();
 
         ourRobot.intake.setServoPositions();
         ourRobot.wobbleGoalMover.raise();
         ourRobot.turret.setTarget(25, 25);
 
         while (opModeIsActive()) {
-            currentAngle = getAngle();
+            ourRobot.odometry.update();
+            currentAngle = ourRobot.odometry.getAngle();
+
+            // uncomment to change to robot centric
+            /*
+            initialAngle = 0;
+            currentAngle = 0;
+             */
             double inputLeftX = gamepad1.left_stick_x;
             double inputLeftY = -gamepad1.left_stick_y;
             double inputRightX = gamepad1.right_stick_x;
@@ -82,14 +89,6 @@ public class FieldCentricTeleOp extends LinearOpMode {
             }
             ourRobot.drivetrain.setPowerDriveMotors(getMotorPowers(rotatedX, rotatedY, inputRightX));
         }
-    }
-
-    public double getAngle() {
-        return 90;
-    }
-
-    public double getInitialAngle() {
-        return 90;
     }
 
     public static double[] rotatePoint(double x, double y, double theta) {

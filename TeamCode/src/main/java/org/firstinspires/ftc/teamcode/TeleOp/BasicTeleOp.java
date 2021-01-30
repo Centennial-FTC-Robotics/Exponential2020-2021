@@ -20,7 +20,13 @@ public class BasicTeleOp extends LinearOpMode {
         while (opModeIsActive()) {
             double x = gamepad1.left_stick_x;
             double y = -gamepad1.left_stick_y;
-
+            if (gamepad1.right_trigger > 0) {
+                ourRobot.intake.setPowerInput(gamepad1.right_trigger);
+            } else if (gamepad1.left_trigger > 0) {
+                ourRobot.intake.setPowerInput(-gamepad1.left_trigger);
+            } else {
+                ourRobot.intake.setPowerInput(0);
+            }
             ourRobot.drivetrain.setPowerDriveMotors(getMotorPowers(x, y, gamepad1.right_stick_x));
         }
     }

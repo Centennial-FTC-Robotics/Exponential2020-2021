@@ -38,7 +38,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
             initialAngle = 0;
             currentAngle = 0;
              */
-            double inputLeftX = gamepad1.left_stick_x;
+            double inputLeftX = -gamepad1.left_stick_x;
             double inputLeftY = -gamepad1.left_stick_y;
             double inputRightX = gamepad1.right_stick_x;
             double inputRightY = gamepad1.right_stick_y;
@@ -76,12 +76,20 @@ public class FieldCentricTeleOp extends LinearOpMode {
             } else if (gamepad1.b) {
                 ourRobot.loader.unload();
             }
-
+            if (gamepad1.right_bumper) {
+                ourRobot.shooter.shootAtHighGoal();
+            }
+            if (gamepad1.x) {
+                ourRobot.loader.load();
+                sleep (250);
+                ourRobot.loader.unload();
+            }
             if (gamepad1.x) {
                 ourRobot.shootAtHighGoal("red");
             } else if (gamepad1.y) {
                 ourRobot.shootPowerShotTargets("red");
             }
+
             if (gamepad1.right_bumper) {
                 ourRobot.shooter.shootAtPowerShot();
             } else {
@@ -113,6 +121,4 @@ public class FieldCentricTeleOp extends LinearOpMode {
         }
         return powers;
     }
-
-
 }

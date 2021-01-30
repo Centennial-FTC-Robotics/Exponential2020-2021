@@ -25,10 +25,11 @@ public class Drivetrain implements Mechanism {
 
     // PID constants
     private double Kp = 0.035;
-    private double Ki = 0.1;
+    //private double Kp = 0.04;
+    private double Ki = /*0.1*/0.11;
     private double Kd = 0;
-    private double tolerance = 0.75;
-
+    private double tolerance = 1.5;
+    private double angleTolerance = 5;
     private double angleKp = 0.03;
     private double angleKi = 0.00;
     private double angleKd = 0;
@@ -163,10 +164,13 @@ public class Drivetrain implements Mechanism {
     }
 
     public void moveToTargetPosition() {
-        moveToTargetPosition(this.Kp, this.Ki, this.Kd);
+        moveToTargetPosition(this.Kp, this.Ki, this.Kd, this.angleTolerance);
     }
 
-    public void moveToTargetPosition(double Kp, double Ki, double Kd) {
+    public void moveToTargetPosition(double angleTolerance) {
+        moveToTargetPosition(this.Kp, this.Ki, this.Kd, angleTolerance);
+    }
+    public void moveToTargetPosition(double Kp, double Ki, double Kd, double angleTolerance) {
         // a lot of random PID variables
         double areaX = 0;
         double areaY = 0;
@@ -192,7 +196,7 @@ public class Drivetrain implements Mechanism {
             velX = disX / intervalTime;
             velY = disY / intervalTime;
 
-            if(distance(targetX, targetY, positioning.xPos, positioning.yPos) < 4.0){
+            if(distance(targetX, targetY, positioning.xPos, positioning.yPos) < 5.0){
 
                 areaX += disX * intervalTime;
                 areaY += disY * intervalTime;
@@ -234,7 +238,7 @@ public class Drivetrain implements Mechanism {
 
         }
 
-        while(Math.abs(IMU.normalize(positioning.angle-targetAngle)) > 5) {
+        while(Math.abs(IMU.normalize(positioning.angle-targetAngle)) > angleTolerance) {
             positioning.update();
             setPowerFieldCentric(0,0,Kp*IMU.normalize(targetAngle-positioning.angle));
         }
@@ -244,17 +248,28 @@ public class Drivetrain implements Mechanism {
         moveTo(positioning.getxPos(), positioning.getyPos(), targetAngle);
     }
 
+    public void turnTo(double targetAngle, double angleTolerance) {
+        moveTo(positioning.getxPos(), positioning.getyPos(), targetAngle, angleTolerance);
+    }
+
     public void moveTo(double targetX, double targetY, double targetAngle) {
         this.targetX = targetX;
         this.targetY = targetY;
         this.targetAngle = targetAngle;
         moveToTargetPosition();
     }
+    public void moveTo(double targetX, double targetY, double targetAngle, double angleTolerance) {
+        this.targetX = targetX;
+        this.targetY = targetY;
+        this.targetAngle = targetAngle;
+        moveToTargetPosition(angleTolerance);
+    }
+
     public void moveTo(double targetX, double targetY, double targetAngle, double Kp, double Ki, double Kd) {
         this.targetX = targetX;
         this.targetY = targetY;
         this.targetAngle = targetAngle;
-        moveToTargetPosition(Kp, Ki, Kd);
+        moveToTargetPosition(Kp, Ki, Kd, this.angleTolerance);
     }
 
     public void moveRelative(double dx, double dy) {

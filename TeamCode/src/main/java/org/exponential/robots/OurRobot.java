@@ -14,6 +14,7 @@ import org.exponential.mechanisms.Shooter;
 import org.exponential.mechanisms.Turret;
 import org.exponential.mechanisms.WobbleGoalMover;
 import org.exponential.superclasses.Robot;
+import org.exponential.utility.LogMaker;
 
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class OurRobot implements Robot {
     public OurRobot() {
         camera = new CameraOpenCV();
     }
-
+    LinearOpMode opMode;
     public OurRobot(CameraOpenCV camera) {
         this.camera = camera;
     }
@@ -44,7 +45,7 @@ public class OurRobot implements Robot {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
 
-
+        this.opMode = opMode;
         // camera = new CameraOpenCV();
         camera.initialize(opMode);
         intake = new Intake();
@@ -79,25 +80,40 @@ public class OurRobot implements Robot {
     public void setUpServos() {
         intake.setServoPositions();
         wobbleGoalMover.raise();
+        wobbleGoalMover.clamp();
     }
     public void shootPowerShotTargets(String side) {
         double[] targetXPositions;
         if (side.equals("red")) {
             targetXPositions = new double[] {2, 9.5, 17};
+            //targetXPositions = new double[] {5, 14, 20};
         } else {
             targetXPositions = new double[] {-2, -9.5, -17};
         }
         double robotX = odometry.getxPos();
         double robotY = odometry.getyPos();
+        //LogMaker logMaker = new LogMaker("powershotlog.txt");
         for (double targetXPosition: targetXPositions) {
             // +180 because we want the robot's front to be facing the exact opposite of the targets.
             //robot shoots backwards
             double targetAngle = 180 + Math.toDegrees(Math.atan2(72 - robotY, targetXPosition - robotX));
-            drivetrain.turnTo(targetAngle);
+           /* logMaker.write("Log for targetXPosition " + targetXPosition);
+            logMaker.write("targetAngle: " + targetAngle);
+            logMaker.write("atan value: " + Math.atan2(72 - robotY, targetXPosition - robotX));*/
+            drivetrain.turnTo(targetAngle, 2);
             shooter.shootAtPowerShot();
-            sleep(500);
+            sleep(1000);
             loader.loadAndUnload();
+            opMode.telemetry.addData("targetXPosition", targetXPosition);
+            opMode.telemetry.addData("targetAngle", targetAngle);
+            opMode.telemetry.addData("atan value", Math.atan2(72 - robotY, targetXPosition - robotX));
+            opMode.telemetry.addData("robotX", odometry.getxPos());
+            opMode.telemetry.addData("robotY", odometry.getyPos());
+            opMode.telemetry.addData("robotTheta", odometry.getAngle());
+            opMode.telemetry.update();
+            //while (!opMode.gamepad1.a);
         }
+        //logMaker.close();
         shooter.stopShooting();
     }
 
@@ -111,10 +127,10 @@ public class OurRobot implements Robot {
         double robotX = odometry.getxPos();
         double robotY = odometry.getyPos();
         for (int i = 0; i < 3; i++) {
-            double targetAngle = Math.toDegrees(Math.atan2(72 - robotY, goalXPosition - robotX));
+            double targetAngle = 180 + Math.toDegrees(Math.atan2(72 - robotY, goalXPosition - robotX));
             drivetrain.turnTo(targetAngle);
             shooter.shootAtHighGoal();
-            sleep(500);
+            sleep(1000);
             loader.loadAndUnload();
         }
         shooter.stopShooting();

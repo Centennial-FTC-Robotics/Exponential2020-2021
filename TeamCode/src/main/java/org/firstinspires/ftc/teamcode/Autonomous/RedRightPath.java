@@ -24,43 +24,43 @@ public class RedRightPath extends LinearOpMode {
         ourRobot.odometry.setPosition(48, -63, 180);
 
         // go to gap between rings and wall (going backwards, wobble goal is on left of robot)
-        ourRobot.drivetrain.moveTo(60, -24, 270);
+        ourRobot.drivetrain.moveTo(56, -24, 270);
 
         // move to proper zone
         if (numRings == 0) { //zone A
-            ourRobot.drivetrain.moveTo(48, 12, 270);
+            ourRobot.drivetrain.moveTo(44, 12, 270);
         } else if (numRings == 1) { //zone B
-            ourRobot.drivetrain.moveTo(24, 36, 270);
+            ourRobot.drivetrain.moveTo(20, 36, 270);
         } else { //zone C
-            ourRobot.drivetrain.moveTo(48, 60, 270);
+            ourRobot.drivetrain.moveTo(44, 60, 270);
         }
         ourRobot.drivetrain.performBrake();
 
         ourRobot.wobbleGoalMover.placeGoal();
         //move to gap between half field and rings
-        ourRobot.drivetrain.moveTo(-12, -24, 270);
+        ourRobot.drivetrain.moveTo(14, -24, 270);
 
         //pick up second goal
-        ourRobot.drivetrain.moveTo(24, -36, 0);
+        ourRobot.drivetrain.moveTo(28, -37, 180);
         ourRobot.drivetrain.performBrake();
         ourRobot.wobbleGoalMover.pickupGoal();
 
         //move to the same gap
-        ourRobot.drivetrain.moveTo(-12, -24, 270);
+        ourRobot.drivetrain.moveTo(12, -24, 270);
 
         // move to proper zone
         if (numRings == 0) { //zone A
-            ourRobot.drivetrain.moveTo(48, 12, 270);
+            ourRobot.drivetrain.moveTo(44, 12, 270);
         } else if (numRings == 1) { //zone B
-            ourRobot.drivetrain.moveTo(24, 36, 270);
+            ourRobot.drivetrain.moveTo(20, 36, 270);
         } else { //zone C
-            ourRobot.drivetrain.moveTo(48, 60, 270);
+            ourRobot.drivetrain.moveTo(44, 60, 270);
         }
         ourRobot.drivetrain.performBrake();
         ourRobot.wobbleGoalMover.placeGoal();
 
         //move to some position on field to start shooting
-        ourRobot.drivetrain.moveTo(12, 0, 90);
+        ourRobot.drivetrain.moveTo(12, 0, 270);
         ourRobot.drivetrain.performBrake();
 
         ourRobot.shootPowerShotTargets("red");

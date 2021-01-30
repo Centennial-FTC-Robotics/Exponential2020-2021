@@ -60,7 +60,7 @@ public class RedRightPath extends LinearOpMode {
         ourRobot.wobbleGoalMover.placeGoal();
 
         //move to some position on field to start shooting
-        ourRobot.drivetrain.moveTo(12, 0, 270);
+        ourRobot.drivetrain.moveTo(12, -6, 270);
         ourRobot.drivetrain.performBrake();
 
         ourRobot.shootPowerShotTargets("red");

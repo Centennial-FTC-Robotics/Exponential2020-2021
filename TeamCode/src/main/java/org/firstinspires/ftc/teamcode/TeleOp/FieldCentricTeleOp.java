@@ -25,31 +25,31 @@ public class FieldCentricTeleOp extends LinearOpMode {
         ourRobot.odometry.setPosition(0, 60, 90);
         initialAngle = ourRobot.odometry.getAngle();
 
-        ourRobot.intake.setServoPositions();
-        ourRobot.wobbleGoalMover.raise();
+        ourRobot.setUpServos();
         //ourRobot.turret.setTarget(25, 25);
 
+        boolean raised = true;
+        boolean clamped = true;
         while (opModeIsActive()) {
             ourRobot.odometry.update();
             currentAngle = ourRobot.odometry.getAngle();
 
             // uncomment to change to robot centric
-            /*
             initialAngle = 0;
             currentAngle = 0;
-             */
+
             double inputLeftX = -gamepad1.left_stick_x;
             double inputLeftY = -gamepad1.left_stick_y;
             double inputRightX = gamepad1.right_stick_x;
             double inputRightY = gamepad1.right_stick_y;
             double reductionFactor = .5;
             // halve values
-            if (gamepad1.left_bumper) {
+            /*if (gamepad1.left_bumper) {
                 inputLeftX *= reductionFactor;
                 inputLeftY *= reductionFactor;
                 inputRightX *= reductionFactor;
                 inputRightY *= reductionFactor;
-            }
+            }*/
 
             //John's targeting thing
 
@@ -68,22 +68,37 @@ public class FieldCentricTeleOp extends LinearOpMode {
             }
 
 
-            if (gamepad1.a) {
-                ourRobot.loader.load();
-                ourRobot.shooter.speedBackUp();
+            if (gamepad1.dpad_up) {
+                /*ourRobot.loader.load();
+                //ourRobot.shooter.speedBackUp();
                 sleep(250);
+                ourRobot.loader.unload();*/
+                ourRobot.loader.loadAndUnload();
+            } /*else if (gamepad1.b) {
                 ourRobot.loader.unload();
-            } else if (gamepad1.b) {
-                ourRobot.loader.unload();
+            }*/
+            if (gamepad1.a) {
+                if (raised) {
+                    ourRobot.wobbleGoalMover.lower();
+                } else {
+                    ourRobot.wobbleGoalMover.raise();
+                }
+                raised = !raised;
             }
-            if (gamepad1.right_bumper) {
-                ourRobot.shooter.shootAtHighGoal();
+            if (gamepad1.b) {
+                if (clamped) {
+                    ourRobot.wobbleGoalMover.release();
+                } else {
+                    ourRobot.wobbleGoalMover.clamp();
+                }
+                clamped = !clamped;
             }
-            if (gamepad1.x) {
+
+            /*if (gamepad1.x) {
                 ourRobot.loader.load();
                 sleep (250);
                 ourRobot.loader.unload();
-            }
+            }*/
             if (gamepad1.x) {
                 ourRobot.shootAtHighGoal("red");
             } else if (gamepad1.y) {
@@ -92,6 +107,8 @@ public class FieldCentricTeleOp extends LinearOpMode {
 
             if (gamepad1.right_bumper) {
                 ourRobot.shooter.shootAtPowerShot();
+            } else if (gamepad1.left_bumper) {
+                ourRobot.shooter.shootAtHighGoal();
             } else {
                 ourRobot.shooter.stopShooting();
             }

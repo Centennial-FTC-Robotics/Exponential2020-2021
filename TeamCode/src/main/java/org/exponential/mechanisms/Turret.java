@@ -37,7 +37,7 @@ public class Turret implements Mechanism, Runnable {
         turretMotor.setTargetPosition(turretMotor.getCurrentPosition());
 
         turretMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        turretMotor.setPower(.4);
+        turretMotor.setPower(1);
         turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         // 59 in x, 236.22 in y.
     }
@@ -80,7 +80,7 @@ public class Turret implements Mechanism, Runnable {
             turretMotor.setTargetPosition((int) (encCountAtAngleZero + ENC_PER_DEGREE * targetAngle));
         }
         turretMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        turretMotor.setPower(0.4);
+        turretMotor.setPower(1);
         currentAngle = (turretMotor.getCurrentPosition()-encCountAtAngleZero)/ENC_PER_DEGREE;
         opMode.telemetry.addData("turret enc", turretMotor.getCurrentPosition());
     }

@@ -71,7 +71,7 @@ public class Turret implements Mechanism, Runnable {
         } else {
             double targetAngle = IMU.normalize(
                     Math.toDegrees(Math.atan2(targetYValue - drivetrain.positioning.yPos,
-                            targetXValue - drivetrain.positioning.xPos)) - drivetrain.positioning.angle);
+                            targetXValue - drivetrain.positioning.xPos)) - drivetrain.positioning.angle + 180);
             if (targetAngle > 90) {
                 targetAngle = 90;
             } else if (targetAngle < -90) {

@@ -18,7 +18,7 @@ public class Turret implements Mechanism, Runnable {
     public static final boolean RELOAD = false;
 
 
-    DcMotorEx turretMotor;
+    public DcMotorEx turretMotor;
     Drivetrain drivetrain;
     LinearOpMode opMode;
     double targetXValue;
@@ -35,6 +35,7 @@ public class Turret implements Mechanism, Runnable {
         turretMotor = opMode.hardwareMap.get(DcMotorEx.class, "turretMotor");
         turretMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         turretMotor.setTargetPosition(turretMotor.getCurrentPosition());
+        turretMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         turretMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         turretMotor.setPower(1);
@@ -72,10 +73,10 @@ public class Turret implements Mechanism, Runnable {
             double targetAngle = IMU.normalize(
                     Math.toDegrees(Math.atan2(targetYValue - drivetrain.positioning.yPos,
                             targetXValue - drivetrain.positioning.xPos)) - drivetrain.positioning.angle + 180);
-            if (targetAngle > 90) {
-                targetAngle = 90;
-            } else if (targetAngle < -90) {
-                targetAngle = -90;
+            if (targetAngle > 170) {
+                targetAngle = 170;
+            } else if (targetAngle < -120) {
+                targetAngle = -120;
             }
             turretMotor.setTargetPosition((int) (encCountAtAngleZero + ENC_PER_DEGREE * targetAngle));
         }

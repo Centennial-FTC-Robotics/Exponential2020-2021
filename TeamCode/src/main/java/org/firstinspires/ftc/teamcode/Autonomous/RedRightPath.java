@@ -11,7 +11,7 @@ public class RedRightPath extends LinearOpMode {
     OurRobot ourRobot;
     @Override
     public void runOpMode() throws InterruptedException {
-        CameraOpenCV camera = new CameraOpenCV(300, 250, 150, 150);
+        CameraOpenCV camera = new CameraOpenCV(250, 200, 150, 150);
         ourRobot = new OurRobot(camera);
         ourRobot.initialize(this);
         //ourRobot.camera.setCameraBounds(300, 250, 150, 150);
@@ -19,7 +19,8 @@ public class RedRightPath extends LinearOpMode {
         waitForStart();
         int numRings = ourRobot.camera.getNumberOfRings();
         ourRobot.camera.deactivate();
-
+        ourRobot.setUpServos();
+        
         // starting on rightmost red tape, facing right
         ourRobot.odometry.setPosition(48, -63, 180);
 
@@ -28,43 +29,45 @@ public class RedRightPath extends LinearOpMode {
 
         // move to proper zone
         if (numRings == 0) { //zone A
-            ourRobot.drivetrain.moveTo(44, 12, 270);
+            ourRobot.drivetrain.moveTo(42, 12, 270);
         } else if (numRings == 1) { //zone B
             ourRobot.drivetrain.moveTo(20, 36, 270);
         } else { //zone C
-            ourRobot.drivetrain.moveTo(44, 60, 270);
+            ourRobot.drivetrain.moveTo(42, 56, 270);
         }
         ourRobot.drivetrain.performBrake();
 
         ourRobot.wobbleGoalMover.placeGoal();
+
+        //shoot rings at power shot targets (also moves to the designated position on the field)
+        //ourRobot.shootPowerShotTargets("red");
+        ourRobot.shootAtHighGoal("red");
+
         //move to gap between half field and rings
-        ourRobot.drivetrain.moveTo(14, -24, 270);
+        ourRobot.drivetrain.moveTo(6.75, -24, 270);
 
         //pick up second goal
-        ourRobot.drivetrain.moveTo(28, -37, 180);
+        ourRobot.drivetrain.moveTo(6.75, -48, 270);
         ourRobot.drivetrain.performBrake();
         ourRobot.wobbleGoalMover.pickupGoal();
 
-        //move to the same gap
-        ourRobot.drivetrain.moveTo(12, -24, 270);
+        //move to the second gap
+        ourRobot.drivetrain.moveTo(6.75, -24, 270);
 
         // move to proper zone
         if (numRings == 0) { //zone A
-            ourRobot.drivetrain.moveTo(44, 12, 270);
+            ourRobot.drivetrain.moveTo(42, 12, 270);
         } else if (numRings == 1) { //zone B
-            ourRobot.drivetrain.moveTo(20, 36, 270);
+            ourRobot.drivetrain.moveTo(9, 36, 270);
         } else { //zone C
-            ourRobot.drivetrain.moveTo(44, 60, 270);
+            ourRobot.drivetrain.moveTo(39, 56, 270);
         }
         ourRobot.drivetrain.performBrake();
         ourRobot.wobbleGoalMover.placeGoal();
 
-        //move to some position on field to start shooting
-        ourRobot.drivetrain.moveTo(12, -6, 270);
-        ourRobot.drivetrain.performBrake();
 
-        ourRobot.shootPowerShotTargets("red");
-
+        //park on line
+        ourRobot.drivetrain.moveTo(30, 6, 270);
         ourRobot.odometry.savePosition();
     }
 }

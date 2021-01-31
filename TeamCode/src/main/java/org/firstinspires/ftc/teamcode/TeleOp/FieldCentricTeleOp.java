@@ -21,8 +21,8 @@ public class FieldCentricTeleOp extends LinearOpMode {
 
         ourRobot = new OurRobot();
         ourRobot.initialize(this);
-        // ourRobot.odometry.loadPosition();
-        ourRobot.odometry.setPosition(0, 60, 90);
+        ourRobot.odometry.loadPosition();
+        //ourRobot.odometry.setPosition(0, 0, 90);
         initialAngle = ourRobot.odometry.getAngle();
 
         ourRobot.setUpServos();
@@ -44,12 +44,12 @@ public class FieldCentricTeleOp extends LinearOpMode {
             double inputRightY = gamepad1.right_stick_y;
             double reductionFactor = .5;
             // halve values
-            /*if (gamepad1.left_bumper) {
+            if (gamepad1.left_bumper) {
                 inputLeftX *= reductionFactor;
                 inputLeftY *= reductionFactor;
                 inputRightX *= reductionFactor;
                 inputRightY *= reductionFactor;
-            }*/
+            }
 
             //John's targeting thing
 
@@ -84,6 +84,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
                     ourRobot.wobbleGoalMover.raise();
                 }
                 raised = !raised;
+                sleep(250);
             }
             if (gamepad1.b) {
                 if (clamped) {
@@ -92,6 +93,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
                     ourRobot.wobbleGoalMover.clamp();
                 }
                 clamped = !clamped;
+                sleep(250);
             }
 
             /*if (gamepad1.x) {
@@ -99,19 +101,17 @@ public class FieldCentricTeleOp extends LinearOpMode {
                 sleep (250);
                 ourRobot.loader.unload();
             }*/
-            if (gamepad1.x) {
+            if (gamepad1.dpad_down) {
                 ourRobot.shootAtHighGoal("red");
-            } else if (gamepad1.y) {
+            } /*else if (gamepad1.y) {
                 ourRobot.shootPowerShotTargets("red");
-            }
+            }*/
 
             if (gamepad1.right_bumper) {
                 ourRobot.shooter.shootAtPowerShot();
-            } else if (gamepad1.left_bumper) {
+            } /*else if (gamepad1.left_bumper) {
                 ourRobot.shooter.shootAtHighGoal();
-            } else {
-                ourRobot.shooter.stopShooting();
-            }
+            }*/
             ourRobot.drivetrain.setPowerDriveMotors(getMotorPowers(rotatedX, rotatedY, inputRightX));
         }
     }

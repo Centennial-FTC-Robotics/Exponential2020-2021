@@ -25,10 +25,14 @@ public class Shooter implements Mechanism {
         setPower(.35);
     }
 
-    public void shootAtHighGoal() {setPower(.38); }
+    public void powerShotReadjustPower() {
+        setPower(.4);
+    }
 
-    public void speedBackUp() {
-        setPower(.49);
+    public void shootAtHighGoal() {setPower(.365); }
+
+    public void highGoalReadjustPower() {
+        setPower(.41);
     }
 
 

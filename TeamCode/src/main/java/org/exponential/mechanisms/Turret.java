@@ -18,7 +18,7 @@ public class Turret implements Mechanism, Runnable {
     public static final boolean RELOAD = false;
 
 
-    DcMotorEx turretMotor;
+    public DcMotorEx turretMotor;
     Drivetrain drivetrain;
     LinearOpMode opMode;
     double targetXValue;
@@ -35,6 +35,7 @@ public class Turret implements Mechanism, Runnable {
         turretMotor = opMode.hardwareMap.get(DcMotorEx.class, "turretMotor");
         turretMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         turretMotor.setTargetPosition(turretMotor.getCurrentPosition());
+        turretMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         turretMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         turretMotor.setPower(1);

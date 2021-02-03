@@ -50,6 +50,10 @@ public class PrintLocation extends LinearOpMode {
                 expo.turret.reload();
             }
 
+            if(gamepad2.y) {
+                expo.turret.savePosition();
+            }
+
         }
 
     }

@@ -66,23 +66,20 @@ public class Turret implements Mechanism, Runnable {
 
     public void readjustTurretAngle() {
         // call this constantly in the teleop while loop
+        double targetAngle;
         if (currentCommand == RELOAD) {
-            turretMotor.setTargetPosition((int) (encCountAtAngleZero));
+            targetAngle = 0;
         } else {
-            double targetAngle = IMU.normalize(
+            targetAngle = IMU.normalize(
                     Math.toDegrees(Math.atan2(targetYValue - drivetrain.positioning.yPos,
                             targetXValue - drivetrain.positioning.xPos)) - drivetrain.positioning.angle + 180);
-            if (targetAngle > 90) {
-                targetAngle = 90;
-            } else if (targetAngle < -90) {
-                targetAngle = -90;
-            }
-            turretMotor.setTargetPosition((int) (encCountAtAngleZero + ENC_PER_DEGREE * targetAngle));
+
         }
+        turretMotor.setTargetPosition(turretMotor.getCurrentPosition()
+                + (int) (ENC_PER_DEGREE * IMU.normalize(targetAngle - currentAngle)));
         turretMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         turretMotor.setPower(1);
-        currentAngle = (turretMotor.getCurrentPosition()-encCountAtAngleZero)/ENC_PER_DEGREE;
-        opMode.telemetry.addData("turret enc", turretMotor.getCurrentPosition());
+        currentAngle += IMU.normalize((turretMotor.getCurrentPosition() - encCountAtAngleZero) / ENC_PER_DEGREE - currentAngle);
     }
 
 

@@ -12,7 +12,7 @@ import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 
 import java.io.File;
 
-public class Turret implements Mechanism, Runnable {
+public class TurretContinuous implements Mechanism, Runnable {
     public static final double ENC_PER_DEGREE = (537.6 * 2) / 360;
     public static final boolean POINT_AT_TARGET = true;
     public static final boolean RELOAD = false;
@@ -39,13 +39,13 @@ public class Turret implements Mechanism, Runnable {
         turretMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         turretMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        turretMotor.setPower(1);
+        turretMotor.setPower(.5);
         turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         previousPos = turretMotor.getCurrentPosition();
     }
 
-    public Turret(Drivetrain drivetrain) {
+    public TurretContinuous(Drivetrain drivetrain) {
         this.drivetrain = drivetrain;
     }
 
@@ -76,13 +76,12 @@ public class Turret implements Mechanism, Runnable {
             targetAngle = IMU.normalize(
                     Math.toDegrees(Math.atan2(targetYValue - drivetrain.positioning.yPos,
                             targetXValue - drivetrain.positioning.xPos)) - drivetrain.positioning.angle + 180);
-
         }
         previousPos = turretMotor.getCurrentPosition();
         turretMotor.setTargetPosition(previousPos
                 + (int) (ENC_PER_DEGREE * IMU.normalize(targetAngle - currentAngle)));
         turretMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        turretMotor.setPower(1);
+        turretMotor.setPower(.5);
         currentAngle += IMU.normalize((previousPos - encCountAtAngleZero) / ENC_PER_DEGREE - currentAngle);
     }
 

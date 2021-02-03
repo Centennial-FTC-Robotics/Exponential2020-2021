@@ -3,15 +3,9 @@ package org.exponential.Tests;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.exponential.mechanisms.ArcOdometry;
-import org.exponential.mechanisms.Drivetrain;
-import org.exponential.mechanisms.IMU;
-import org.exponential.mechanisms.Odometry;
-import org.exponential.mechanisms.Turret;
+import org.exponential.mechanisms.TurretContinuous;
 import org.exponential.robots.OurRobot;
-import org.exponential.superclasses.Robot;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,10 +30,9 @@ public class PrintLocation extends LinearOpMode {
                 expo.drivetrain.setPowerDriveMotors(getMotorPowers(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x));
             }
             expo.odometry.update();
-            expo.turret.pointAtTarget();
             expo.turret.readjustTurretAngle();
 
-            telemetry.addData("pointing at target", expo.turret.currentCommand == Turret.POINT_AT_TARGET);
+            telemetry.addData("pointing at target", expo.turret.currentCommand == TurretContinuous.POINT_AT_TARGET);
             telemetry.addData("turret angle", expo.turret.currentAngle);
             telemetry.addData("x", expo.odometry.getxPos());
             telemetry.addData("y", expo.odometry.getyPos());
@@ -48,6 +41,14 @@ public class PrintLocation extends LinearOpMode {
             // telemetry.addData("normalized angle", IMU.normalize(expo.odometry.getAngle()));
 
             telemetry.update();
+
+            if (gamepad2.b) {
+                expo.turret.pointAtTarget();
+            }
+
+            if(gamepad2.x) {
+                expo.turret.reload();
+            }
 
         }
 

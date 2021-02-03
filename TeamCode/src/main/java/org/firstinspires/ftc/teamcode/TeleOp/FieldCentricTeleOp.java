@@ -24,6 +24,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
         ourRobot.odometry.loadPosition();
         //ourRobot.odometry.setPosition(0, 0, 90);
         initialAngle = ourRobot.odometry.getAngle();
+        int bumperTest;
 
         ourRobot.setUpServos();
         //ourRobot.turret.setTarget(25, 25);
@@ -112,6 +113,13 @@ public class FieldCentricTeleOp extends LinearOpMode {
             } /*else if (gamepad1.left_bumper) {
                 ourRobot.shooter.shootAtHighGoal();
             }*/
+            if (gamepad1.right_bumper) {
+                bumperTest = 1;
+            } else {
+                bumperTest = 0;
+            }
+            telemetry.addData("bumper",bumperTest);
+            telemetry.update();
             ourRobot.drivetrain.setPowerDriveMotors(getMotorPowers(rotatedX, rotatedY, inputRightX));
         }
     }

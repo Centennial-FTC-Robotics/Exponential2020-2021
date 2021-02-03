@@ -21,9 +21,7 @@ public class Shooter implements Mechanism {
         shooterMotor.setPower(power);
     }
 
-    public void shootAtPowerShot() {
-        setPower(.35);
-    }
+    public void shootAtPowerShot() { setPower(.43); }
 
     public void powerShotReadjustPower() {
         setPower(.4);

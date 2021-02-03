@@ -11,10 +11,9 @@ import org.exponential.mechanisms.Intake;
 import org.exponential.mechanisms.Loader;
 import org.exponential.mechanisms.Odometry;
 import org.exponential.mechanisms.Shooter;
-import org.exponential.mechanisms.Turret;
+import org.exponential.mechanisms.TurretContinuous;
 import org.exponential.mechanisms.WobbleGoalMover;
 import org.exponential.superclasses.Robot;
-import org.exponential.utility.LogMaker;
 
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class OurRobot implements Robot {
     public Loader loader;
     public Shooter shooter;
     public WobbleGoalMover wobbleGoalMover;
-    public Turret turret;
+    public TurretContinuous turret;
     public OurRobot() {
         camera = new CameraOpenCV();
     }
@@ -67,7 +66,7 @@ public class OurRobot implements Robot {
         drivetrain = new Drivetrain(odometry);
         drivetrain.initialize(opMode);
 
-        turret = new Turret(drivetrain);
+        turret = new TurretContinuous(drivetrain);
         turret.initialize(opMode);
 
         //setUpServos();

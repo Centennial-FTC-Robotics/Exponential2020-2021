@@ -26,6 +26,7 @@ public class Turret implements Mechanism, Runnable {
     public boolean currentCommand = POINT_AT_TARGET;
     public double currentAngle = 0;
 
+    private int previousPos;
     // if the turret was facing directly forwards, what could the encoder count be?
     double encCountAtAngleZero = 0;
 
@@ -40,7 +41,8 @@ public class Turret implements Mechanism, Runnable {
         turretMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         turretMotor.setPower(1);
         turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        // 59 in x, 236.22 in y.
+
+        previousPos = turretMotor.getCurrentPosition();
     }
 
     public Turret(Drivetrain drivetrain) {
@@ -76,11 +78,12 @@ public class Turret implements Mechanism, Runnable {
                             targetXValue - drivetrain.positioning.xPos)) - drivetrain.positioning.angle + 180);
 
         }
-        turretMotor.setTargetPosition(turretMotor.getCurrentPosition()
+        previousPos = turretMotor.getCurrentPosition();
+        turretMotor.setTargetPosition(previousPos
                 + (int) (ENC_PER_DEGREE * IMU.normalize(targetAngle - currentAngle)));
         turretMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         turretMotor.setPower(1);
-        currentAngle += IMU.normalize((turretMotor.getCurrentPosition() - encCountAtAngleZero) / ENC_PER_DEGREE - currentAngle);
+        currentAngle += IMU.normalize((previousPos - encCountAtAngleZero) / ENC_PER_DEGREE - currentAngle);
     }
 
 

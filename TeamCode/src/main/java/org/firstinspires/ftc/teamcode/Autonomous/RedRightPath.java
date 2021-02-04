@@ -21,7 +21,7 @@ public class RedRightPath extends LinearOpMode {
         ourRobot.camera.deactivate();
         ourRobot.setUpServos();
         
-        // starting on rightmost red tape, facing right
+        // starting on rightmost red tape, facing left
         ourRobot.odometry.setPosition(48, -63, 180);
 
         // go to gap between rings and wall (going backwards, wobble goal is on left of robot)

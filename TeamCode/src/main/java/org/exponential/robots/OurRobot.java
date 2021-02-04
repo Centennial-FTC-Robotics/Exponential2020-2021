@@ -159,4 +159,19 @@ public class OurRobot implements Robot {
         }
         shooter.stopShooting();
     }
+
+    public void scoreWobbleGoal(String side) {
+        double targetXPosition;
+        if (side.equals("red")) {
+            targetXPosition = 36;
+        } else {
+            targetXPosition = -36;
+        }
+
+        //move to edge of wall facing left
+        drivetrain.moveTo(targetXPosition, -63, 180);
+
+        //drop goal
+        wobbleGoalMover.placeGoal();
+    }
 }

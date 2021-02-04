@@ -108,6 +108,10 @@ public class FieldCentricTeleOp extends LinearOpMode {
                 ourRobot.shootPowerShotTargets("red");
             }*/
 
+            if (gamepad1.dpad_up) {
+                ourRobot.scoreWobbleGoal("red");
+            }
+
             if (gamepad1.right_bumper) {
                 ourRobot.shooter.shootAtPowerShot();
             } /*else if (gamepad1.left_bumper) {

@@ -59,7 +59,7 @@ public class Turret implements Mechanism, Runnable {
     }
 
 
-    public void reload() {
+    public void setToReloadPosition() {
         currentCommand = RELOAD;
         readjustTurretAngle();
     }
@@ -73,6 +73,7 @@ public class Turret implements Mechanism, Runnable {
             double targetAngle = IMU.normalize(
                     Math.toDegrees(Math.atan2(targetYValue - drivetrain.positioning.yPos,
                             targetXValue - drivetrain.positioning.xPos)) - drivetrain.positioning.angle + 180);
+            // redundant, a relic of the past............
             if (targetAngle > 180) {
                 targetAngle = 180;
             } else if (targetAngle < -180) {

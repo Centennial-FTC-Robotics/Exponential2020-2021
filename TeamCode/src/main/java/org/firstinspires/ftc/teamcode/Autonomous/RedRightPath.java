@@ -68,6 +68,6 @@ public class RedRightPath extends LinearOpMode {
 
         //park on line
         ourRobot.drivetrain.moveTo(30, 6, 270);
-        ourRobot.odometry.savePosition();
+        ourRobot.savePositions();
     }
 }

@@ -82,6 +82,17 @@ public class OurRobot implements Robot {
         wobbleGoalMover.raise();
         wobbleGoalMover.clamp();
     }
+
+    public void savePositions() {
+        odometry.savePosition();
+        turret.savePosition();
+    }
+
+    public void loadPositions() {
+        odometry.loadPosition();
+        turret.loadPosition();
+    }
+
     public void shootPowerShotTargets(String side) {
         double[] targetXPositions;
         if (side.equals("red")) {
@@ -91,40 +102,35 @@ public class OurRobot implements Robot {
             targetXPositions = new double[] {-2, -9.5, -17};
         }
         //move to some position on field to start shooting
-        drivetrain.moveTo(12, -6, 270);
+        drivetrain.moveTo(12, -6, odometry.getAngle());
         drivetrain.performBrake();
 
-        double robotX = odometry.getxPos();
-        double robotY = odometry.getyPos();
+        turret.pointAtTarget();
+
+        /*double robotX = odometry.getxPos();
+        double robotY = odometry.getyPos();*/
+
         boolean first = true;
         //LogMaker logMaker = new LogMaker("powershotlog.txt");
         for (double targetXPosition: targetXPositions) {
             // +180 because we want the robot's front to be facing the exact opposite of the targets.
             //robot shoots backwards
-            double targetAngle = 180 + Math.toDegrees(Math.atan2(72 - robotY, targetXPosition - robotX));
-           /* logMaker.write("Log for targetXPosition " + targetXPosition);
-            logMaker.write("targetAngle: " + targetAngle);
-            logMaker.write("atan value: " + Math.atan2(72 - robotY, targetXPosition - robotX));*/
-            //drivetrain.turnTo(targetAngle, 1.9);  TODO: uncomment this if needed
-            drivetrain.moveTo(targetXPosition, -6, 270);
+            //double targetAngle = 180 + Math.toDegrees(Math.atan2(72 - robotY, targetXPosition - robotX));
+            turret.setTarget(targetXPosition, 72);
+            turret.readjustTurretAngle();
+            opMode.sleep(250);
             if (first) {
                 shooter.shootAtPowerShot();
                 first = false;
             } else {
                 shooter.powerShotReadjustPower();
             }
-            sleep(1000);
+            opMode.sleep(1000);
             loader.loadAndUnload();
-            /*opMode.telemetry.addData("targetXPosition", targetXPosition);
-            opMode.telemetry.addData("targetAngle", targetAngle);
-            opMode.telemetry.addData("atan value", Math.atan2(72 - robotY, targetXPosition - robotX));
-            opMode.telemetry.addData("robotX", odometry.getxPos());
-            opMode.telemetry.addData("robotY", odometry.getyPos());
-            opMode.telemetry.addData("robotTheta", odometry.getAngle());
-            opMode.telemetry.update();*/
-            //while (!opMode.gamepad1.a);
+
         }
         //logMaker.close();
+        turret.setToReloadPosition();
         shooter.stopShooting();
     }
 
@@ -135,19 +141,23 @@ public class OurRobot implements Robot {
         } else {
             goalXPosition = -36;
         }
+
+        turret.setTarget(goalXPosition, 72);
         //move to some position on field to start shooting
-        drivetrain.moveTo(39 + 6, -6, 270, 2);
+        drivetrain.moveTo(goalXPosition, -6, odometry.getAngle());
         drivetrain.performBrake();
 
-        double robotX = odometry.getxPos();
-        double robotY = odometry.getyPos();
+        turret.pointAtTarget();
+        opMode.sleep(250);
 
-        double targetAngle = 180 + Math.toDegrees(Math.atan2(72 - robotY, goalXPosition - robotX));
+        /*double robotX = odometry.getxPos();
+        double robotY = odometry.getyPos();*/
+
+        // double targetAngle = 180 + Math.toDegrees(Math.atan2(72 - robotY, goalXPosition - robotX));
         //drivetrain.turnTo(targetAngle, 4);
 
         boolean first = true;
         for (int i = 0; i < 3; i++) {
-
             if (first) {
                 shooter.shootAtHighGoal();
                 first = false;
@@ -157,6 +167,7 @@ public class OurRobot implements Robot {
             sleep(1000);
             loader.loadAndUnload();
         }
+        turret.setToReloadPosition();
         shooter.stopShooting();
     }
 

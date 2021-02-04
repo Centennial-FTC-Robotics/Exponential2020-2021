@@ -13,27 +13,30 @@ public class FieldCentricTeleOp extends LinearOpMode {
     private double initialAngle;
     private double currentAngle;
 
-    private OurRobot ourRobot;
+    private OurRobot robot;
 
     @Override
     public void runOpMode() throws InterruptedException {
         waitForStart();
 
-        ourRobot = new OurRobot();
-        ourRobot.initialize(this);
-        ourRobot.odometry.loadPosition();
+        robot = new OurRobot();
+        robot.initialize(this);
+        robot.loadPositions();
         //ourRobot.odometry.setPosition(0, 0, 90);
-        initialAngle = ourRobot.odometry.getAngle();
+        initialAngle = robot.odometry.getAngle();
         int bumperTest;
 
-        ourRobot.setUpServos();
+        robot.setUpServos();
         //ourRobot.turret.setTarget(25, 25);
-
+        robot.turret.setToReloadPosition();
         boolean raised = true;
         boolean clamped = true;
         while (opModeIsActive()) {
-            ourRobot.odometry.update();
-            currentAngle = ourRobot.odometry.getAngle();
+            robot.odometry.update();
+            currentAngle = robot.odometry.getAngle();
+
+            // move the turret to correct position
+            robot.turret.readjustTurretAngle();
 
             // uncomment to change to robot centric
             /*initialAngle = 0;
@@ -52,20 +55,16 @@ public class FieldCentricTeleOp extends LinearOpMode {
                 inputRightY *= reductionFactor;
             }
 
-            //John's targeting thing
-
-            // ourRobot.turret.moveTurret();//TODO Eric pls fix this
-
             double theta = currentAngle - initialAngle;
             double rotatedX = inputLeftX * Math.cos(Math.toRadians(theta)) - inputLeftY * Math.sin(Math.toRadians(theta));
             double rotatedY = inputLeftX * Math.sin(Math.toRadians(theta)) + inputLeftY * Math.cos(Math.toRadians(theta));
 
             if (gamepad1.right_trigger > 0) {
-                ourRobot.intake.setPowerInput(gamepad1.right_trigger);
+                robot.intake.setPowerInput(gamepad1.right_trigger);
             } else if (gamepad1.left_trigger > 0) {
-                ourRobot.intake.setPowerInput(-gamepad1.left_trigger);
+                robot.intake.setPowerInput(-gamepad1.left_trigger);
             } else {
-                ourRobot.intake.setPowerInput(0);
+                robot.intake.setPowerInput(0);
             }
 
 
@@ -74,24 +73,24 @@ public class FieldCentricTeleOp extends LinearOpMode {
                 //ourRobot.shooter.speedBackUp();
                 sleep(250);
                 ourRobot.loader.unload();*/
-                ourRobot.loader.loadAndUnload();
+                robot.loader.loadAndUnload();
             } /*else if (gamepad1.b) {
                 ourRobot.loader.unload();
             }*/
             if (gamepad1.a) {
                 if (raised) {
-                    ourRobot.wobbleGoalMover.lower();
+                    robot.wobbleGoalMover.lower();
                 } else {
-                    ourRobot.wobbleGoalMover.raise();
+                    robot.wobbleGoalMover.raise();
                 }
                 raised = !raised;
                 sleep(250);
             }
             if (gamepad1.b) {
                 if (clamped) {
-                    ourRobot.wobbleGoalMover.release();
+                    robot.wobbleGoalMover.release();
                 } else {
-                    ourRobot.wobbleGoalMover.clamp();
+                    robot.wobbleGoalMover.clamp();
                 }
                 clamped = !clamped;
                 sleep(250);
@@ -103,17 +102,17 @@ public class FieldCentricTeleOp extends LinearOpMode {
                 ourRobot.loader.unload();
             }*/
             if (gamepad1.dpad_down) {
-                ourRobot.shootAtHighGoal("red");
+                robot.shootAtHighGoal("red");
             } /*else if (gamepad1.y) {
                 ourRobot.shootPowerShotTargets("red");
             }*/
 
             if (gamepad1.dpad_up) {
-                ourRobot.scoreWobbleGoal("red");
+                robot.scoreWobbleGoal("red");
             }
 
             if (gamepad1.right_bumper) {
-                ourRobot.shooter.shootAtPowerShot();
+                robot.shooter.shootAtPowerShot();
             } /*else if (gamepad1.left_bumper) {
                 ourRobot.shooter.shootAtHighGoal();
             }*/
@@ -124,7 +123,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
             }
             telemetry.addData("bumper",bumperTest);
             telemetry.update();
-            ourRobot.drivetrain.setPowerDriveMotors(getMotorPowers(rotatedX, rotatedY, inputRightX));
+            robot.drivetrain.setPowerDriveMotors(getMotorPowers(rotatedX, rotatedY, inputRightX));
         }
     }
 

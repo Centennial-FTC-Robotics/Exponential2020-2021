@@ -36,8 +36,8 @@ public class FieldCentricTeleOp extends LinearOpMode {
             currentAngle = ourRobot.odometry.getAngle();
 
             // uncomment to change to robot centric
-            initialAngle = 0;
-            currentAngle = 0;
+            /*initialAngle = 0;
+            currentAngle = 0;*/
 
             double inputLeftX = -gamepad1.left_stick_x;
             double inputLeftY = -gamepad1.left_stick_y;
@@ -57,8 +57,8 @@ public class FieldCentricTeleOp extends LinearOpMode {
             // ourRobot.turret.moveTurret();//TODO Eric pls fix this
 
             double theta = currentAngle - initialAngle;
-            double rotatedX = inputLeftX * Math.cos(theta) - inputLeftY * Math.sin(theta);
-            double rotatedY = inputLeftX * Math.sin(theta) + inputLeftY * Math.cos(theta);
+            double rotatedX = inputLeftX * Math.cos(Math.toRadians(theta)) - inputLeftY * Math.sin(Math.toRadians(theta));
+            double rotatedY = inputLeftX * Math.sin(Math.toRadians(theta)) + inputLeftY * Math.cos(Math.toRadians(theta));
 
             if (gamepad1.right_trigger > 0) {
                 ourRobot.intake.setPowerInput(gamepad1.right_trigger);

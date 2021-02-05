@@ -15,8 +15,8 @@ public class WobbleGoalMover implements Mechanism {
 
     public static final double RAISE_POSITION = .2;
     public static final double LOWER_POSITION = .62;
-    public static final double CLAMP_POSITION = .74;
-    public static final double RELEASE_POSITION = .4;
+    public static final double CLAMP_POSITION = .6;
+    public static final double RELEASE_POSITION = .2;
     @Override
     public void initialize(LinearOpMode opMode) {
         /*leftMoverServo = hardwareMap.servo.get("leftMoverServo");

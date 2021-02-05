@@ -17,11 +17,13 @@ public class Intake implements Mechanism {
     public static final double LEFT_SERVO_POSITION = .85;
     public static final double RIGHT_SERVO_POSITION = 0;
     public DcMotorEx intakeMotor;
+    public DcMotorEx conveyorMotor;
     public Servo leftIntakeServo;
     public Servo rightIntakeServo;
     @Override
     public void initialize(LinearOpMode opMode) {
         intakeMotor = opMode.hardwareMap.get(DcMotorEx.class, "intakeMotor");
+        conveyorMotor = opMode.hardwareMap.get(DcMotorEx.class, "conveyorMotor");
         leftIntakeServo = opMode.hardwareMap.servo.get("leftIntakeServo");
         rightIntakeServo = opMode.hardwareMap.servo.get("rightIntakeServo");
     }
@@ -38,15 +40,18 @@ public class Intake implements Mechanism {
 
     // TODO: intake and outtake power will need to be changed for direction as well.
     public void intake() {
-        setPower(INTAKE_POWER);
+        intakeMotor.setPower(INTAKE_POWER);
+        conveyorMotor.setPower(INTAKE_POWER);
     }
 
     public void outtake() {
-        setPower(OUTTAKE_POWER);
+        intakeMotor.setPower(OUTTAKE_POWER);
+        conveyorMotor.setPower(OUTTAKE_POWER);
     }
 
     public void stop() {
-        setPower(0);
+        intakeMotor.setPower(0);
+        conveyorMotor.setPower(0);
     }
 
     public void setServoPositions() {

@@ -102,7 +102,11 @@ public class OurRobot implements Robot {
             targetXPositions = new double[] {-2, -9.5, -17};
         }
         //move to some position on field to start shooting
-        drivetrain.moveTo(12, -6, odometry.getAngle());
+
+        double robotX = odometry.getxPos();
+        double robotY = odometry.getyPos();
+        double targetAngle = Math.toDegrees(Math.atan2(-6 - robotY, 12 - robotX));
+        drivetrain.moveTo(12, -6, targetAngle);
         drivetrain.performBrake();
 
         turret.pointAtTarget();
@@ -143,8 +147,13 @@ public class OurRobot implements Robot {
         }
 
         turret.setTarget(goalXPosition, 72);
+
+        double robotX = odometry.getxPos();
+        double robotY = odometry.getyPos();
+
         //move to some position on field to start shooting
-        drivetrain.moveTo(goalXPosition, -6, odometry.getAngle());
+        double targetAngle = Math.toDegrees(Math.atan2(-6 - robotY, goalXPosition - robotX));
+        drivetrain.moveTo(goalXPosition, -6, targetAngle);
         drivetrain.performBrake();
 
         turret.pointAtTarget();

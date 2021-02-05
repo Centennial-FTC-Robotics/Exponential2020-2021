@@ -87,6 +87,10 @@ public class Turret implements Mechanism, Runnable {
         opMode.telemetry.addData("turret enc", turretMotor.getCurrentPosition());
     }
 
+    public void setAngle(double angle) {
+        currentAngle = angle;
+        encCountAtAngleZero = turretMotor.getCurrentPosition() - currentAngle * ENC_PER_DEGREE;
+    }
 
     public void savePosition() {
         File file = AppUtil.getInstance().getSettingsFile("TurretPosition.txt");

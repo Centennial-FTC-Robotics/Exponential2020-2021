@@ -21,8 +21,13 @@ public class FieldCentricTeleOp extends LinearOpMode {
 
         robot = new OurRobot();
         robot.initialize(this);
-        robot.loadPositions();
-        robot.odometry.setPosition(0, 0, 90);  // comment for auto to teleop transition
+        //comment out this line for non transition (testing) purposes
+        //robot.loadPositions();
+
+        //comment out the following two lines for auto to teleop transitions
+        robot.odometry.setPosition(0, 0, 90);
+        robot.turret.setAngle(0);
+
         initialAngle = robot.odometry.getAngle();
         int bumperTest;
 
@@ -36,7 +41,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
             currentAngle = robot.odometry.getAngle();
 
             // move the turret to correct position
-            //robot.turret.readjustTurretAngle();
+            robot.turret.readjustTurretAngle();
 
             // uncomment to change to robot centric
             /*initialAngle = 0;

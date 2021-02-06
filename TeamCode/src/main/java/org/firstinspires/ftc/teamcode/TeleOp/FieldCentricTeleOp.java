@@ -28,7 +28,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
         robot.odometry.setPosition(0, 0, 90);
         robot.turret.setAngle(0);
 
-        initialAngle = robot.odometry.getAngle();
+        initialAngle = robot.odometry.getAngle() + 90;  // +90 so that the controls are field centric from the red drivers' perspective
         int bumperTest;
 
         robot.setUpServos();
@@ -49,8 +49,8 @@ public class FieldCentricTeleOp extends LinearOpMode {
 
             double inputLeftX = -gamepad1.left_stick_x;
             double inputLeftY = -gamepad1.left_stick_y;
-            double inputRightX = .6 * gamepad1.right_stick_x;
-            double inputRightY = .6 * gamepad1.right_stick_y;
+            double inputRightX = .3 * gamepad1.right_stick_x;
+            double inputRightY = .3 * gamepad1.right_stick_y;
             double reductionFactor = .5;
             // halve values
             if (gamepad1.left_bumper) {
@@ -104,21 +104,25 @@ public class FieldCentricTeleOp extends LinearOpMode {
                 sleep(250);
             }
 
-            /*if (gamepad1.x) {
-                ourRobot.loader.load();
-                sleep (250);
-                ourRobot.loader.unload();
-            }*/
-            if (gamepad1.dpad_down) {
+            if (gamepad1.dpad_up) {
+                robot.drivetrain.turnTo(180);
+            } else if (gamepad1.dpad_right) {
+                robot.drivetrain.turnTo(90);
+            } else if (gamepad1.dpad_down) {
+                robot.drivetrain.turnTo(0);
+            } else if (gamepad1.dpad_left) {
+                robot.drivetrain.turnTo(270);
+            }
+            /*if (gamepad1.dpad_down) {
                 robot.shootAtHighGoal("red");
-            } /*else if (gamepad1.y) {
+            } *//*else if (gamepad1.y) {
                 ourRobot.shootPowerShotTargets("red");
-            }*/
+            }*//*
 
             if (gamepad1.dpad_up) {
                 robot.scoreWobbleGoal("red");
             }
-
+*/
             if (gamepad1.right_bumper) {
                 robot.shooter.shootAtPowerShot();
             } /*else if (gamepad1.left_bumper) {

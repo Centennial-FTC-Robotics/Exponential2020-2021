@@ -54,8 +54,8 @@ public class Odometry implements Runnable, Mechanism {
         /*forwardLeftEnc = opMode.hardwareMap.get(DcMotorEx.class, "leftOdometry");
         forwardRightEnc = opMode.hardwareMap.get(DcMotorEx.class, "rightOdometry");
         horizontalEnc = opMode.hardwareMap.get(DcMotorEx.class, "backOdometry");*/
-        forwardLeftEnc = opMode.hardwareMap.get(DcMotorEx.class, "conveyorMotor");
-        horizontalEnc = opMode.hardwareMap.get(DcMotorEx.class, "frontLeft");
+        forwardLeftEnc = opMode.hardwareMap.get(DcMotorEx.class, "frontLeft");
+        horizontalEnc = opMode.hardwareMap.get(DcMotorEx.class, "conveyorMotor");
         forwardRightEnc = opMode.hardwareMap.get(DcMotorEx.class, "intakeMotor");
 
         forwardLeftEnc.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);

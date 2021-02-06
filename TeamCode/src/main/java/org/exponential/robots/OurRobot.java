@@ -141,7 +141,7 @@ public class OurRobot implements Robot {
     public void shootAtHighGoal(String side) {
         double goalXPosition;
         if (side.equals("red")) {
-            goalXPosition = 36;
+            goalXPosition = 13;
         } else {
             goalXPosition = -36;
         }
@@ -151,14 +151,19 @@ public class OurRobot implements Robot {
         double robotX = odometry.getxPos();
         double robotY = odometry.getyPos();
 
+        //SET SHOOTER TO ITS INITIAL POWER
+        shooter.shootAtHighGoal();
+
         //move to some position on field to start shooting
         double targetAngle = Math.toDegrees(Math.atan2(-6 - robotY, goalXPosition - robotX));
         drivetrain.moveTo(goalXPosition, -6, targetAngle);
         drivetrain.performBrake();
 
+        for (int i = 0; i < 6; i++) {
+            turret.pointAtTarget();
+            opMode.sleep(250);
+        }
         turret.pointAtTarget();
-        opMode.sleep(250);
-
         /*double robotX = odometry.getxPos();
         double robotY = odometry.getyPos();*/
 
@@ -168,12 +173,12 @@ public class OurRobot implements Robot {
         boolean first = true;
         for (int i = 0; i < 3; i++) {
             if (first) {
-                shooter.shootAtHighGoal();
+                //shooter.shootAtHighGoal();
                 first = false;
             } else {
                 shooter.highGoalReadjustPower();
+                sleep(500);
             }
-            sleep(1000);
             loader.loadAndUnload();
         }
         turret.setToReloadPosition();

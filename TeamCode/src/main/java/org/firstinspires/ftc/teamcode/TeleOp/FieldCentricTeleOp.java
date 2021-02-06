@@ -65,11 +65,14 @@ public class FieldCentricTeleOp extends LinearOpMode {
             double rotatedY = inputLeftX * Math.sin(Math.toRadians(theta)) + inputLeftY * Math.cos(Math.toRadians(theta));
 
             if (gamepad1.right_trigger > 0) {
-                robot.intake.setPowerInput(gamepad1.right_trigger);
+                //robot.intake.setPowerInput(gamepad1.right_trigger);
+                robot.intake.intake();
             } else if (gamepad1.left_trigger > 0) {
-                robot.intake.setPowerInput(-gamepad1.left_trigger);
+                //robot.intake.setPowerInput(-gamepad1.left_trigger);
+                robot.intake.outtake();
             } else {
-                robot.intake.setPowerInput(0);
+                //robot.intake.setPowerInput(0);
+                robot.intake.stop();
             }
 
 

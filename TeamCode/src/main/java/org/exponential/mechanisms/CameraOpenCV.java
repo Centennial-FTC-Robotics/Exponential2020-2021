@@ -88,7 +88,7 @@ public class CameraOpenCV implements Mechanism {
         final Scalar BLUE = new Scalar(0, 0, 255);
         final Scalar GREEN = new Scalar(0, 255, 0);
 
-        final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(300, 250);
+        final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(300, 300);
 
         static final int REGION_WIDTH = 150;
         static final int REGION_HEIGHT = 150;

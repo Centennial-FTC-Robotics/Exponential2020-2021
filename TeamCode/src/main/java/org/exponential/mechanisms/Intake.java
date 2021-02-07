@@ -1,6 +1,7 @@
 package org.exponential.mechanisms;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -26,7 +27,10 @@ public class Intake implements Mechanism {
     @Override
     public void initialize(LinearOpMode opMode) {
         intakeMotor = opMode.hardwareMap.get(DcMotorEx.class, "intakeMotor");
+        intakeMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         conveyorMotor = opMode.hardwareMap.get(DcMotorEx.class, "conveyorMotor");
+        intakeMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+
         leftIntakeServo = opMode.hardwareMap.servo.get("leftIntakeServo");
         rightIntakeServo = opMode.hardwareMap.servo.get("rightIntakeServo");
     }

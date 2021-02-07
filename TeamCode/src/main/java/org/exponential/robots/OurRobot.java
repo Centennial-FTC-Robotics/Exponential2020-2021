@@ -12,7 +12,6 @@ import org.exponential.mechanisms.Loader;
 import org.exponential.mechanisms.Odometry;
 import org.exponential.mechanisms.Shooter;
 import org.exponential.mechanisms.Turret;
-import org.exponential.mechanisms.TurretContinuous;
 import org.exponential.mechanisms.WobbleGoalMover;
 import org.exponential.superclasses.Robot;
 
@@ -134,7 +133,7 @@ public class OurRobot implements Robot {
 
         }
         //logMaker.close();
-        turret.setToReloadPosition();
+        turret.pointToReloadPosition();
         shooter.stopShooting();
     }
 
@@ -181,7 +180,7 @@ public class OurRobot implements Robot {
             }
             loader.loadAndUnload();
         }
-        turret.setToReloadPosition();
+        turret.pointToReloadPosition();
         shooter.stopShooting();
     }
 

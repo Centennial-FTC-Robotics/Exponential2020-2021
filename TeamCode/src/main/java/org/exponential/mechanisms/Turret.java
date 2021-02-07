@@ -59,7 +59,7 @@ public class Turret implements Mechanism, Runnable {
     }
 
 
-    public void setToReloadPosition() {
+    public void pointToReloadPosition() {
         currentCommand = RELOAD;
         readjustTurretAngle();
     }

@@ -1,12 +1,14 @@
 package org.exponential.Tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.exponential.mechanisms.ArcOdometry;
 import org.exponential.mechanisms.Drivetrain;
 import org.exponential.mechanisms.IMU;
 import org.exponential.robots.OurRobot;
 
+@TeleOp
 public class TurretAngleTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         OurRobot expo = new OurRobot();
@@ -33,7 +35,6 @@ public class TurretAngleTest extends LinearOpMode {
             telemetry.addData("current angle (in terms of the robot): ", expo.turret.currentAngle);
 
             telemetry.update();
-
         }
 
     }

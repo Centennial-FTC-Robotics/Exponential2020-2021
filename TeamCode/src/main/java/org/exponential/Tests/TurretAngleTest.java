@@ -1,0 +1,41 @@
+package org.exponential.Tests;
+
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+import org.exponential.mechanisms.ArcOdometry;
+import org.exponential.mechanisms.Drivetrain;
+import org.exponential.mechanisms.IMU;
+import org.exponential.robots.OurRobot;
+
+public class TurretAngleTest extends LinearOpMode {
+    public void runOpMode() throws InterruptedException {
+        OurRobot expo = new OurRobot();
+        expo.initialize(this);
+
+        double targetAngle = 180;
+        while (opModeIsActive()) {
+            int currentIndex = 0;
+            expo.turret.pointAtAngle();
+            expo.odometry.update();
+            expo.turret.readjustTurretAngle();
+            expo.drivetrain.performBrake();
+
+            if (gamepad1.dpad_up) {
+                targetAngle += 5;
+                sleep(250);
+            } else if (gamepad1.dpad_down) {
+                targetAngle -= 5;
+                sleep(250);
+            }
+
+            expo.turret.setAngle(targetAngle);
+
+            telemetry.addData("target angle (in terms of the field): ", targetAngle);
+            telemetry.addData("current angle (in terms of the robot): ", expo.turret.currentAngle);
+
+            telemetry.update();
+
+        }
+
+    }
+}

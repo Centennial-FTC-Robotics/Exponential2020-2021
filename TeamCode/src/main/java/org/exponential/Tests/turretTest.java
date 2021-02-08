@@ -37,6 +37,7 @@ public class turretTest extends LinearOpMode {
                 sleep(500);
             }
             telemetry.addData("Current Position: ", "(" + expo.odometry.getxPos() + ", " + expo.odometry.getyPos() + ")");
+            telemetry.addData("Angle: ", expo.odometry.getAngle());
             telemetry.addData("Pointing Towards: ", "(" + targetX + ", " + targetY + ")");
             telemetry.addData("Turret Angle: ", expo.turret.currentAngle);
             telemetry.update();

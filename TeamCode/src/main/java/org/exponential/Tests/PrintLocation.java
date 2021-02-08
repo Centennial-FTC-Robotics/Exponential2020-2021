@@ -18,7 +18,7 @@ public class PrintLocation extends LinearOpMode {
         expo.initialize(this);
         expo.intake.setServoPositions();
         expo.wobbleGoalMover.raise();
-        expo.turret.setToReloadPosition();
+        //* expo.turret.setToReloadPosition();
 
         boolean fieldCentric = false;
         while(opModeIsActive()){

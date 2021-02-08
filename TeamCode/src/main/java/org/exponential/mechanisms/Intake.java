@@ -13,7 +13,7 @@ public class Intake implements Mechanism {
     public static final double INTAKE_POWER = -.45;
     public static final double OUTTAKE_POWER = .45;
     public static final double CONVEYOR_INTAKE_POWER = -.1;
-    public static final double CONVEYOR_OUTTAKE_POWER = .1;
+    public static final double CONVEYOR_OUTTAKE_POWER = -.1;
     
     public static final double INTAKE_FACTOR = .6;
     public static final double CONVEYOR_FACTOR = -.05;

@@ -48,7 +48,7 @@ public class PrintLocation extends LinearOpMode {
             }
 
             if(gamepad2.x) {
-                expo.turret.setToReloadPosition();
+                expo.turret.pointToReloadPosition();
             }
 
             if(gamepad2.y) {

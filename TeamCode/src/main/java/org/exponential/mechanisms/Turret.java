@@ -13,7 +13,7 @@ import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import java.io.File;
 
 public class Turret implements Mechanism, Runnable {
-    public static final double ENC_PER_DEGREE = (537.6 * 2) / 360;
+    public static final double ENC_PER_DEGREE = (1120.0) / 360.0;
     public static final boolean POINT_AT_TARGET = true;
     public static final boolean RELOAD = false;
 
@@ -59,7 +59,7 @@ public class Turret implements Mechanism, Runnable {
     }
 
 
-    public void setToReloadPosition() {
+    public void pointToReloadPosition() {
         currentCommand = RELOAD;
         readjustTurretAngle();
     }
@@ -83,7 +83,7 @@ public class Turret implements Mechanism, Runnable {
         }
         turretMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         turretMotor.setPower(1);
-        currentAngle = (turretMotor.getCurrentPosition()-encCountAtAngleZero)/ENC_PER_DEGREE;
+        currentAngle = (turretMotor.getCurrentPosition() - encCountAtAngleZero) / ENC_PER_DEGREE;
         opMode.telemetry.addData("turret enc", turretMotor.getCurrentPosition());
     }
 

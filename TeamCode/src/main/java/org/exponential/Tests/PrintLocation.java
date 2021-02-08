@@ -18,6 +18,7 @@ public class PrintLocation extends LinearOpMode {
         expo.initialize(this);
         expo.intake.setServoPositions();
         expo.wobbleGoalMover.raise();
+        expo.turret.setToReloadPosition();
 
         boolean fieldCentric = false;
         while(opModeIsActive()){
@@ -52,8 +53,13 @@ public class PrintLocation extends LinearOpMode {
 
             if(gamepad2.y) {
                 expo.turret.savePosition();
+                expo.odometry.savePosition();
             }
 
+            if (gamepad2.a) {
+                expo.turret.loadPosition();
+                expo.odometry.loadPosition();
+            }
         }
 
     }

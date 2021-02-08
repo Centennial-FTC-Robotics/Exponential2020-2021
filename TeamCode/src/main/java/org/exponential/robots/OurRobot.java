@@ -48,8 +48,6 @@ public class OurRobot implements Robot {
         this.opMode = opMode;
         // camera = new CameraOpenCV();
         camera.initialize(opMode);
-        intake = new Intake();
-        intake.initialize(opMode);
         loader = new Loader();
         loader.initialize(opMode);
         shooter = new Shooter();
@@ -63,7 +61,8 @@ public class OurRobot implements Robot {
                 intake.intakeMotor);*/
         odometry = new ArcOdometry(imu);
         odometry.initialize(opMode);
-
+        intake = new Intake();
+        intake.initialize(opMode);
         drivetrain = new Drivetrain(odometry);
         drivetrain.initialize(opMode);
 

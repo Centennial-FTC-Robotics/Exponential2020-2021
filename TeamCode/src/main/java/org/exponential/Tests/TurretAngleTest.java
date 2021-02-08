@@ -14,7 +14,6 @@ public class TurretAngleTest extends LinearOpMode {
 
         double targetAngle = 180;
         while (opModeIsActive()) {
-            int currentIndex = 0;
             expo.turret.pointAtAngle();
             expo.odometry.update();
             expo.turret.readjustTurretAngle();
@@ -28,7 +27,7 @@ public class TurretAngleTest extends LinearOpMode {
                 sleep(250);
             }
 
-            expo.turret.setAngle(targetAngle);
+            expo.turret.setTargetAngle(targetAngle);
 
             telemetry.addData("target angle (in terms of the field): ", targetAngle);
             telemetry.addData("current angle (in terms of the robot): ", expo.turret.currentAngle);

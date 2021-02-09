@@ -47,7 +47,6 @@ public class Turret implements Mechanism, Runnable {
         // 59 in x, 236.22 in y.
 
         PIDFCoefficients oldCoeffi = turretMotor.getPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION);
-        oldCoeffi.i *= 1.5;
         PIDFCoefficients newCoeffi = new PIDFCoefficients(oldCoeffi.p, oldCoeffi.i*1.5, oldCoeffi.d, oldCoeffi.f);
         turretMotor.setPIDFCoefficients(DcMotorEx.RunMode.RUN_TO_POSITION, newCoeffi);
     }

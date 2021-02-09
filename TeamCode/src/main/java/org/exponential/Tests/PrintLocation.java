@@ -33,7 +33,7 @@ public class PrintLocation extends LinearOpMode {
             expo.odometry.update();
             expo.turret.readjustTurretAngle();
 
-            telemetry.addData("pointing at target", expo.turret.currentCommand == TurretContinuous.POINT_AT_TARGET);
+            //telemetry.addData("pointing at target", ""+(expo.turret.currentCommand == TurretContinuous.POINT_AT_TARGET));
             telemetry.addData("turret angle", expo.turret.currentAngle);
             telemetry.addData("x", expo.odometry.getxPos());
             telemetry.addData("y", expo.odometry.getyPos());

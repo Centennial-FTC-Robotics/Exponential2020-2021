@@ -13,6 +13,7 @@ public class TurretAngleTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         OurRobot expo = new OurRobot();
         expo.initialize(this);
+        expo.shooter.setPower(0.382);
 
         double targetAngle = 180;
         while (opModeIsActive()) {
@@ -27,6 +28,10 @@ public class TurretAngleTest extends LinearOpMode {
             } else if (gamepad1.dpad_down) {
                 targetAngle -= 5;
                 sleep(250);
+            }
+
+            if(gamepad1.a){
+                expo.loader.loadAndUnload();
             }
 
             expo.turret.setTargetAngle(targetAngle);

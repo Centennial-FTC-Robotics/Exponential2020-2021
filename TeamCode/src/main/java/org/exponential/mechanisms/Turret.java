@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.PIDCoefficients;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.util.ReadWriteFile;
 
@@ -43,6 +45,11 @@ public class Turret implements Mechanism, Runnable {
         turretMotor.setPower(1);
         turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         // 59 in x, 236.22 in y.
+
+        PIDFCoefficients oldCoeffi = turretMotor.getPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION);
+        oldCoeffi.i *= 1.5;
+        PIDFCoefficients newCoeffi = new PIDFCoefficients(oldCoeffi.p, oldCoeffi.i*1.5, oldCoeffi.d, oldCoeffi.f);
+        turretMotor.setPIDFCoefficients(DcMotorEx.RunMode.RUN_TO_POSITION, newCoeffi);
     }
 
     public Turret(Drivetrain drivetrain) {

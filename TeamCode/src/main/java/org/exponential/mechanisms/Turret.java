@@ -37,6 +37,11 @@ public class Turret implements Mechanism, Runnable {
     public void initialize(LinearOpMode opMode) {
         this.opMode = opMode;
         turretMotor = opMode.hardwareMap.get(DcMotorEx.class, "turretMotor");
+
+        PIDFCoefficients oldCoeffi = turretMotor.getPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION);
+        PIDFCoefficients newCoeffi = new PIDFCoefficients(oldCoeffi.p, oldCoeffi.i*1.5, oldCoeffi.d, oldCoeffi.f);
+        turretMotor.setPIDFCoefficients(DcMotorEx.RunMode.RUN_TO_POSITION, newCoeffi);
+
         turretMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         turretMotor.setTargetPosition(turretMotor.getCurrentPosition());
         // turretMotor.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -46,9 +51,7 @@ public class Turret implements Mechanism, Runnable {
         turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         // 59 in x, 236.22 in y.
 
-        /*PIDFCoefficients oldCoeffi = turretMotor.getPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION);
-        PIDFCoefficients newCoeffi = new PIDFCoefficients(oldCoeffi.p, oldCoeffi.i*1.5, oldCoeffi.d, oldCoeffi.f);
-        turretMotor.setPIDFCoefficients(DcMotorEx.RunMode.RUN_TO_POSITION, newCoeffi);*/
+
     }
 
     public Turret(Drivetrain drivetrain) {

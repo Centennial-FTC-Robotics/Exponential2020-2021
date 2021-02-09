@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.PIDCoefficients;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.util.ReadWriteFile;
 
@@ -14,8 +16,9 @@ import java.io.File;
 
 public class Turret implements Mechanism, Runnable {
     public static final double ENC_PER_DEGREE = (1120.0) / 360.0;
-    public static final boolean POINT_AT_TARGET = true;
-    public static final boolean RELOAD = false;
+    public static final int POINT_AT_TARGET = 0;
+    public static final int RELOAD = 1;
+    public static final int POINT_AT_ANGLE = 2;
 
 
     public DcMotorEx turretMotor;
@@ -23,7 +26,8 @@ public class Turret implements Mechanism, Runnable {
     LinearOpMode opMode;
     double targetXValue;
     double targetYValue;
-    public boolean currentCommand = POINT_AT_TARGET;
+    double targetAngle;
+    public int currentCommand = POINT_AT_TARGET;
     public double currentAngle = 0;
 
     // if the turret was facing directly forwards, what could the encoder count be?
@@ -33,14 +37,21 @@ public class Turret implements Mechanism, Runnable {
     public void initialize(LinearOpMode opMode) {
         this.opMode = opMode;
         turretMotor = opMode.hardwareMap.get(DcMotorEx.class, "turretMotor");
+        /*
+        PIDFCoefficients oldCoeffi = turretMotor.getPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION);
+        PIDFCoefficients newCoeffi = new PIDFCoefficients(oldCoeffi.p, oldCoeffi.i*1.5, oldCoeffi.d, oldCoeffi.f);
+        turretMotor.setPIDFCoefficients(DcMotorEx.RunMode.RUN_TO_POSITION, newCoeffi);
+        */
         turretMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         turretMotor.setTargetPosition(turretMotor.getCurrentPosition());
-        turretMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        // turretMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         turretMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         turretMotor.setPower(1);
         turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         // 59 in x, 236.22 in y.
+
+
     }
 
     public Turret(Drivetrain drivetrain) {
@@ -64,12 +75,16 @@ public class Turret implements Mechanism, Runnable {
         readjustTurretAngle();
     }
 
+    public void pointAtAngle() {
+        currentCommand = POINT_AT_ANGLE;
+        readjustTurretAngle();
+    }
 
     public void readjustTurretAngle() {
         // call this constantly in the teleop while loop
         if (currentCommand == RELOAD) {
             turretMotor.setTargetPosition((int) (encCountAtAngleZero));
-        } else {
+        } else if (currentCommand == POINT_AT_TARGET) {
             double targetAngle = IMU.normalize(
                     Math.toDegrees(Math.atan2(targetYValue - drivetrain.positioning.yPos,
                             targetXValue - drivetrain.positioning.xPos)) - drivetrain.positioning.angle + 180);
@@ -80,6 +95,9 @@ public class Turret implements Mechanism, Runnable {
                 targetAngle = -180;
             }
             turretMotor.setTargetPosition((int) (encCountAtAngleZero + ENC_PER_DEGREE * targetAngle));
+        } else if (currentCommand == POINT_AT_ANGLE) {
+            turretMotor.setTargetPosition((int) (encCountAtAngleZero +
+                    ENC_PER_DEGREE * IMU.normalize(targetAngle + 180 - drivetrain.positioning.getAngle())));
         }
         turretMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         turretMotor.setPower(1);
@@ -90,6 +108,10 @@ public class Turret implements Mechanism, Runnable {
     public void setAngle(double angle) {
         currentAngle = angle;
         encCountAtAngleZero = turretMotor.getCurrentPosition() - currentAngle * ENC_PER_DEGREE;
+    }
+
+    public void setTargetAngle(double angleDeg) {
+        targetAngle = angleDeg;
     }
 
     public void savePosition() {
@@ -103,6 +125,7 @@ public class Turret implements Mechanism, Runnable {
         currentAngle = Double.parseDouble(ReadWriteFile.readFile(file));
         encCountAtAngleZero = turretMotor.getCurrentPosition() - currentAngle * ENC_PER_DEGREE;
     }
+
 
     @Override
     public void run() {

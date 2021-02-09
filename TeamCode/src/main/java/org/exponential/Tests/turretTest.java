@@ -16,10 +16,10 @@ public class turretTest extends LinearOpMode {
         waitForStart();
 
         expo.initialize(this);
-        double targetX = 0, targetY = 72;
+        double targetX = 0, targetY = -72;
 
         expo.turret.setTarget(targetX, targetY);
-        expo.shooter.setPower(1);
+        expo.shooter.setPower(0.382);
         expo.turret.pointAtTarget();
 
         while (opModeIsActive()) {

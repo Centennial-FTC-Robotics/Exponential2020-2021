@@ -67,9 +67,9 @@ public class FieldCentricTeleOp extends LinearOpMode {
             double rotatedX = inputLeftX * Math.cos(Math.toRadians(theta)) - inputLeftY * Math.sin(Math.toRadians(theta));
             double rotatedY = inputLeftX * Math.sin(Math.toRadians(theta)) + inputLeftY * Math.cos(Math.toRadians(theta));
 
-            if (gamepad1.right_trigger > 0 || gamepad2.left_trigger > 0) {
+            if (gamepad1.right_trigger > 0 || gamepad2.left_stick_y < 0) {
                 robot.intake.intake();
-            } else if (gamepad1.left_trigger > 0 || gamepad2.right_trigger > 0) {
+            } else if (gamepad1.left_trigger > 0 || gamepad2.left_stick_y >  0) {
                 //robot.intake.setPowerInput(-gamepad1.left_trigger);
                 robot.intake.outtake();
             } else {
@@ -142,16 +142,22 @@ public class FieldCentricTeleOp extends LinearOpMode {
             }
 */
             if (gamepad2.b && gamepad2.start) {
-                robot.shootAtHighGoal("red");
+                //robot.shootAtHighGoal("red");
+                robot.drivetrain.moveTo(44, 0, 270);
+                robot.drivetrain.turnTo(270);
+
             }
             if (gamepad2.x) {
                 robot.loader.loadAndUnload();
             }
             if (gamepad2.right_bumper) {
                 robot.shooter.shootAtHighGoal();
+            } else if (gamepad2.left_trigger > 0) {
+                robot.shooter.shootAtPowerShot();
             } else {
                 robot.shooter.stopShooting();
             }
+
             if (gamepad1.left_bumper) {
                 robot.turret.pointToReloadPosition();
             }
@@ -162,14 +168,14 @@ public class FieldCentricTeleOp extends LinearOpMode {
             } else if (gamepad2.dpad_left) {
                 robot.turret.setTarget(2, 72); // left power shot
                 robot.turret.pointAtTarget();
-
             } else if (gamepad2.dpad_down) {
                 robot.turret.setTarget(9.5, 72); // middle power shot
                 robot.turret.pointAtTarget();
-
             } else if (gamepad2.dpad_right) {
                 robot.turret.setTarget(17, 72); // right power shot
                 robot.turret.pointAtTarget();
+            } else if (gamepad2.left_bumper) {
+                robot.turret.pointToReloadPosition();
             }
 
             /*if (gamepad1.right_bumper) {

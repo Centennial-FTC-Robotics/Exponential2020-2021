@@ -60,8 +60,6 @@ public class OurRobot implements Robot {
                 intake.intakeMotor);*/
         odometry = new ArcOdometry(imu);
         odometry.initialize(opMode);
-        intake = new Intake();
-        intake.initialize(opMode);
         drivetrain = new Drivetrain(odometry);
         drivetrain.initialize(opMode);
 

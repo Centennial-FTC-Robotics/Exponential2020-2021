@@ -64,7 +64,7 @@ public class Odometry implements Runnable, Mechanism {
         forwardLeftEnc.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         forwardRightEnc.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         forwardRightEnc.setDirection(DcMotorSimple.Direction.REVERSE);
-        horizontalEnc.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        horizontalEnc.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
 
         this.opMode = opMode;

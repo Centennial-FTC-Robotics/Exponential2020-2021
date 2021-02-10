@@ -3,6 +3,7 @@ package org.exponential.Tests;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.exponential.mechanisms.Turret;
 import org.exponential.mechanisms.TurretContinuous;
 import org.exponential.robots.OurRobot;
 
@@ -33,7 +34,7 @@ public class PrintLocation extends LinearOpMode {
             expo.odometry.update();
             expo.turret.readjustTurretAngle();
 
-            //telemetry.addData("pointing at target", ""+(expo.turret.currentCommand == TurretContinuous.POINT_AT_TARGET));
+            telemetry.addData("pointing at target", expo.turret.currentCommand == Turret.POINT_AT_TARGET);
             telemetry.addData("turret angle", expo.turret.currentAngle);
             telemetry.addData("x", expo.odometry.getxPos());
             telemetry.addData("y", expo.odometry.getyPos());

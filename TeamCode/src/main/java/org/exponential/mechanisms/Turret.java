@@ -49,8 +49,6 @@ public class Turret implements Mechanism, Runnable {
         turretMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         turretMotor.setPower(1);
         turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        // 59 in x, 236.22 in y.
-
 
     }
 
@@ -102,7 +100,11 @@ public class Turret implements Mechanism, Runnable {
         turretMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         turretMotor.setPower(1);
         currentAngle = (turretMotor.getCurrentPosition() - encCountAtAngleZero) / ENC_PER_DEGREE;
-        opMode.telemetry.addData("turret enc", turretMotor.getCurrentPosition());
+        opMode.telemetry.addData("turret enc: ", turretMotor.getCurrentPosition());
+        opMode.telemetry.addData("current turret angle (in terms of field): ", IMU.normalize(currentAngle + drivetrain.positioning.getAngle() + 180));
+        opMode.telemetry.addData("current turret angle (relative to turret): ", currentAngle);
+        opMode.telemetry.addData("delta x: ", targetXValue - drivetrain.positioning.getxPos());
+        opMode.telemetry.addData("delta y: ", targetYValue - drivetrain.positioning.getyPos());
     }
 
     public void setAngle(double angle) {

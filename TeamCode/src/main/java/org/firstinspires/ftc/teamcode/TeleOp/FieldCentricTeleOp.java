@@ -13,8 +13,9 @@ import java.util.Map;
 public class FieldCentricTeleOp extends LinearOpMode {
     private double initialAngle;
     private double currentAngle;
-    ElapsedTime wobbleToggle = new ElapsedTime();
+    ElapsedTime wobbleToggleTimer = new ElapsedTime();
     boolean wobbleState = true;
+    ElapsedTime shooterTimer = new ElapsedTime();
     private String turretState;
 
     private OurRobot robot;
@@ -111,7 +112,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
                 robot.wobbleGoalMover.raise();
             } else if (gamepad1.dpad_down) {
                 robot.wobbleGoalMover.lower();
-            } else if (gamepad1.dpad_right && wobbleToggle.milliseconds() > 300) {
+            } else if (gamepad1.dpad_right && wobbleToggleTimer.milliseconds() > 300) {
                 if (wobbleState) {
                 robot.wobbleGoalMover.release();
                 }
@@ -119,7 +120,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
                     robot.wobbleGoalMover.clamp();
                 }
                 wobbleState = !wobbleState;
-                wobbleToggle.reset();
+                wobbleToggleTimer.reset();
             }
 
 

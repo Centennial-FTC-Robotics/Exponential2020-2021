@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.exponential.robots.OurRobot;
 
@@ -12,6 +13,8 @@ import java.util.Map;
 public class FieldCentricTeleOp extends LinearOpMode {
     private double initialAngle;
     private double currentAngle;
+    ElapsedTime wobbleToggle = new ElapsedTime();
+    boolean wobbleState = true;
 
     private OurRobot robot;
 
@@ -49,8 +52,8 @@ public class FieldCentricTeleOp extends LinearOpMode {
 
             double inputLeftX = -gamepad1.left_stick_x;
             double inputLeftY = -gamepad1.left_stick_y;
-            double inputRightX = .3 * gamepad1.right_stick_x;
-            double inputRightY = .3 * gamepad1.right_stick_y;
+            double inputRightX = .4 * gamepad1.right_stick_x;
+            double inputRightY = .4 * gamepad1.right_stick_y;
             double reductionFactor = .5;
             // halve values
             if (gamepad1.left_bumper) {
@@ -107,10 +110,15 @@ public class FieldCentricTeleOp extends LinearOpMode {
                 robot.wobbleGoalMover.raise();
             } else if (gamepad1.dpad_down) {
                 robot.wobbleGoalMover.lower();
-            } else if (gamepad1.dpad_left) {
+            } else if (gamepad1.dpad_right && wobbleToggle.milliseconds() > 300) {
+                if (wobbleState) {
                 robot.wobbleGoalMover.release();
-            } else if (gamepad1.dpad_right) {
-                robot.wobbleGoalMover.clamp();
+                }
+                else {
+                    robot.wobbleGoalMover.clamp();
+                }
+                wobbleState = !wobbleState;
+                wobbleToggle.reset();
             }
 
 
@@ -118,7 +126,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
                 robot.drivetrain.turnTo(-90);  //(270)
             } else if (gamepad1.b) { //towards goals
                 robot.drivetrain.turnTo(90);
-            } else if (gamepad1.a) { //towards drivers
+            } else if (gamepad1.a && !gamepad1.start) { //towards drivers
                 robot.drivetrain.turnTo(0);
             } else if (gamepad1.y) { // away from drivers
                 robot.drivetrain.turnTo(180);
@@ -133,7 +141,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
                 robot.scoreWobbleGoal("red");
             }
 */
-            if (gamepad2.b) {
+            if (gamepad2.b && gamepad2.start) {
                 robot.shootAtHighGoal("red");
             }
             if (gamepad2.x) {

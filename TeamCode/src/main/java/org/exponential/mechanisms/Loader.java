@@ -9,7 +9,7 @@ import static org.exponential.utility.Utility.sleep;
 
 public class Loader implements Mechanism {
     public static final double LOAD_POSITION = 0;
-    public static final double UNLOAD_POSITION = .45;
+    public static final double UNLOAD_POSITION = .55;
     Servo loaderServo;
     @Override
     public void initialize(LinearOpMode opMode) {

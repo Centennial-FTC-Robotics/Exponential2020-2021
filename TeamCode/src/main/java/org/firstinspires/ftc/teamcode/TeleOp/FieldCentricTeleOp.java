@@ -15,6 +15,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
     private double currentAngle;
     ElapsedTime wobbleToggle = new ElapsedTime();
     boolean wobbleState = true;
+    private String turretState;
 
     private OurRobot robot;
 
@@ -165,17 +166,22 @@ public class FieldCentricTeleOp extends LinearOpMode {
             if (gamepad2.dpad_up) {
                 robot.turret.setTarget(36, 72); // aim at high goal
                 robot.turret.pointAtTarget();
+                turretState = "high goal";
             } else if (gamepad2.dpad_left) {
                 robot.turret.setTarget(2, 72); // left power shot
                 robot.turret.pointAtTarget();
+                turretState = "left power shot";
             } else if (gamepad2.dpad_down) {
                 robot.turret.setTarget(9.5, 72); // middle power shot
                 robot.turret.pointAtTarget();
+                turretState = "middle power shot";
             } else if (gamepad2.dpad_right) {
                 robot.turret.setTarget(17, 72); // right power shot
                 robot.turret.pointAtTarget();
+                turretState = "right power shot";
             } else if (gamepad2.left_bumper) {
                 robot.turret.pointToReloadPosition();
+                turretState = "reload";
             }
 
             /*if (gamepad1.right_bumper) {
@@ -187,8 +193,8 @@ public class FieldCentricTeleOp extends LinearOpMode {
                 bumperTest = 1;
             } else {
                 bumperTest = 0;
-            }
-            telemetry.addData("bumper",bumperTest);*/
+            }*/
+            telemetry.addData("turretState",turretState);
             telemetry.update();
             robot.drivetrain.setPowerDriveMotors(getMotorPowers(rotatedX, rotatedY, inputRightX));
         }

@@ -142,6 +142,7 @@ public class Odometry implements Runnable, Mechanism {
         xVel = changeInPos[0] / timeElapsed;
         yVel = changeInPos[1] / timeElapsed;
         angle += changeInAngle;
+        angle = IMU.normalize(angle);
         angleVel = changeInAngle / timeElapsed;
 
     }

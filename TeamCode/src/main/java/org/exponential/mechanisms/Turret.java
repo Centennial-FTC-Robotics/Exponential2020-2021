@@ -2,6 +2,7 @@ package org.exponential.mechanisms;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorControllerEx;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
@@ -19,7 +20,7 @@ public class Turret implements Mechanism, Runnable {
     public static final int POINT_AT_TARGET = 0;
     public static final int RELOAD = 1;
     public static final int POINT_AT_ANGLE = 2;
-
+    public double SHOOTER_INNACURACY = 0;
 
     public DcMotorEx turretMotor;
     Drivetrain drivetrain;
@@ -31,7 +32,7 @@ public class Turret implements Mechanism, Runnable {
     public double currentAngle = 0;
 
     // if the turret was facing directly forwards, what could the encoder count be?
-    double encCountAtAngleZero = 0;
+    public double encCountAtAngleZero = 0;
 
 
     public void initialize(LinearOpMode opMode) {
@@ -44,11 +45,25 @@ public class Turret implements Mechanism, Runnable {
         */
         turretMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         turretMotor.setTargetPosition(turretMotor.getCurrentPosition());
-        //turretMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        turretMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         turretMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         turretMotor.setPower(1);
         turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        DcMotorControllerEx motorControllerEx = (DcMotorControllerEx)turretMotor.getController();
+
+        // get the port number of our configured motor.
+        int motorIndex = ((DcMotorEx)turretMotor).getPortNumber();
+
+        // get the PID coefficients for the RUN_USING_ENCODER  modes.
+        PIDCoefficients pidOrig = motorControllerEx.getPIDCoefficients(motorIndex, DcMotor.RunMode.RUN_USING_ENCODER);
+
+        // change coefficients.
+        PIDCoefficients pidNew = new PIDCoefficients(1.5 * pidOrig.p, 1.5 * pidOrig.i, 1* pidOrig.d);
+        motorControllerEx.setPIDCoefficients(motorIndex, DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
+
+        // re-read coefficients and verify change.
+        PIDCoefficients pidModified = motorControllerEx.getPIDCoefficients(motorIndex, DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public Turret(Drivetrain drivetrain) {

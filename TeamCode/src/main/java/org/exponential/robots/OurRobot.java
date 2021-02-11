@@ -198,4 +198,27 @@ public class OurRobot implements Robot {
         //drop goal
         wobbleGoalMover.placeGoal();
     }
+
+    int encOfLeftPS = -100;
+    int encOfRightPS = 100;
+    public void endgamePowerShots (String side) {
+        if (side.equals("red")) {
+            shooter.shootAtPowerShot();
+            drivetrain.moveTo(12, 12, 270);
+            turret.turretMotor.setTargetPosition((int) turret.encCountAtAngleZero + encOfLeftPS);
+            turret.turretMotor.setPower(1);
+            sleep(500);
+            loader.loadAndUnload();
+            turret.turretMotor.setTargetPosition((int) turret.encCountAtAngleZero);
+            turret.turretMotor.setPower(1);
+            sleep(500);
+            loader.loadAndUnload();
+            turret.turretMotor.setTargetPosition((int) turret.encCountAtAngleZero + encOfRightPS);
+            turret.turretMotor.setPower(1);
+            sleep(500);
+            loader.loadAndUnload();
+        } else {
+            drivetrain.moveTo(-12,12,270);
+        }
+    }
 }

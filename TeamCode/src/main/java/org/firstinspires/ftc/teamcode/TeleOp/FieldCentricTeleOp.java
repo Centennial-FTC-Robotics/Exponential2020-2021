@@ -15,8 +15,9 @@ public class FieldCentricTeleOp extends LinearOpMode {
     private double currentAngle;
     ElapsedTime wobbleToggleTimer = new ElapsedTime();
     boolean wobbleState = true;
-    ElapsedTime shooterTimer = new ElapsedTime();
     private String turretState;
+    double shooterInaccuracy = 0;
+    ElapsedTime shooterTimer = new ElapsedTime();
 
     private OurRobot robot;
 
@@ -149,8 +150,18 @@ public class FieldCentricTeleOp extends LinearOpMode {
                 robot.drivetrain.turnTo(270);
 
             }
-            if (gamepad2.x) {
+            //Triple shot
+            if (gamepad2.y) {
+                robot.loader.loadAndUnloadTwo();
+                robot.shooter.adjustingHighGoalShot();
                 robot.loader.loadAndUnload();
+                robot.turret.pointToReloadPosition();
+            }
+            //single shot
+            if(gamepad2.x) {
+                robot.loader.load();
+                sleep(80);
+                robot.loader.unload();
             }
             if (gamepad2.right_bumper) {
                 robot.shooter.shootAtHighGoal();
@@ -164,20 +175,32 @@ public class FieldCentricTeleOp extends LinearOpMode {
                 robot.turret.pointToReloadPosition();
             }
 
-            if (gamepad2.dpad_up) {
-                robot.turret.setTarget(36, 72); // aim at high goal
+            if(gamepad2.right_stick_x != 0 && shooterTimer.milliseconds() > 100) {
+                shooterInaccuracy += gamepad2.right_stick_x * 1.5;
+                shooterTimer.reset();
+            }
+
+            if(gamepad2.a) {
+                shooterInaccuracy = 0;
+            }
+                if (gamepad2.dpad_up) {
+                //targetX was 36
+                robot.turret.setTarget(38 + shooterInaccuracy, 72); // aim at high goal
                 robot.turret.pointAtTarget();
                 turretState = "high goal";
             } else if (gamepad2.dpad_left) {
-                robot.turret.setTarget(2, 72); // left power shot
+                //targetX was 2
+                robot.turret.setTarget(2 + shooterInaccuracy, 72); // left power shot
                 robot.turret.pointAtTarget();
                 turretState = "left power shot";
             } else if (gamepad2.dpad_down) {
-                robot.turret.setTarget(9.5, 72); // middle power shot
+                //targetX was 9.5
+                robot.turret.setTarget(8 + shooterInaccuracy, 72); // middle power shot
                 robot.turret.pointAtTarget();
                 turretState = "middle power shot";
             } else if (gamepad2.dpad_right) {
-                robot.turret.setTarget(17, 72); // right power shot
+                //target was 17
+                robot.turret.setTarget(16 + shooterInaccuracy, 72); // right power shot
                 robot.turret.pointAtTarget();
                 turretState = "right power shot";
             } else if (gamepad2.left_bumper) {
@@ -195,7 +218,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
             } else {
                 bumperTest = 0;
             }*/
-            telemetry.addData("turretState",turretState);
+            telemetry.addData("shooterInaccuracy",shooterInaccuracy);
             telemetry.update();
             robot.drivetrain.setPowerDriveMotors(getMotorPowers(rotatedX, rotatedY, inputRightX));
         }

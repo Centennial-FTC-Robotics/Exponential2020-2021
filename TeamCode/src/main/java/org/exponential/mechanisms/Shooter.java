@@ -12,8 +12,9 @@ public class Shooter implements Mechanism {
 
     DcMotorEx shooterMotor;
 
-    public static final double NEW_I = 0;
-
+    public static final double NEW_P = 22;
+    public static final double NEW_I = 3.85;
+    public static final double NEW_D = 3.55;
 
 
     @Override
@@ -22,16 +23,7 @@ public class Shooter implements Mechanism {
         shooterMotor.setDirection(DcMotorEx.Direction.REVERSE);
         shooterMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         shooterMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        /*
-        //Getting old PID Values
-        PIDCoefficients pidOrig = shooterMotor.getPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        //Adding in New PID Values
-        PIDCoefficients pidNew = new PIDCoefficients(pidOrig.p, NEW_I, pidOrig.d);
-        shooterMotor.setPIDCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
-        */
-
-        //------------------------------------------------------------------------------------------ testing out top and bottom.
         DcMotorControllerEx motorControllerEx = (DcMotorControllerEx)shooterMotor.getController();
 
         // get the port number of our configured motor.
@@ -41,12 +33,8 @@ public class Shooter implements Mechanism {
         PIDCoefficients pidOrig = motorControllerEx.getPIDCoefficients(motorIndex, DcMotor.RunMode.RUN_USING_ENCODER);
 
         // change coefficients.
-        PIDCoefficients pidNew = new PIDCoefficients(pidOrig.p, NEW_I, pidOrig.d);
+        PIDCoefficients pidNew = new PIDCoefficients(NEW_P, NEW_I, NEW_D);
         motorControllerEx.setPIDCoefficients(motorIndex, DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
-
-        // re-read coefficients and verify change.
-        PIDCoefficients pidModified = motorControllerEx.getPIDCoefficients(motorIndex, DcMotor.RunMode.RUN_USING_ENCODER);
-
 
     }
 
@@ -54,15 +42,16 @@ public class Shooter implements Mechanism {
         shooterMotor.setPower(power);
     }
 
-    public void shootAtPowerShot() { setPower(.43); }
+    public void shootAtPowerShot() { setPower(.365); }
 
-    public void powerShotReadjustPower() { setPower(.355); }
+    public void powerShotReadjustPower() { setPower(.37); }
 
-    public void shootAtHighGoal() {setPower(.38); }
+    public void shootAtHighGoal() {setPower(.377); }
 
     public void highGoalReadjustPower() {
-        setPower(.385);
+        setPower(.395);
     }
+    public void adjustingHighGoalShot() {setPower(.325); }
 
 
     public void stopShooting() {

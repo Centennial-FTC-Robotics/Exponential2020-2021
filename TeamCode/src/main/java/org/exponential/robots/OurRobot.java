@@ -55,9 +55,6 @@ public class OurRobot implements Robot {
         wobbleGoalMover.initialize(opMode);
         imu = new IMU();
         imu.initialize(opMode);
-        /*odometry = new ArcOdometry(imu, opMode.hardwareMap.get(DcMotorEx.class, "leftOdometry"),
-                opMode.hardwareMap.get(DcMotorEx.class, "frontLeft"),
-                intake.intakeMotor);*/
         odometry = new ArcOdometry(imu);
         odometry.initialize(opMode);
         drivetrain = new Drivetrain(odometry);
@@ -68,12 +65,6 @@ public class OurRobot implements Robot {
 
         intake = new Intake();
         intake.initialize(opMode);
-        //setUpServos();
-  /*      //right odometry: intake motor
-        odometry.setEncoders(opMode.hardwareMap.get(DcMotorEx.class, "leftOdometry"),
-                opMode.hardwareMap.get(DcMotorEx.class, "backOdometry"),
-                intake.intakeMotor);*/
-
     }
 
     public void setUpServos() {
@@ -84,68 +75,58 @@ public class OurRobot implements Robot {
 
     public void savePositions() {
         odometry.savePosition();
-        turret.savePosition();
+        //turret.savePosition();
     }
 
     public void loadPositions() {
         odometry.loadPosition();
-        turret.loadPosition();
+        //turret.loadPosition();
     }
 
     public void shootPowerShotTargets(String side) {
         double[] targetXPositions;
         if (side.equals("red")) {
             targetXPositions = new double[] {2, 9.5, 17};
-            //targetXPositions = new double[] {2 + 1.75, 9.5 + 2.75, 17 + 4.5};
         } else {
             targetXPositions = new double[] {-2, -9.5, -17};
         }
-        //move to some position on field to start shooting
 
-        double robotX = odometry.getxPos();
-        double robotY = odometry.getyPos();
-        double targetAngle = Math.toDegrees(Math.atan2(-6 - robotY, 12 - robotX));
-        drivetrain.moveTo(12, -6, targetAngle);
-        drivetrain.performBrake();
-
-        turret.pointAtTarget();
-
-        /*double robotX = odometry.getxPos();
-        double robotY = odometry.getyPos();*/
-
-        boolean first = true;
-        //LogMaker logMaker = new LogMaker("powershotlog.txt");
         for (double targetXPosition: targetXPositions) {
-            // +180 because we want the robot's front to be facing the exact opposite of the targets.
-            //robot shoots backwards
-            //double targetAngle = 180 + Math.toDegrees(Math.atan2(72 - robotY, targetXPosition - robotX));
-            turret.setTarget(targetXPosition, 72);
-            turret.readjustTurretAngle();
-            opMode.sleep(250);
-            if (first) {
-                shooter.shootAtPowerShot();
-                first = false;
-            } else {
-                shooter.powerShotReadjustPower();
-            }
-            opMode.sleep(1000);
-            loader.loadAndUnload();
+            shooter.shootAtPowerShot();  //going to assume that the initial move will be long enough to rev up the motor enough
 
+            drivetrain.moveTo(targetXPosition, -6, 270);
+            drivetrain.performBrake();
+            loader.loadAndUnload();
         }
-        //logMaker.close();
-        turret.pointToReloadPosition();
         shooter.stopShooting();
+    }
+
+    public void shootPowerShotTargetsTurret(String side) {
+        double turretTargetEncoders[];
+        shooter.shootAtPowerShot();
+        if (side.equals("red")) {
+            drivetrain.moveTo(12, -6, 270);
+            turretTargetEncoders = new double[] {turret.encCountAtAngleZero - 100,
+                    turret.encCountAtAngleZero,
+                    turret.encCountAtAngleZero + 100};
+        } else {
+            turretTargetEncoders = new double[] {};
+        }
+        for (double targetEncoderValue: turretTargetEncoders) {
+            turret.turretMotor.setTargetPosition((int) targetEncoderValue);
+            turret.turretMotor.setPower(1);
+            opMode.sleep(500);
+            loader.loadAndUnload();
+        }
     }
 
     public void shootAtHighGoal(String side) {
         double goalXPosition;
         if (side.equals("red")) {
-            goalXPosition = 13;
+            goalXPosition = 36;
         } else {
             goalXPosition = -36;
         }
-
-        turret.setTarget(goalXPosition, 72);
 
         double robotX = odometry.getxPos();
         double robotY = odometry.getyPos();
@@ -154,25 +135,13 @@ public class OurRobot implements Robot {
         shooter.shootAtHighGoal();
 
         //move to some position on field to start shooting
-        double targetAngle = Math.toDegrees(Math.atan2(-6 - robotY, goalXPosition - robotX));
-        drivetrain.moveTo(goalXPosition, -6, targetAngle);
+        //double targetAngle = Math.toDegrees(Math.atan2(-6 - robotY, goalXPosition - robotX));
+        drivetrain.moveTo(goalXPosition, -6, 270);
         drivetrain.performBrake();
-
-        for (int i = 0; i < 6; i++) {
-            turret.pointAtTarget();
-            opMode.sleep(250);
-        }
-        turret.pointAtTarget();
-        /*double robotX = odometry.getxPos();
-        double robotY = odometry.getyPos();*/
-
-        // double targetAngle = 180 + Math.toDegrees(Math.atan2(72 - robotY, goalXPosition - robotX));
-        //drivetrain.turnTo(targetAngle, 4);
 
         boolean first = true;
         for (int i = 0; i < 3; i++) {
             if (first) {
-                //shooter.shootAtHighGoal();
                 first = false;
             } else {
                 shooter.highGoalReadjustPower();
@@ -180,7 +149,7 @@ public class OurRobot implements Robot {
             }
             loader.loadAndUnload();
         }
-        turret.pointToReloadPosition();
+        //turret.pointToReloadPosition();
         shooter.stopShooting();
     }
 
@@ -197,28 +166,5 @@ public class OurRobot implements Robot {
 
         //drop goal
         wobbleGoalMover.placeGoal();
-    }
-
-    int encOfLeftPS = -100;
-    int encOfRightPS = 100;
-    public void endgamePowerShots (String side) {
-        if (side.equals("red")) {
-            shooter.shootAtPowerShot();
-            drivetrain.moveTo(12, 12, 270);
-            turret.turretMotor.setTargetPosition((int) turret.encCountAtAngleZero + encOfLeftPS);
-            turret.turretMotor.setPower(1);
-            sleep(500);
-            loader.loadAndUnload();
-            turret.turretMotor.setTargetPosition((int) turret.encCountAtAngleZero);
-            turret.turretMotor.setPower(1);
-            sleep(500);
-            loader.loadAndUnload();
-            turret.turretMotor.setTargetPosition((int) turret.encCountAtAngleZero + encOfRightPS);
-            turret.turretMotor.setPower(1);
-            sleep(500);
-            loader.loadAndUnload();
-        } else {
-            drivetrain.moveTo(-12,12,270);
-        }
     }
 }

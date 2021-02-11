@@ -42,17 +42,17 @@ public class Shooter implements Mechanism {
         shooterMotor.setPower(power);
     }
 
-    public void shootAtPowerShot() { setPower(.365); }
+    public void shootAtPowerShot() {
+        setPower(.365);
+    }
 
-    public void powerShotReadjustPower() { setPower(.37); }
-
-    public void shootAtHighGoal() {setPower(.377); }
+    public void shootAtHighGoal() {
+        setPower(.377);
+    }
 
     public void highGoalReadjustPower() {
         setPower(.395);
     }
-    public void adjustingHighGoalShot() {setPower(.325); }
-
 
     public void stopShooting() {
         setPower(0);

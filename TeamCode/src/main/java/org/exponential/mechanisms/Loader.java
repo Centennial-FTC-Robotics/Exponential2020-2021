@@ -6,18 +6,16 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.exponential.superclasses.Mechanism;
 
-import static org.exponential.utility.Utility.sleep;
 
 public class Loader implements Mechanism {
     public static final double LOAD_POSITION = 0;
     public static final double UNLOAD_POSITION = .55;
     Servo loaderServo;
-    int shot = 0;
-    ElapsedTime shooterTimer = new ElapsedTime();
-
+    LinearOpMode opMode;
 
     @Override
     public void initialize(LinearOpMode opMode) {
+        this.opMode = opMode;
         loaderServo = opMode.hardwareMap.servo.get("loaderServo");
         loaderServo.setPosition(UNLOAD_POSITION);
     }
@@ -30,30 +28,16 @@ public class Loader implements Mechanism {
         loaderServo.setPosition(UNLOAD_POSITION);
     }
 
-    public void loadAndUnloadTwo() {
+    public void loadAndUnload() {
+        load();
+        opMode.sleep(100);
+        unload();
+    }
 
-        /*for (shot = 0; shot < 3; shot++) {
-            shooterTimer.reset();
-            if (shooterTimer.milliseconds() > 250) {
-                load();
-            } else if (shooterTimer.milliseconds() > 500) {
-                unload();
-            }
-        }
-        shot = 0;*/
-
-        for (int i = 0; i < 2; i++) {
-            load();
-            sleep(80);
-            unload();
-            sleep(250);
+    public void loadAllRings() {
+        for (int i = 0; i < 3; i++) {
+            loadAndUnload();
+            opMode.sleep(250);
         }
     }
-        public void loadAndUnload() {
-            load();
-            sleep(80);
-            unload();
-            sleep(250);
-
-        }
 }

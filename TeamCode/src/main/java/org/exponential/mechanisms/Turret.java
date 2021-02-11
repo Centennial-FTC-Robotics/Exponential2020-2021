@@ -49,7 +49,6 @@ public class Turret implements Mechanism, Runnable {
         turretMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         turretMotor.setPower(1);
         turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
     }
 
     public Turret(Drivetrain drivetrain) {
@@ -86,7 +85,7 @@ public class Turret implements Mechanism, Runnable {
             double targetAngle = IMU.normalize(
                     Math.toDegrees(Math.atan2(targetYValue - drivetrain.positioning.yPos,
                             targetXValue - drivetrain.positioning.xPos)) - drivetrain.positioning.angle + 180);
-            // redundant, a relic of the past............
+            // redundant, a relic of the past.........+...
             if (targetAngle > 180) {
                 targetAngle = 180;
             } else if (targetAngle < -180) {

@@ -341,6 +341,11 @@ public class Drivetrain implements Mechanism {
         return motorPowers;
     }
 
+    public void moveToFaceTarget(double xTarg, double yTarg){
+        double targetAngle = Math.toDegrees(Math.atan2(yTarg-positioning.getyPos(), xTarg-positioning.getxPos()));
+        moveTo(xTarg, yTarg, targetAngle);
+    }
+
     public void performBrake() {
         frontLeft.setPower(0);
         frontRight.setPower(0);

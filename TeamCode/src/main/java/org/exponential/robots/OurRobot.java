@@ -94,7 +94,7 @@ public class OurRobot implements Robot {
         for (double targetXPosition: targetXPositions) {
             shooter.shootAtPowerShot();  //going to assume that the initial move will be long enough to rev up the motor enough
 
-            drivetrain.moveTo(targetXPosition, -6, 270);
+            drivetrain.moveTo(targetXPosition, -6, 270, 4);
             drivetrain.performBrake();
             loader.loadAndUnload();
         }
@@ -136,24 +136,26 @@ public class OurRobot implements Robot {
 
         //move to some position on field to start shooting
         //double targetAngle = Math.toDegrees(Math.atan2(-6 - robotY, goalXPosition - robotX));
-        drivetrain.moveTo(goalXPosition, -6, 270);
+        drivetrain.moveTo(goalXPosition, -6, 270, 3);
         drivetrain.performBrake();
 
-        boolean first = true;
+        loadAndUnloadAllRings();
+        /*boolean first = true;
         for (int i = 0; i < 3; i++) {
             if (first) {
                 first = false;
             } else {
-                shooter.highGoalReadjustPower();
-                sleep(500);
+                shooter.readjustHighGoalPower();
+                sleep(250);
             }
             loader.loadAndUnload();
-        }
+        }*/
         //turret.pointToReloadPosition();
         shooter.stopShooting();
     }
 
     public void scoreWobbleGoal(String side) {
+        wobbleGoalMover.raise();
         double targetXPosition;
         if (side.equals("red")) {
             targetXPosition = 36;
@@ -162,9 +164,19 @@ public class OurRobot implements Robot {
         }
 
         //move to edge of wall facing left
-        drivetrain.moveTo(targetXPosition, -63, 180);
+        drivetrain.moveTo(targetXPosition, -61, 180);
 
         //drop goal
-        wobbleGoalMover.placeGoal();
+        //wobbleGoalMover.placeGoal();
+        wobbleGoalMover.release();
+    }
+
+    public void loadAndUnloadAllRings () {
+        for (int i = 0; i < 2; i++) {
+            loader.loadAndUnload();
+            opMode.sleep(250);
+        }
+        shooter.readjustHighGoalPower();
+        loader.loadAndUnload();
     }
 }

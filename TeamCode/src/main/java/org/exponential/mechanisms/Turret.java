@@ -48,7 +48,8 @@ public class Turret implements Mechanism, Runnable {
         turretMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         turretMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        turretMotor.setPower(1);
+        turretMotor.setPower(0); //set to 0 to not move
+
         turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         DcMotorControllerEx motorControllerEx = (DcMotorControllerEx)turretMotor.getController();
 

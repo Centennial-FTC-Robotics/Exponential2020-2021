@@ -37,7 +37,8 @@ public class Loader implements Mechanism {
     public void loadAllRings() {
         for (int i = 0; i < 3; i++) {
             loadAndUnload();
-            opMode.sleep(250);
+            opMode.sleep(200);
         }
+
     }
 }

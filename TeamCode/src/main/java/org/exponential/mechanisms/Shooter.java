@@ -47,11 +47,11 @@ public class Shooter implements Mechanism {
     }
 
     public void shootAtHighGoal() {
-        setPower(.377);
+        setPower(.365);
     }
 
-    public void highGoalReadjustPower() {
-        setPower(.395);
+    public void readjustHighGoalPower() {
+        setPower(.338);
     }
 
     public void stopShooting() {

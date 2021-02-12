@@ -34,7 +34,7 @@ public class Intake implements Mechanism {
         conveyorMotor = opMode.hardwareMap.get(DcMotorEx.class, "conveyorMotor");
         intakeMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
-        CRServo conveyorServo = opMode.hardwareMap.get(CRServo.class,"leftIntakeServo");
+        //CRServo conveyorServo = opMode.hardwareMap.get(CRServo.class,"conveyorServo");
         rightIntakeServo = opMode.hardwareMap.servo.get("rightIntakeServo");
     }
 
@@ -55,13 +55,13 @@ public class Intake implements Mechanism {
     public void intake() {
         intakeMotor.setPower(INTAKE_POWER);
         conveyorMotor.setPower(CONVEYOR_INTAKE_POWER);
-        conveyorServo.setPower(SERVO_INTAKE_POWER);
+        //conveyorServo.setPower(SERVO_INTAKE_POWER);
     }
 
     public void outtake() {
         intakeMotor.setPower(OUTTAKE_POWER);
         conveyorMotor.setPower(CONVEYOR_OUTTAKE_POWER);
-        conveyorServo.setPower(SERVO_OUTTAKE_POWER);
+        //conveyorServo.setPower(SERVO_OUTTAKE_POWER);
     }
 
     public void stop() {

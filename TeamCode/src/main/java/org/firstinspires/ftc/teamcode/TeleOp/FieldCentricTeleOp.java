@@ -75,6 +75,8 @@ public class FieldCentricTeleOp extends LinearOpMode {
             if (gamepad1.dpad_up) {
                 robot.wobbleGoalMover.raise();
             } else if (gamepad1.dpad_down) {
+                robot.wobbleGoalMover.release();
+                sleep(50);
                 robot.wobbleGoalMover.lower();
             } else if (gamepad1.dpad_right) {
                 if (clamped) {
@@ -96,15 +98,15 @@ public class FieldCentricTeleOp extends LinearOpMode {
                 robot.drivetrain.turnTo(180);
             }
 
-            if (gamepad2.b && !gamepad2.start) {
+            /*if (gamepad2.b && !gamepad2.start) {
                 //robot.shootAtHighGoal("red");
                 robot.drivetrain.moveTo(44, 0, 270);
                 robot.drivetrain.turnTo(270);
 
-            }
+            }*/ //we already have another thing for b so I commented this out -John
             //Triple shot
             if (gamepad2.y) {
-                robot.loader.loadAllRings();
+                robot.loadAndUnloadAllRings();
             }
             //single shot
             if(gamepad2.x) {

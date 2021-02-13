@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.exponential.mechanisms.CameraOpenCV;
 import org.exponential.robots.OurRobot;
@@ -17,6 +18,18 @@ public class RedRightPath extends LinearOpMode {
         //ourRobot.camera.setCameraBounds(300, 250, 150, 150);
         robot.camera.activate();
         waitForStart();
+        Runnable myRunnable =
+                new Runnable(){
+                    public void run(){
+                        while (true) {
+                            robot.odometry.update();
+                            sleep(100);
+                        }
+                    }
+                };
+        Thread thread = new Thread(myRunnable);
+        thread.start();
+
         int numRings = robot.camera.getNumberOfRings();
         robot.camera.deactivate();
         robot.setUpServos();
@@ -56,7 +69,7 @@ public class RedRightPath extends LinearOpMode {
 
         }
         if (numRings == 1) {
-            robot.odometry.offsetXPos(2);
+            //robot.odometry.offsetXPos(2);
             //pickup rings from starter stack
             robot.intake.outtake();  //should be intake, encoders are weird
             robot.shooter.shootAtHighGoal();
@@ -68,7 +81,7 @@ public class RedRightPath extends LinearOpMode {
             //shoot the newly picked up rings
             robot.shootAtHighGoal("red");
 
-            robot.odometry.offsetXPos(-2);
+            //robot.odometry.offsetXPos(-2);
         } else if (numRings == 4) {
             robot.shooter.shootAtHighGoal();
 
@@ -81,7 +94,7 @@ public class RedRightPath extends LinearOpMode {
             robot.drivetrain.moveTo(36, -18, 270);
             robot.drivetrain.moveTo(36, -16, 270);
 
-            robot.drivetrain.moveTo(36, -19.5, 270);
+            robot.drivetrain.moveTo(36, -19, 270);
             robot.drivetrain.performBrake();
             sleep(2200);
             robot.intake.stop();
@@ -99,13 +112,13 @@ public class RedRightPath extends LinearOpMode {
 
         //pick up second goal
         if (numRings == 0) {
-            robot.drivetrain.moveTo(11, -50, 270);
+            robot.drivetrain.moveTo(11, -49, 270);
         } else if (numRings == 1) {
-            robot.odometry.offsetXPos(0);
-            robot.drivetrain.moveTo(11, -50, 270);
+            //robot.odometry.offsetXPos(0);
+            robot.drivetrain.moveTo(11, -49, 270);
 
         } else {
-            robot.drivetrain.moveTo(11, -50, 270);
+            robot.drivetrain.moveTo(11, -49, 270);
 
         }
         robot.drivetrain.performBrake();
@@ -133,5 +146,12 @@ public class RedRightPath extends LinearOpMode {
             robot.drivetrain.moveTo(40, 6, 270);
         }
         robot.savePositions();
+    }
+
+    public void sleep(int ms) {
+        ElapsedTime timer = new ElapsedTime();
+        while (timer.milliseconds() < ms) {
+            //robot.odometry.update();
+        }
     }
 }

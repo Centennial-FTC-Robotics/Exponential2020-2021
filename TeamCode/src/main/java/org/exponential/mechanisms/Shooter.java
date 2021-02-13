@@ -43,7 +43,7 @@ public class Shooter implements Mechanism {
     }
 
     public void shootAtPowerShot() {
-        setPower(.365);
+        setPower(.355);
     }
 
     public void shootAtHighGoal() {

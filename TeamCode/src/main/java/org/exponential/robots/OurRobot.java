@@ -92,7 +92,7 @@ public class OurRobot implements Robot {
         for (double targetXPosition: targetXPositions) {
             shooter.shootAtPowerShot();  //going to assume that the initial move will be long enough to rev up the motor enough
 
-            drivetrain.moveTo(targetXPosition, -6, 270, 4);
+            drivetrain.moveTo(targetXPosition, -6, 270, 2);
             drivetrain.performBrake();
             loader.loadAndUnload();
         }

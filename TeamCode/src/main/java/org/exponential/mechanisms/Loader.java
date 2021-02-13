@@ -30,7 +30,7 @@ public class Loader implements Mechanism {
 
     public void loadAndUnload() {
         load();
-        opMode.sleep(100);
+        opMode.sleep(80);
         unload();
     }
 

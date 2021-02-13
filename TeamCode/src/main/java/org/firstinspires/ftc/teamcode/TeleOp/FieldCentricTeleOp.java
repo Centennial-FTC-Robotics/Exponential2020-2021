@@ -88,14 +88,42 @@ public class FieldCentricTeleOp extends LinearOpMode {
                 sleep(250);
             }
 
+            if (gamepad2.dpad_right) {
+                robot.odometry.offsetXPos(-2);
+                sleep(100);
+            } else if (gamepad2.dpad_left) {
+                robot.odometry.offsetXPos(2);
+                sleep(500);
+            }
+
             if (gamepad1.x) { //towards back
-                robot.drivetrain.turnTo(-90);  //(270)
+                Runnable myRunnable = new Runnable(){
+                            public void run(){
+                                robot.drivetrain.turnTo(-90);  //(270)
+                            }};
+                Thread thread = new Thread(myRunnable);
+                thread.start();
             } else if (gamepad1.b) { //towards goals
-                robot.drivetrain.turnTo(90);
+                Runnable myRunnable = new Runnable(){
+                    public void run(){
+                        robot.drivetrain.turnTo(90);  //(270)
+                    }};
+                Thread thread = new Thread(myRunnable);
+                thread.start();
             } else if (gamepad1.a && !gamepad1.start) { //towards drivers
-                robot.drivetrain.turnTo(0);
+                Runnable myRunnable = new Runnable(){
+                    public void run(){
+                        robot.drivetrain.turnTo(0);  //(270)
+                    }};
+                Thread thread = new Thread(myRunnable);
+                thread.start();
             } else if (gamepad1.y) { // away from drivers
-                robot.drivetrain.turnTo(180);
+                Runnable myRunnable = new Runnable(){
+                    public void run(){
+                        robot.drivetrain.turnTo(180);  //(270)
+                    }};
+                Thread thread = new Thread(myRunnable);
+                thread.start();
             }
 
             /*if (gamepad2.b && !gamepad2.start) {
@@ -129,7 +157,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
                 robot.shooter.stopShooting();
             }
 
-
+/*
             if (gamepad2.dpad_up) {
                  // aim at high goal
                 robot.drivetrain.moveTo(36, -6, 270);
@@ -143,7 +171,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
             } else if (gamepad2.dpad_right) { //right power shot
                 robot.drivetrain.moveTo(17, -6, 270);
 
-            }
+            }*/
 
             telemetry.update();
             robot.drivetrain.setPowerDriveMotors(getMotorPowers(rotatedX, rotatedY, inputRightX));

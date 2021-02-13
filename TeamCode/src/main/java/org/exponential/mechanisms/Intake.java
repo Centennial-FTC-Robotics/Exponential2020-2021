@@ -23,10 +23,12 @@ public class Intake implements Mechanism {
 
     public static final double LEFT_SERVO_POSITION = .85;
     public static final double RIGHT_SERVO_POSITION = 0;
+    public static final double INTAKE_RELEASE_POSITION = .25;
     public DcMotorEx intakeMotor;
     public DcMotorEx conveyorMotor;
     public CRServo conveyorServo;
     public Servo rightIntakeServo;
+    public Servo intakeReleaseServo;
     @Override
     public void initialize(LinearOpMode opMode) {
         intakeMotor = opMode.hardwareMap.get(DcMotorEx.class, "intakeMotor");
@@ -35,7 +37,8 @@ public class Intake implements Mechanism {
         intakeMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
         //CRServo conveyorServo = opMode.hardwareMap.get(CRServo.class,"conveyorServo");
-        rightIntakeServo = opMode.hardwareMap.servo.get("rightIntakeServo");
+        //rightIntakeServo = opMode.hardwareMap.servo.get("rightIntakeServo");
+        intakeReleaseServo = opMode.hardwareMap.servo.get("intakeReleaseServo");
     }
 
     public void setPower(double power) {
@@ -71,6 +74,7 @@ public class Intake implements Mechanism {
 
     public void setServoPositions() {
         //leftIntakeServo.setPosition(LEFT_SERVO_POSITION);
-        rightIntakeServo.setPosition(RIGHT_SERVO_POSITION);
+        //rightIntakeServo.setPosition(RIGHT_SERVO_POSITION);
+        intakeReleaseServo.setPosition(INTAKE_RELEASE_POSITION);
     }
 }

@@ -31,6 +31,7 @@ public class RedRightPath extends LinearOpMode {
         if (numRings == 0) { //zone A
             robot.drivetrain.moveTo(48, 12, 270);
         } else if (numRings == 1) { //zone B
+            robot.drivetrain.moveTo(48, 6, 270);
             robot.drivetrain.moveTo(26, 36, 270);
         } else { //zone C
             //split into two moves
@@ -47,9 +48,15 @@ public class RedRightPath extends LinearOpMode {
 
         //shoot rings at power shot targets (also moves to the designated position on the field)
         //ourRobot.shootPowerShotTargets("red");
-        robot.shootAtHighGoal("red");  //ends at 36, -6
+        // if it's 0 rings, go for power shots instead
+        if (numRings == 0) {
+            robot.shootAtPowerShotTargets("red");
+        } else {
+            robot.shootAtHighGoal("red");  //ends at 38, -6
 
+        }
         if (numRings == 1) {
+            robot.odometry.offsetXPos(2);
             //pickup rings from starter stack
             robot.intake.outtake();  //should be intake, encoders are weird
             robot.shooter.shootAtHighGoal();
@@ -60,21 +67,23 @@ public class RedRightPath extends LinearOpMode {
             robot.intake.stop();
             //shoot the newly picked up rings
             robot.shootAtHighGoal("red");
+
+            robot.odometry.offsetXPos(-2);
         } else if (numRings == 4) {
             robot.shooter.shootAtHighGoal();
 
-            //knock down starter stack
+            /*//knock down starter stack
             robot.intake.intake(); //outtake rings to throw stack down
             robot.drivetrain.moveTo(36, -20, 270);
-            robot.drivetrain.moveTo(36, -18, 270);
+            robot.drivetrain.moveTo(36, -18, 270); */
             //pickup rings from starter stack
             robot.intake.outtake();  //should be intake, encoders are weird
+            robot.drivetrain.moveTo(36, -18, 270);
+            robot.drivetrain.moveTo(36, -16, 270);
 
-            robot.drivetrain.moveTo(36, -20, 270);
-            robot.drivetrain.moveTo(36, -21.5, 270);
-            robot.drivetrain.moveTo(36, -24, 270);
-
-            sleep(1000);
+            robot.drivetrain.moveTo(36, -19.5, 270);
+            robot.drivetrain.performBrake();
+            sleep(2200);
             robot.intake.stop();
             //shoot the newly picked up rings
             robot.shootAtHighGoal("red");
@@ -83,16 +92,27 @@ public class RedRightPath extends LinearOpMode {
         //shootathighgoal moves robot to 36, -6
 
         //move to gap between half field and rings
-        robot.drivetrain.moveTo(11., -6, 270);
+        robot.drivetrain.moveTo(11, -6, 270);
         //robot.drivetrain.moveTo(11.25, -24, 270);
 
+        robot.drivetrain.moveTo(11, -28, 270);
+
         //pick up second goal
-        robot.drivetrain.moveTo(11., -50, 270);
+        if (numRings == 0) {
+            robot.drivetrain.moveTo(11, -50, 270);
+        } else if (numRings == 1) {
+            robot.odometry.offsetXPos(0);
+            robot.drivetrain.moveTo(11, -50, 270);
+
+        } else {
+            robot.drivetrain.moveTo(11, -50, 270);
+
+        }
         robot.drivetrain.performBrake();
         robot.wobbleGoalMover.pickupGoal();
 
         //move to the second gap
-        robot.drivetrain.moveTo(11., -24, 270);
+        robot.drivetrain.moveTo(11, -24, 270);
 
         // move to proper zone
         if (numRings == 0) { //zone A
@@ -107,7 +127,11 @@ public class RedRightPath extends LinearOpMode {
 
 
         //park on line
-        robot.drivetrain.moveTo(40, 6, 270);
+        if (numRings == 1) {
+            robot.drivetrain.moveTo(24, 6, 270);
+        } else {
+            robot.drivetrain.moveTo(40, 6, 270);
+        }
         robot.savePositions();
     }
 }

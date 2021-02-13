@@ -1,6 +1,7 @@
 package org.exponential.Tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.exponential.mechanisms.ArcOdometry;
@@ -10,6 +11,7 @@ import org.exponential.mechanisms.IMU;
 import org.exponential.mechanisms.Odometry;
 import org.exponential.robots.OurRobot;
 
+@Disabled
 @Autonomous
 public class MoveTester extends LinearOpMode {
     public void runOpMode() throws InterruptedException {

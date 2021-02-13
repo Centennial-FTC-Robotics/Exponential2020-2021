@@ -1,10 +1,12 @@
 package org.exponential.unittests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.exponential.mechanisms.CameraTensorFlow;
 import org.exponential.superclasses.UnitTester;
 
+@Disabled
 @Autonomous(name="CameraTensorFlowTester", group="Autonomous")
 public class CameraTensorFlowTester extends UnitTester {
     CameraTensorFlow camera;

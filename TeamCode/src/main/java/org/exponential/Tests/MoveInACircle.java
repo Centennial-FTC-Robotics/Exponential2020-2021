@@ -1,6 +1,7 @@
 package org.exponential.Tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.exponential.mechanisms.ArcOdometry;
@@ -12,7 +13,7 @@ import org.exponential.mechanisms.parametricEQ.State;
 import org.exponential.robots.OurRobot;
 
 import java.io.IOException;
-
+@Disabled
 @Autonomous
 public class MoveInACircle extends LinearOpMode {
     public void runOpMode() throws InterruptedException {

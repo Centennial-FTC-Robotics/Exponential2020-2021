@@ -17,8 +17,6 @@ import org.exponential.superclasses.Robot;
 
 import java.util.List;
 
-import static org.exponential.utility.Utility.sleep;
-
 public class OurRobot implements Robot {
     public Drivetrain drivetrain;
     public Odometry odometry;
@@ -83,7 +81,7 @@ public class OurRobot implements Robot {
         //turret.loadPosition();
     }
 
-    public void shootPowerShotTargets(String side) {
+    public void shootAtPowerShotTargets(String side) {
         double[] targetXPositions;
         if (side.equals("red")) {
             targetXPositions = new double[] {2, 9.5, 17};
@@ -123,7 +121,7 @@ public class OurRobot implements Robot {
     public void shootAtHighGoal(String side) {
         double goalXPosition;
         if (side.equals("red")) {
-            goalXPosition = 36;
+            goalXPosition = 38;
         } else {
             goalXPosition = -36;
         }
@@ -136,7 +134,7 @@ public class OurRobot implements Robot {
 
         //move to some position on field to start shooting
         //double targetAngle = Math.toDegrees(Math.atan2(-6 - robotY, goalXPosition - robotX));
-        drivetrain.moveTo(goalXPosition, -6, 270, 3);
+        drivetrain.moveTo(goalXPosition, -6, 270, 1.75);
         drivetrain.performBrake();
 
         loadAndUnloadAllRings();

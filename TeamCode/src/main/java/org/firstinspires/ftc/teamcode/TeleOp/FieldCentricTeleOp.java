@@ -113,7 +113,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
                 robot.loader.loadAndUnload();
             }
             if (gamepad2.a) {
-                robot.shootPowerShotTargets("red");
+                robot.shootAtPowerShotTargets("red");
             }
             if (gamepad2.b) {
                 robot.shootAtHighGoal("red");
@@ -148,6 +148,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
             telemetry.update();
             robot.drivetrain.setPowerDriveMotors(getMotorPowers(rotatedX, rotatedY, inputRightX));
         }
+        robot.odometry.savePosition();
     }
 
     public static double[] rotatePoint(double x, double y, double theta) {

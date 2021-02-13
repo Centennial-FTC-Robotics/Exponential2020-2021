@@ -1,10 +1,12 @@
 package org.exponential.Tests;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.exponential.robots.OurRobot;
 
+@Disabled
 @TeleOp(name = "PIDCalibration", group = "TeleOp")
 public class PIDCalibration extends LinearOpMode {
     @Override

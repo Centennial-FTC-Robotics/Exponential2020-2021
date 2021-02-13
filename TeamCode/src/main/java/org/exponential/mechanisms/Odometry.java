@@ -172,6 +172,14 @@ public class Odometry implements Runnable, Mechanism {
         imu.angle = angle;
     }
 
+    public void offsetXPos(double dx) {
+        xPos = xPos + dx;
+    }
+
+    public void offsetYPos(double dy) {
+        yPos = yPos + dy;
+    }
+
     public double getxPos() {
         return xPos;
     }

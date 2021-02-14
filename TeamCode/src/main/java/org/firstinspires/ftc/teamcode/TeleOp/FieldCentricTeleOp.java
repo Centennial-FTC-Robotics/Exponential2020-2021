@@ -104,33 +104,23 @@ public class FieldCentricTeleOp extends LinearOpMode {
             }
 
             if (gamepad1.x) { //towards back
-                Runnable myRunnable = new Runnable(){
+                /*Runnable myRunnable = new Runnable(){
                             public void run(){
                                 robot.drivetrain.turnTo(-90);  //(270)
                             }};
                 Thread thread = new Thread(myRunnable);
-                thread.start();
+                thread.start();*/
+                robot.drivetrain.turnTo(-90);  //(270)
+
             } else if (gamepad1.b) { //towards goals
-                Runnable myRunnable = new Runnable(){
-                    public void run(){
-                        robot.drivetrain.turnTo(90);  //(270)
-                    }};
-                Thread thread = new Thread(myRunnable);
-                thread.start();
+                robot.drivetrain.turnTo(90);  //(270)
+
             } else if (gamepad1.a && !gamepad1.start) { //towards drivers
-                Runnable myRunnable = new Runnable(){
-                    public void run(){
-                        robot.drivetrain.turnTo(0);  //(270)
-                    }};
-                Thread thread = new Thread(myRunnable);
-                thread.start();
+                robot.drivetrain.turnTo(0);  //(270)
+
             } else if (gamepad1.y) { // away from drivers
-                Runnable myRunnable = new Runnable(){
-                    public void run(){
-                        robot.drivetrain.turnTo(180);  //(270)
-                    }};
-                Thread thread = new Thread(myRunnable);
-                thread.start();
+                robot.drivetrain.turnTo(180);  //(270)
+
             }
 
             /*if (gamepad2.b && !gamepad2.start) {

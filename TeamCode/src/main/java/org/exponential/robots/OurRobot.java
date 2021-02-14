@@ -27,10 +27,13 @@ public class OurRobot implements Robot {
     public Shooter shooter;
     public WobbleGoalMover wobbleGoalMover;
     public Turret turret;
+
     public OurRobot() {
         camera = new CameraOpenCV();
     }
+
     LinearOpMode opMode;
+
     public OurRobot(CameraOpenCV camera) {
         this.camera = camera;
     }
@@ -84,12 +87,12 @@ public class OurRobot implements Robot {
     public void shootAtPowerShotTargets(String side) {
         double[] targetXPositions;
         if (side.equals("red")) {
-            targetXPositions = new double[] {4, 11.5, 19};
+            targetXPositions = new double[]{4, 11.5, 19};
         } else {
-            targetXPositions = new double[] {-2, -9.5, -17};
+            targetXPositions = new double[]{-2, -9.5, -17};
         }
 
-        for (double targetXPosition: targetXPositions) {
+        for (double targetXPosition : targetXPositions) {
             shooter.shootAtPowerShot();  //going to assume that the initial move will be long enough to rev up the motor enough
 
             drivetrain.moveTo(targetXPosition, -6, 270, 2);
@@ -104,13 +107,13 @@ public class OurRobot implements Robot {
         shooter.shootAtPowerShot();
         if (side.equals("red")) {
             drivetrain.moveTo(12, -6, 270);
-            turretTargetEncoders = new double[] {turret.encCountAtAngleZero - 100,
+            turretTargetEncoders = new double[]{turret.encCountAtAngleZero - 100,
                     turret.encCountAtAngleZero,
                     turret.encCountAtAngleZero + 100};
         } else {
-            turretTargetEncoders = new double[] {};
+            turretTargetEncoders = new double[]{};
         }
-        for (double targetEncoderValue: turretTargetEncoders) {
+        for (double targetEncoderValue : turretTargetEncoders) {
             turret.turretMotor.setTargetPosition((int) targetEncoderValue);
             turret.turretMotor.setPower(1);
             opMode.sleep(500);
@@ -169,12 +172,22 @@ public class OurRobot implements Robot {
         wobbleGoalMover.release();
     }
 
-    public void loadAndUnloadAllRings () {
+    public void loadAndUnloadAllRings() {
         for (int i = 0; i < 2; i++) {
             loader.loadAndUnload();
             opMode.sleep(250);
         }
         shooter.readjustHighGoalPower();
         loader.loadAndUnload();
+    }
+
+    public double headingRotation(double targetAngle) {
+        double kP = .06;
+        double rotationPower = 0;
+        double tolerance = 5;
+        if (Math.abs(targetAngle - IMU.normalize(odometry.getAngle())) > tolerance) {
+            rotationPower = kP * (targetAngle - IMU.normalize(odometry.getAngle()));
+        }
+        return rotationPower;
     }
 }

@@ -17,6 +17,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
     boolean wobbleState = true;
     double shooterInaccuracy = 0;
     ElapsedTime shooterTimer = new ElapsedTime();
+    double headingRotationPower = 0;
 
     private OurRobot robot;
 
@@ -103,7 +104,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
                 sleep(150);
             }
 
-            if (gamepad1.x) { //towards back
+            /*if (gamepad1.x) { //towards back
                 Runnable myRunnable = new Runnable(){
                             public void run(){
                                 robot.drivetrain.turnTo(-90);  //(270)
@@ -131,8 +132,17 @@ public class FieldCentricTeleOp extends LinearOpMode {
                     }};
                 Thread thread = new Thread(myRunnable);
                 thread.start();
-            }
+            }*/
 
+            if (gamepad1.x) {
+                headingRotationPower = robot.headingRotation(-90);
+            } else if (gamepad1.y) {
+                headingRotationPower = robot.headingRotation (180);
+            } else if (gamepad1.a) {
+                headingRotationPower = robot.headingRotation(0);
+            } else if (gamepad1.b) {
+                headingRotationPower = robot.headingRotation (90);
+            }
             /*if (gamepad2.b && !gamepad2.start) {
                 //robot.shootAtHighGoal("red");
                 robot.drivetrain.moveTo(44, 0, 270);
@@ -181,7 +191,8 @@ public class FieldCentricTeleOp extends LinearOpMode {
             }*/
 
             telemetry.update();
-            robot.drivetrain.setPowerDriveMotors(getMotorPowers(rotatedX, rotatedY, inputRightX));
+
+            robot.drivetrain.setPowerDriveMotors(getMotorPowers(rotatedX, rotatedY, inputRightX + headingRotationPower));
         }
         robot.odometry.savePosition();
     }

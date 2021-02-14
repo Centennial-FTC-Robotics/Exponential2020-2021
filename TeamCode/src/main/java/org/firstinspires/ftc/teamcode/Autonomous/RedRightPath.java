@@ -92,11 +92,11 @@ public class RedRightPath extends LinearOpMode {
             //pickup rings from starter stack
             robot.intake.outtake();  //should be intake, encoders are weird
             robot.drivetrain.moveTo(36, -18, 270);
-            robot.drivetrain.moveTo(36, -16, 270);
+            robot.drivetrain.moveTo(36, -17, 270);
 
-            robot.drivetrain.moveTo(36, -19, 270);
+            robot.drivetrain.moveTo(36, -18, 270);
             robot.drivetrain.performBrake();
-            sleep(2200);
+            sleep(1900);
             robot.intake.stop();
             //shoot the newly picked up rings
             robot.shootAtHighGoal("red");
@@ -114,7 +114,8 @@ public class RedRightPath extends LinearOpMode {
         if (numRings == 0) {
             robot.drivetrain.moveTo(11, -49, 270);
         } else if (numRings == 1) {
-            //robot.odometry.offsetXPos(0);
+            robot.odometry.offsetXPos(3);
+            robot.odometry.offsetYPos(3);
             robot.drivetrain.moveTo(11, -49, 270);
 
         } else {

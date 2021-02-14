@@ -27,12 +27,13 @@ public class FieldCentricTeleOp extends LinearOpMode {
         robot = new OurRobot();
         robot.initialize(this);
         //comment out this line for non transition (testing) purposes
-        //robot.loadPositions();
+        robot.loadPositions();
+
 
         //comment out the following line for auto to teleop transitions
-        robot.odometry.setPosition(0, 0, 90);
+        //robot.odometry.setPosition(0, 0, 90);
 
-        initialAngle = robot.odometry.getAngle() + 90;  // +90 so that the controls are field centric from the red drivers' perspective
+        initialAngle = robot.odometry.getAngle() + 270;  // +90 so that the controls are field centric from the red drivers' perspective
 
         robot.setUpServos();
         boolean raised = true;
@@ -90,10 +91,16 @@ public class FieldCentricTeleOp extends LinearOpMode {
 
             if (gamepad2.dpad_right) {
                 robot.odometry.offsetXPos(-2);
-                sleep(100);
+                sleep(150);
             } else if (gamepad2.dpad_left) {
                 robot.odometry.offsetXPos(2);
-                sleep(500);
+                sleep(150);
+            } else if (gamepad2.dpad_up) {
+                robot.odometry.offsetYPos(-1);
+                sleep(150);
+            } else if (gamepad2.dpad_down) {
+                robot.odometry.offsetYPos(1);
+                sleep(150);
             }
 
             if (gamepad1.x) { //towards back
@@ -146,9 +153,9 @@ public class FieldCentricTeleOp extends LinearOpMode {
             if (gamepad2.b) {
                 robot.shootAtHighGoal("red");
             }
-            if (gamepad1.right_bumper) {
+            /*if (gamepad1.right_bumper) {
                 robot.scoreWobbleGoal("red");
-            }
+            }*/
             if (gamepad2.right_bumper) {
                 robot.shooter.shootAtHighGoal();
             } else if (gamepad2.left_trigger > 0) {

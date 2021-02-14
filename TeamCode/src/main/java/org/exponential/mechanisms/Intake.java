@@ -11,22 +11,22 @@ import org.exponential.superclasses.Mechanism;
 import static java.lang.Thread.sleep;
 
 public class Intake implements Mechanism {
-    public static final double INTAKE_POWER = .85;
-    public static final double OUTTAKE_POWER = -.85;
-    public static final double CONVEYOR_INTAKE_POWER = .85;
+    public static final double INTAKE_POWER = .65;
+    public static final double OUTTAKE_POWER = -.65;
+    public static final double CONVEYOR_INTAKE_POWER = 1;
     public static final double CONVEYOR_OUTTAKE_POWER = -.85;
-    public static final double SERVO_INTAKE_POWER = 1;
-    public static final double SERVO_OUTTAKE_POWER = -1;
+    public static final double SERVO_INTAKE_POWER = -1;
+    public static final double SERVO_OUTTAKE_POWER = 1;
     
     public static final double INTAKE_FACTOR = .6;
     public static final double CONVEYOR_FACTOR = -.05;
 
     public static final double LEFT_SERVO_POSITION = .85;
     public static final double RIGHT_SERVO_POSITION = 0;
-    public static final double INTAKE_RELEASE_POSITION = .25;
+    public static final double INTAKE_RELEASE_POSITION = .4;
     public DcMotorEx intakeMotor;
     public DcMotorEx conveyorMotor;
-    public CRServo conveyorServo;
+    //public CRServo conveyorServo;
     public Servo rightIntakeServo;
     public Servo intakeReleaseServo;
     @Override
@@ -36,7 +36,7 @@ public class Intake implements Mechanism {
         conveyorMotor = opMode.hardwareMap.get(DcMotorEx.class, "conveyorMotor");
         intakeMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
 
-        //CRServo conveyorServo = opMode.hardwareMap.get(CRServo.class,"conveyorServo");
+        //conveyorServo = opMode.hardwareMap.get(CRServo.class,"conveyorServo");
         //rightIntakeServo = opMode.hardwareMap.servo.get("rightIntakeServo");
         intakeReleaseServo = opMode.hardwareMap.servo.get("intakeReleaseServo");
     }
@@ -70,6 +70,7 @@ public class Intake implements Mechanism {
     public void stop() {
         intakeMotor.setPower(0);
         conveyorMotor.setPower(0);
+        //conveyorServo.setPower(0);
     }
 
     public void setServoPositions() {

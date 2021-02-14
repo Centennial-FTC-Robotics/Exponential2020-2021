@@ -132,9 +132,14 @@ public class RedRightPath extends LinearOpMode {
         if (numRings == 0) { //zone A
             robot.drivetrain.moveTo(44, 12, 270);
         } else if (numRings == 1) { //zone B
-            robot.drivetrain.moveTo(22, 36, 270);
+            double targetX = 22;
+            double targetY = 36;
+            robot.drivetrain.moveTo(targetX, targetY, 270);
         } else { //zone C
-            robot.drivetrain.moveTo(44, 52, 270);
+            double targetX = 44;
+            double targetY = 52;
+            double targetAngle = Math.atan2(targetY - robot.odometry.getyPos(), targetX - robot.odometry.getxPos());
+            robot.drivetrain.moveTo(targetX, targetY, targetAngle);
         }
         robot.drivetrain.performBrake();
         robot.wobbleGoalMover.placeGoal();

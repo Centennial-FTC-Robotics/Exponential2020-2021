@@ -193,6 +193,11 @@ public class Drivetrain implements Mechanism {
         double previousTime = 0;
 
         double angleTowardsTargetPos = Math.atan2(targetY - positioning.getyPos(), targetX - positioning.getxPos());
+        //choose whether or not to make the front or back of robot face the target
+        double distFromAngle = Math.abs(angleTowardsTargetPos - positioning.getAngle());
+        if (distFromAngle > 90) {  // if the robot has to turn more than 90deg to face forward, face backwards instead
+            angleTowardsTargetPos = IMU.normalize(angleTowardsTargetPos + 180);
+        }
         while (opMode.opModeIsActive() && (distance(targetX, targetY, positioning.xPos, positioning.yPos) > tolerance)) {
             positioning.update();
 

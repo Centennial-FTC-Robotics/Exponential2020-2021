@@ -278,6 +278,12 @@ public class Drivetrain implements Mechanism {
         moveToTargetPosition(angleTolerance);
     }
 
+    public void moveToStraight(double targetX, double targetY) {  // to just go directly towards the target, no targetAngle
+        this.targetX = targetX;
+        this.targetY = targetY;
+        this.targetAngle = Math.atan2(targetY - positioning.getyPos(), targetX - positioning.getxPos());
+        moveToTargetPosition();
+    }
     public void moveToStraight(double targetX, double targetY, double targetAngle, double radius) {
         this.targetX = targetX;
         this.targetY = targetY;

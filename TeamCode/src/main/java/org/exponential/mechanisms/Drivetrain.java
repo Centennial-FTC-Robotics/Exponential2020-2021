@@ -164,13 +164,20 @@ public class Drivetrain implements Mechanism {
     }
 
     public void moveToTargetPosition() {
-        moveToTargetPosition(this.Kp, this.Ki, this.Kd, this.angleTolerance);
+        moveToTargetPosition(this.Kp, this.Ki, this.Kd, this.angleTolerance, 999);
     }
 
     public void moveToTargetPosition(double angleTolerance) {
-        moveToTargetPosition(this.Kp, this.Ki, this.Kd, angleTolerance);
+        moveToTargetPosition(this.Kp, this.Ki, this.Kd, angleTolerance, 999);
     }
-    public void moveToTargetPosition(double Kp, double Ki, double Kd, double angleTolerance) {
+
+    public void moveToTargetPositionStraight(double radius) {
+        moveToTargetPosition(this.Kp, this.Ki, this.Kd, this.angleTolerance, radius);
+    }
+    public void moveToTargetPositionStraight(double radius, double angleTolerance) {
+        moveToTargetPosition(this.Kp, this.Ki, this.Kd, angleTolerance, radius);
+    }
+    public void moveToTargetPosition(double Kp, double Ki, double Kd, double angleTolerance, double turnToTargetAngleRadius) {
         // a lot of random PID variables
         double areaX = 0;
         double areaY = 0;
@@ -185,6 +192,7 @@ public class Drivetrain implements Mechanism {
         ElapsedTime timer = new ElapsedTime();
         double previousTime = 0;
 
+        double angleTowardsTargetPos = Math.atan2(targetY - positioning.getyPos(), targetX - positioning.getxPos());
         while (opMode.opModeIsActive() && (distance(targetX, targetY, positioning.xPos, positioning.yPos) > tolerance)) {
             positioning.update();
 
@@ -196,7 +204,8 @@ public class Drivetrain implements Mechanism {
             velX = disX / intervalTime;
             velY = disY / intervalTime;
 
-            if(distance(targetX, targetY, positioning.xPos, positioning.yPos) < 5.0){
+            double distanceFromTarget = distance(targetX, targetY, positioning.xPos, positioning.yPos);
+            if(distanceFromTarget < 5.0){
 
                 areaX += disX * intervalTime;
                 areaY += disY * intervalTime;
@@ -205,7 +214,11 @@ public class Drivetrain implements Mechanism {
                 areaY = 0;
             }
             // angle PID calculations
-            disAngle = IMU.normalize(targetAngle - positioning.angle);
+            if (distanceFromTarget < turnToTargetAngleRadius) {  // if robot is close enough to target, start turning towards target angle
+                disAngle = IMU.normalize(targetAngle - positioning.angle);
+            } else {  //otherwise, have the robot move straight towards the target
+                disAngle = IMU.normalize(angleTowardsTargetPos - positioning.angle);
+            }
             areaAngle = disAngle * intervalTime;
             velAngle = disAngle / intervalTime;
 
@@ -265,12 +278,27 @@ public class Drivetrain implements Mechanism {
         moveToTargetPosition(angleTolerance);
     }
 
+    public void moveToStraight(double targetX, double targetY, double targetAngle, double radius) {
+        this.targetX = targetX;
+        this.targetY = targetY;
+        this.targetAngle = targetAngle;
+        moveToTargetPositionStraight(radius);
+    }
+
+    public void moveToStraight(double targetX, double targetY, double targetAngle, double radius, double angleTolerance) {
+        this.targetX = targetX;
+        this.targetY = targetY;
+        this.targetAngle = targetAngle;
+        moveToTargetPositionStraight(radius, angleTolerance);
+    }
+
     public void moveTo(double targetX, double targetY, double targetAngle, double Kp, double Ki, double Kd) {
         this.targetX = targetX;
         this.targetY = targetY;
         this.targetAngle = targetAngle;
-        moveToTargetPosition(Kp, Ki, Kd, this.angleTolerance);
+        moveToTargetPosition(Kp, Ki, Kd, this.angleTolerance, 999);
     }
+
 
     public void moveRelative(double dx, double dy) {
         moveRelative(dx, dy, this.Kp, this.Ki, this.Kd);

@@ -146,7 +146,7 @@ public class RedRightPath extends LinearOpMode {
             double targetX = 44;
             double targetY = 52;
             //double targetAngle = Math.atan2(targetY - robot.odometry.getyPos(), targetX - robot.odometry.getxPos());
-            robot.drivetrain.moveTo(targetX, targetY, 270, 12);
+            robot.drivetrain.moveToStraight(targetX, targetY, 270, 12);
         }
         robot.drivetrain.performBrake();
         robot.wobbleGoalMover.placeGoal();

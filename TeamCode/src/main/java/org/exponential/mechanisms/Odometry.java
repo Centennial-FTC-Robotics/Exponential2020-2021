@@ -13,9 +13,14 @@ import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import java.io.File;
 
 public class Odometry implements Runnable, Mechanism {
-    DcMotorEx forwardLeftEnc;
-    DcMotorEx forwardRightEnc;
-    DcMotorEx horizontalEnc;
+    // so that the imu doesn't slow down the while loop too much
+    public int iterationsPerIMURead = 0; // ratio of encoder reads to imu reads
+    private int currentIterationsSinceIMURead = 0;
+    private double angleAccumulation = 0; // the change in angle from all encoder reads since the last imu read
+
+    public DcMotorEx forwardLeftEnc;
+    public DcMotorEx forwardRightEnc;
+    public DcMotorEx horizontalEnc;
 
     LinearOpMode opMode;
 
@@ -29,14 +34,12 @@ public class Odometry implements Runnable, Mechanism {
     double yVel;
     double angleVel;
 
-    // encapsulated variables (yuhwan: why make these private and not everything else?)
-    // eric: cause everything above are stuff you wanna access in drivetrain class, I didn't make an getters
-    // or at least that was the intention until I had to specialize it, ur right
-    int lastLeftEncPos;
-    int lastRightEncPos;
-    int lastHoriEncPos;
+    public int lastLeftEncPos;
+    public int lastRightEncPos;
+    public int lastHoriEncPos;
 
     double horiEncPerDegree = 31;
+    double vertEncPerDegree = 1; // TODO: change this when you get the value
 
     ElapsedTime updateTimer;
 
@@ -117,15 +120,19 @@ public class Odometry implements Runnable, Mechanism {
         // readings from the time between the two calls
         lastLeftEncPos -= leftEncChange;
         lastRightEncPos -= rightEncChange;
-        lastHoriEncPos = horiEncChange;
-
+        lastHoriEncPos += horiEncChange;
 
         // updates angle
-        imu.update();
-        double changeInAngle = imu.angle - angle;
+        double changeInAngle;
+        if(currentIterationsSinceIMURead==iterationsPerIMURead){
+            currentIterationsSinceIMURead = 0;
+            imu.update();
+            changeInAngle = imu.angle - angle;
+        } else {
+            currentIterationsSinceIMURead++;
+            changeInAngle = (rightEncChange-leftEncChange) / (2*vertEncPerDegree) - angle;
+        }
         update(timeElapsed, changeInAngle, leftEncChange, rightEncChange, horiEncChange, true);
-
-
     }
     public void update(double timeElapsed, double changeInAngle, int leftEncChange, int rightEncChange, int horiEncChange, boolean imuAngleUpdate) {
 

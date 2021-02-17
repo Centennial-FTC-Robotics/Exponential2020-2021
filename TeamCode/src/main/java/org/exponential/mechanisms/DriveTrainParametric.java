@@ -17,7 +17,7 @@ public class DriveTrainParametric extends Drivetrain {
     public final static double xVelMax = 59.17; // inch per sec per motor power
     public final static double yVelMax = 63.016; // inch per sec per motor power
     public final static double rotate = 404.76; // degrees per sec per motor power
-    public final static double xAccelMax =1761.22334; // inch per sec^2
+    public final static double xAccelMax = 1761.22334; // inch per sec^2
     public final static double yAccelMax = 2459.2876; // inch per sec^2
 
     // feedback constants
@@ -35,8 +35,7 @@ public class DriveTrainParametric extends Drivetrain {
     public void moveAlongParametricEq(ParametricEq equation) {
 
         // a lot of random PID variables
-        double areaX = 0;
-        double areaY = 0;
+        double areaDis = 0;
         double velX;
         double velY;
         double disX;
@@ -63,10 +62,10 @@ public class DriveTrainParametric extends Drivetrain {
             // linear PID calculations
             disX = (targetState.fieldX - positioning.xPos);
             disY = (targetState.fieldY - positioning.yPos);
-            areaX += disX * intervalTime;
-            areaY += disY * intervalTime;
             velX = disX / intervalTime;
             velY = disY / intervalTime;
+            double distance = Math.sqrt(Math.pow(disX, 2) + Math.pow(disY, 2));
+            areaDis += distance * intervalTime;
 
             // Angle PID calculations
             disAngle = IMU.normalize(targetState.angle - imu.angle);
@@ -74,9 +73,14 @@ public class DriveTrainParametric extends Drivetrain {
             velAngle = disAngle / intervalTime;
 
             // Feedback portion
-            double xNew = KPBACK * disX + KIBACK * areaX + KDBACK * velX;
-            double yNew = KPBACK * disY + KIBACK * areaY + KDBACK * velY;
+            double xNew = KPBACK * disX + KDBACK * velX;
+            double yNew = KPBACK * disY + KDBACK * velY;
             double angleNew = KPBACKANGLE * disAngle + KIBACKANGLE * areaAngle + KDBACKANGLE * velAngle;
+            if (distance > 0) {
+                // prevents a divide by 0
+                xNew += areaDis * (disX) / distance;
+                yNew += areaDis * (disY) / distance;
+            }
 
             // Feedforward portion
             xNew += targetState.velX;
@@ -86,17 +90,15 @@ public class DriveTrainParametric extends Drivetrain {
             // sets the velocity using encapsulated velocity method that uses motion profiling
             setVel(xNew, yNew, angleNew);
 
-            opMode.telemetry.addData("X: ",positioning.xPos);
+            opMode.telemetry.addData("X: ", positioning.xPos);
             opMode.telemetry.addData("Y: ", positioning.yPos);
             opMode.telemetry.addData("Angle: ", positioning.angle);
             opMode.telemetry.addData("Dis X: ", disX);
             opMode.telemetry.addData("Dis Y: ", disY);
             opMode.telemetry.addData("Dis Angle: ", disAngle);
 
-            opMode.telemetry.update();
+            // opMode.telemetry.update();
         }
-
-
     }
 
 
@@ -144,7 +146,7 @@ public class DriveTrainParametric extends Drivetrain {
         // gives a little bit of elbow room so that the robot is not forced to go at the fastest
         // theoretically possible path
         double portionOfMaxAccel = 0.9; // how much leeway to give
-        ParametricEq line = new StraightLine(x,y,angle, positioning.xPos, positioning.yPos, positioning.angle, portionOfMaxAccel);
+        ParametricEq line = new StraightLine(x, y, angle, positioning.xPos, positioning.yPos, positioning.angle, portionOfMaxAccel);
         moveAlongParametricEq(line);
     }
 }

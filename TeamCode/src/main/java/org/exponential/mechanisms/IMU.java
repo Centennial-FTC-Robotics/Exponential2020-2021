@@ -9,7 +9,7 @@ import org.exponential.superclasses.Mechanism;
 public class IMU implements Mechanism {
 
     BNO055IMU imu;
-    double angle;
+    public double angle;
 
     @Override
     public void initialize(LinearOpMode opMode) {

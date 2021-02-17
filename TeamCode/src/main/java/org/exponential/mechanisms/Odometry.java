@@ -78,10 +78,8 @@ public class Odometry implements Runnable, Mechanism {
     }
     @Override
     public void run() {
-        ElapsedTime timer = new ElapsedTime();
         while (opMode.opModeIsActive()) {
-            update(timer.seconds());
-            timer.reset();
+            update();
         }
     }
 
@@ -105,13 +103,11 @@ public class Odometry implements Runnable, Mechanism {
         return 2*Math.PI*0.984252/8192 * encoders;
     }
 
-    public void update(double timeElapsed) {
-        opMode.telemetry.addData("left",encToInch(-1 * forwardLeftEnc.getCurrentPosition()));
-        opMode.telemetry.addData("right",encToInch(-1 * forwardRightEnc.getCurrentPosition()));
-        opMode.telemetry.addData("hori",encToInch(horizontalEnc.getCurrentPosition()));
+    public void update() {
+        double timeElapsed = updateTimer.seconds();
         updateTimer.reset();
 
-        // updates position, velocity, and angle according to how much time has elapsed
+        // opMode.telemetry.addData("ratio", horizontalEnc.getCurrentPosition()/angle);
 
         int leftEncChange = -(forwardLeftEnc.getCurrentPosition() - lastLeftEncPos);
         int rightEncChange = -(forwardRightEnc.getCurrentPosition() - lastRightEncPos);
@@ -123,11 +119,17 @@ public class Odometry implements Runnable, Mechanism {
         lastRightEncPos -= rightEncChange;
         lastHoriEncPos = horiEncChange;
 
+
         // updates angle
         imu.update();
         double changeInAngle = imu.angle - angle;
-        angleVel = changeInAngle / timeElapsed;
+        update(timeElapsed, changeInAngle, leftEncChange, rightEncChange, horiEncChange, true);
 
+
+    }
+    public void update(double timeElapsed, double changeInAngle, int leftEncChange, int rightEncChange, int horiEncChange, boolean imuAngleUpdate) {
+
+        // updates position, velocity, and angle according to how much time has elapsed
         // currently in robot centric
         double[] changeInPos = new double[]{
                 encToInch(horiEncChange - horiEncPerDegree * changeInAngle),
@@ -142,16 +144,10 @@ public class Odometry implements Runnable, Mechanism {
         xVel = changeInPos[0] / timeElapsed;
         yVel = changeInPos[1] / timeElapsed;
         angle += changeInAngle;
-        angle = IMU.normalize(angle);
         angleVel = changeInAngle / timeElapsed;
 
     }
 
-    public void update() {
-        double timeElapsed = updateTimer.seconds();
-        update(timeElapsed);
-        // opMode.telemetry.addData("ratio", horizontalEnc.getCurrentPosition()/angle);
-    }
 
     public void savePosition() {
         File file = AppUtil.getInstance().getSettingsFile("RobotPosition.txt");

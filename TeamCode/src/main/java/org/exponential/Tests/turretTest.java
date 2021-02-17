@@ -16,10 +16,10 @@ public class turretTest extends LinearOpMode {
         waitForStart();
 
         expo.initialize(this);
-        double targetX = 0, targetY = -72;
+        double targetX = 0, targetY = 72;
 
         expo.turret.setTarget(targetX, targetY);
-        expo.shooter.setPower(0.382);
+        // expo.shooter.setPower(0.382);
         expo.turret.pointAtTarget();
 
         while (opModeIsActive()) {
@@ -36,6 +36,7 @@ public class turretTest extends LinearOpMode {
                 }
                 sleep(500);
             }
+            expo.drivetrain.setPowerFieldCentric(gamepad1.left_stick_x, -gamepad1.left_stick_y, -gamepad1.right_stick_x);
             telemetry.addData("Current Position: ", "(" + expo.odometry.getxPos() + ", " + expo.odometry.getyPos() + ")");
             telemetry.addData("Angle: ", expo.odometry.getAngle());
             telemetry.addData("Pointing Towards: ", "(" + targetX + ", " + targetY + ")");

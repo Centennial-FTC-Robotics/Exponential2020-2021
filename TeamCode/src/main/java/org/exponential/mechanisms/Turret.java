@@ -48,23 +48,25 @@ public class Turret implements Mechanism, Runnable {
         turretMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         turretMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        turretMotor.setPower(0); //set to 0 to not move
+        turretMotor.setPower(1); //set to 0 to not move
 
         turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        DcMotorControllerEx motorControllerEx = (DcMotorControllerEx)turretMotor.getController();
+        DcMotorControllerEx motorControllerEx = (DcMotorControllerEx) turretMotor.getController();
 
         // get the port number of our configured motor.
-        int motorIndex = ((DcMotorEx)turretMotor).getPortNumber();
+        int motorIndex = ((DcMotorEx) turretMotor).getPortNumber();
 
         // get the PID coefficients for the RUN_USING_ENCODER  modes.
         PIDCoefficients pidOrig = motorControllerEx.getPIDCoefficients(motorIndex, DcMotor.RunMode.RUN_USING_ENCODER);
 
         // change coefficients.
-        PIDCoefficients pidNew = new PIDCoefficients(1.5 * pidOrig.p, 1.5 * pidOrig.i, 1* pidOrig.d);
+        PIDCoefficients pidNew = new PIDCoefficients(1.5 * pidOrig.p, 4 * pidOrig.i, 1 * pidOrig.d);
         motorControllerEx.setPIDCoefficients(motorIndex, DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
 
         // re-read coefficients and verify change.
         PIDCoefficients pidModified = motorControllerEx.getPIDCoefficients(motorIndex, DcMotor.RunMode.RUN_USING_ENCODER);
+
+        turretMotor.setTargetPositionTolerance(0);
     }
 
     public Turret(Drivetrain drivetrain) {
@@ -108,6 +110,7 @@ public class Turret implements Mechanism, Runnable {
                 targetAngle = -180;
             }
             turretMotor.setTargetPosition((int) (encCountAtAngleZero + ENC_PER_DEGREE * targetAngle));
+            opMode.telemetry.addData("target angle", targetAngle);
         } else if (currentCommand == POINT_AT_ANGLE) {
             turretMotor.setTargetPosition((int) (encCountAtAngleZero +
                     ENC_PER_DEGREE * IMU.normalize(targetAngle + 180 - drivetrain.positioning.getAngle())));
@@ -115,11 +118,11 @@ public class Turret implements Mechanism, Runnable {
         turretMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         turretMotor.setPower(1);
         currentAngle = (turretMotor.getCurrentPosition() - encCountAtAngleZero) / ENC_PER_DEGREE;
-        opMode.telemetry.addData("turret enc: ", turretMotor.getCurrentPosition());
+        /*opMode.telemetry.addData("turret enc: ", turretMotor.getCurrentPosition());
         opMode.telemetry.addData("current turret angle (in terms of field): ", IMU.normalize(currentAngle + drivetrain.positioning.getAngle() + 180));
         opMode.telemetry.addData("current turret angle (relative to turret): ", currentAngle);
         opMode.telemetry.addData("delta x: ", targetXValue - drivetrain.positioning.getxPos());
-        opMode.telemetry.addData("delta y: ", targetYValue - drivetrain.positioning.getyPos());
+        opMode.telemetry.addData("delta y: ", targetYValue - drivetrain.positioning.getyPos());*/
     }
 
     public void setAngle(double angle) {

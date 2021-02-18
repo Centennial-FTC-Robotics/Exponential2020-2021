@@ -15,14 +15,14 @@ import org.exponential.robots.OurRobot;
 
 public abstract class ExpoOpMode extends LinearOpMode {
     public OurRobot expo = new OurRobot();
-    public Odometry odometry = expo.odometry;
-    public Drivetrain drivetrain = expo.drivetrain;
-    public IMU imu = expo.imu;
-    public Intake intake = expo.intake;
-    public Loader loader = expo.loader;
-    public Shooter shooter = expo.shooter;
-    public Turret turret = expo.turret;
-    public WobbleGoalMover wobbleGoalMover = expo.wobbleGoalMover;
+    public Odometry odometry;
+    public Drivetrain drivetrain;
+    public IMU imu;
+    public Intake intake;
+    public Loader loader;
+    public Shooter shooter;
+    public Turret turret;
+    public WobbleGoalMover wobbleGoalMover;
 
     public void sleepMilliseconds(int milli){
         ElapsedTime timer = new ElapsedTime();
@@ -34,7 +34,17 @@ public abstract class ExpoOpMode extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         expo.initialize(this);
+
+        odometry = expo.odometry;
+        Drivetrain drivetrain = expo.drivetrain;
+        imu = expo.imu;
+        intake = expo.intake;
+        loader = expo.loader;
+        shooter = expo.shooter;
+        turret = expo.turret;
+        wobbleGoalMover = expo.wobbleGoalMover;
         waitForStart();
+        run();
     }
 
     public abstract void run() throws InterruptedException;

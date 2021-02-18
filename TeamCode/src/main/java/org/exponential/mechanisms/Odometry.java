@@ -16,7 +16,6 @@ public class Odometry implements Runnable, Mechanism {
     // so that the imu doesn't slow down the while loop too much
     public int iterationsPerIMURead = 0; // ratio of encoder reads to imu reads
     private int currentIterationsSinceIMURead = 0;
-    private double angleAccumulation = 0; // the change in angle from all encoder reads since the last imu read
 
     public DcMotorEx forwardLeftEnc;
     public DcMotorEx forwardRightEnc;
@@ -38,8 +37,9 @@ public class Odometry implements Runnable, Mechanism {
     public int lastRightEncPos;
     public int lastHoriEncPos;
 
-    double horiEncPerDegree = 31;
-    double vertEncPerDegree = 1; // TODO: change this when you get the value
+    public double horiEncPerDegree = 33;
+    public double vertLeftEncPerDegree = -137.342;
+    public double vertRightEncPerDegree = 157.898;
 
     ElapsedTime updateTimer;
 
@@ -52,6 +52,7 @@ public class Odometry implements Runnable, Mechanism {
     public Odometry(IMU imu) {
         this.imu = imu;
     }
+
     @Override
     public void initialize(LinearOpMode opMode) {
         /*forwardLeftEnc = opMode.hardwareMap.get(DcMotorEx.class, "leftOdometry");
@@ -79,6 +80,7 @@ public class Odometry implements Runnable, Mechanism {
         forwardRightEnc = rightEncoder;
         horizontalEnc = backEncoder;
     }
+
     @Override
     public void run() {
         while (opMode.opModeIsActive()) {
@@ -103,7 +105,7 @@ public class Odometry implements Runnable, Mechanism {
     }
 
     public double encToInch(double encoders) {
-        return 2*Math.PI*0.984252/8192 * encoders;
+        return 2 * Math.PI * 0.984252 / 8192 * encoders;
     }
 
     public void update() {
@@ -124,23 +126,29 @@ public class Odometry implements Runnable, Mechanism {
 
         // updates angle
         double changeInAngle;
-        if(currentIterationsSinceIMURead==iterationsPerIMURead){
+        if (currentIterationsSinceIMURead == iterationsPerIMURead) {
             currentIterationsSinceIMURead = 0;
             imu.update();
             changeInAngle = imu.angle - angle;
+            opMode.telemetry.addData("Angle Read Type: ", "IMU");
+
+            update(timeElapsed, changeInAngle, leftEncChange, rightEncChange, horiEncChange, true);
         } else {
             currentIterationsSinceIMURead++;
-            changeInAngle = (rightEncChange-leftEncChange) / (2*vertEncPerDegree) - angle;
+            changeInAngle = getAngleChange(leftEncChange, rightEncChange) - angle;
+
+            opMode.telemetry.addData("Angle Read Type: ", "Encoder");
+            update(timeElapsed, changeInAngle, leftEncChange, rightEncChange, horiEncChange, false);
         }
-        update(timeElapsed, changeInAngle, leftEncChange, rightEncChange, horiEncChange, true);
     }
+
     public void update(double timeElapsed, double changeInAngle, int leftEncChange, int rightEncChange, int horiEncChange, boolean imuAngleUpdate) {
 
         // updates position, velocity, and angle according to how much time has elapsed
         // currently in robot centric
         double[] changeInPos = new double[]{
                 encToInch(horiEncChange - horiEncPerDegree * changeInAngle),
-                encToInch((leftEncChange + rightEncChange) / 2)
+                encToInch(weightedAverage(leftEncChange, rightEncChange))
         };
 
         // changes to field centric displacement vector
@@ -168,11 +176,19 @@ public class Odometry implements Runnable, Mechanism {
         setPosition(Double.parseDouble(contents[0]), Double.parseDouble(contents[1]), Double.parseDouble(contents[2]));
     }
 
-    public void setPosition(double x, double y, double angle){
+    public void setPosition(double x, double y, double angle) {
         this.xPos = x;
         this.yPos = y;
         this.angle = angle;
         imu.angle = angle;
+    }
+
+    public double weightedAverage(int leftEncChange, int rightEncChange) {
+        return (vertRightEncPerDegree * leftEncChange - vertLeftEncPerDegree * rightEncChange) / (vertRightEncPerDegree - vertLeftEncPerDegree);
+    }
+
+    public double getAngleChange(int leftEncChange, int rightEncChange) {
+        return (rightEncChange - leftEncChange) / (vertRightEncPerDegree - vertLeftEncPerDegree);
     }
 
     public void offsetXPos(double dx) {

@@ -19,11 +19,11 @@ public class ArcOdometry extends Odometry {
         if (changeInAngle == 0) {
             changeInPos = new double[]{
                     encToInch(horiEncChange),
-                    encToInch((leftEncChange + rightEncChange) / 2)
+                    encToInch(weightedAverage(leftEncChange, rightEncChange))
             };
         } else {
-            double radius = Math.abs(encToInch(leftEncChange + rightEncChange) / (2 * Math.toRadians(changeInAngle)));
-            if (leftEncChange + rightEncChange > 0) {
+            double radius = Math.abs(encToInch(weightedAverage(leftEncChange, rightEncChange) / Math.toRadians(changeInAngle)));
+            if (weightedAverage(leftEncChange, rightEncChange) > 0) {
                 if (changeInAngle > 0) {
                     changeInPos = new double[]{
                             (radius * (Math.cos(Math.toRadians(Math.abs(changeInAngle))) - 1)),

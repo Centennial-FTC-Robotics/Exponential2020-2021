@@ -47,5 +47,9 @@ public abstract class ExpoOpMode extends LinearOpMode {
         run();
     }
 
+    public void setDrivetrainMotorToGamepad(){
+        expo.drivetrain.setPowerFieldCentric(gamepad1.left_stick_x, -gamepad1.left_stick_y, -gamepad1.right_stick_x);
+    }
+
     public abstract void run() throws InterruptedException;
 }

@@ -18,6 +18,8 @@ public class GetOdometryRatio extends ExpoOpMode {
             telemetry.addData("encoder change in angle: ", -(odometry.forwardRightEnc.getCurrentPosition() -
                     odometry.forwardLeftEnc.getCurrentPosition())
                     / (odometry.vertRightEncPerDegree - odometry.vertLeftEncPerDegree));
+            telemetry.addData("weighted average (in inches): ",
+                    odometry.encToInch(odometry.weightedAverage(-odometry.forwardLeftEnc.getCurrentPosition(), -odometry.forwardRightEnc.getCurrentPosition())));
             telemetry.update();
         }
     }

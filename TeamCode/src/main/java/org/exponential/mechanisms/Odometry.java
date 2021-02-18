@@ -14,7 +14,7 @@ import java.io.File;
 
 public class Odometry implements Runnable, Mechanism {
     // so that the imu doesn't slow down the while loop too much
-    public int iterationsPerIMURead = 0; // ratio of encoder reads to imu reads
+    public int iterationsPerIMURead = 100; // ratio of encoder reads to imu reads
     private int currentIterationsSinceIMURead = 0;
 
     public DcMotorEx forwardLeftEnc;
@@ -53,6 +53,9 @@ public class Odometry implements Runnable, Mechanism {
         this.imu = imu;
     }
 
+    // for testing
+    int imuUpdates = 0;
+    int encAngleUpdates = 0;
     @Override
     public void initialize(LinearOpMode opMode) {
         /*forwardLeftEnc = opMode.hardwareMap.get(DcMotorEx.class, "leftOdometry");
@@ -133,13 +136,17 @@ public class Odometry implements Runnable, Mechanism {
             opMode.telemetry.addData("Angle Read Type: ", "IMU");
 
             update(timeElapsed, changeInAngle, leftEncChange, rightEncChange, horiEncChange, true);
+            imuUpdates++;
+
         } else {
             currentIterationsSinceIMURead++;
-            changeInAngle = getAngleChange(leftEncChange, rightEncChange) - angle;
+            changeInAngle = getAngleChange(leftEncChange, rightEncChange);
 
             opMode.telemetry.addData("Angle Read Type: ", "Encoder");
             update(timeElapsed, changeInAngle, leftEncChange, rightEncChange, horiEncChange, false);
+            encAngleUpdates++;
         }
+        opMode.telemetry.addData("imu and enc updates: ", imuUpdates+", "+encAngleUpdates);
     }
 
     public void update(double timeElapsed, double changeInAngle, int leftEncChange, int rightEncChange, int horiEncChange, boolean imuAngleUpdate) {

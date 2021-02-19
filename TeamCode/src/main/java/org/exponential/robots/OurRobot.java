@@ -52,8 +52,8 @@ public class OurRobot implements Robot {
         loader.initialize(opMode);
         shooter = new Shooter();
         shooter.initialize(opMode);
-        wobbleGoalMover = new WobbleGoalMover();
-        wobbleGoalMover.initialize(opMode);
+        // wobbleGoalMover = new WobbleGoalMover();
+        // wobbleGoalMover.initialize(opMode);
         imu = new IMU();
         imu.initialize(opMode);
         odometry = new ArcOdometry(imu);

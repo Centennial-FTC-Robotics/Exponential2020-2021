@@ -14,7 +14,7 @@ import java.io.File;
 
 public class Odometry implements Runnable, Mechanism {
     // so that the imu doesn't slow down the while loop too much
-    public int iterationsPerIMURead = 100; // ratio of encoder reads to imu reads
+    public int iterationsPerIMURead = 0; // ratio of encoder reads to imu reads
     private int currentIterationsSinceIMURead = 0;
 
     public DcMotorEx forwardLeftEnc;
@@ -56,6 +56,7 @@ public class Odometry implements Runnable, Mechanism {
     // for testing
     int imuUpdates = 0;
     int encAngleUpdates = 0;
+
     @Override
     public void initialize(LinearOpMode opMode) {
         /*forwardLeftEnc = opMode.hardwareMap.get(DcMotorEx.class, "leftOdometry");
@@ -92,7 +93,7 @@ public class Odometry implements Runnable, Mechanism {
     }
 
     public double[] toFieldCentric(double robotX, double robotY) {
-        double angleRad = Math.toRadians(imu.angle);
+        double angleRad = Math.toRadians(angle);
         double centricX = robotX * Math.cos(angleRad - Math.PI / 2) - robotY * Math.sin(angleRad - Math.PI / 2);
         double centricY = robotY * Math.cos(angleRad - Math.PI / 2) + robotX * Math.sin(angleRad - Math.PI / 2);
 
@@ -100,7 +101,7 @@ public class Odometry implements Runnable, Mechanism {
     }
 
     public double[] toRobotCentric(double fieldX, double fieldY) {
-        double angleRad = Math.toRadians(imu.angle);
+        double angleRad = Math.toRadians(angle);
         double robotX = fieldX * Math.cos(-angleRad + Math.PI / 2) - fieldY * Math.sin(-angleRad + Math.PI / 2);
         double robotY = fieldY * Math.cos(-angleRad + Math.PI / 2) + fieldX * Math.sin(-angleRad + Math.PI / 2);
 
@@ -111,6 +112,7 @@ public class Odometry implements Runnable, Mechanism {
         return 2 * Math.PI * 0.984252 / 8192 * encoders;
     }
 
+    double previousIMUAngle = 0;
     public void update() {
         double timeElapsed = updateTimer.seconds();
         updateTimer.reset();
@@ -132,21 +134,22 @@ public class Odometry implements Runnable, Mechanism {
         if (currentIterationsSinceIMURead == iterationsPerIMURead) {
             currentIterationsSinceIMURead = 0;
             imu.update();
-            changeInAngle = imu.angle - angle;
-            opMode.telemetry.addData("Angle Read Type: ", "IMU");
+            changeInAngle = IMU.normalize(imu.angle - angle);
 
             update(timeElapsed, changeInAngle, leftEncChange, rightEncChange, horiEncChange, true);
             imuUpdates++;
-
         } else {
             currentIterationsSinceIMURead++;
             changeInAngle = getAngleChange(leftEncChange, rightEncChange);
-
-            opMode.telemetry.addData("Angle Read Type: ", "Encoder");
+            imu.update();
+            double imuChangeInAngle = IMU.normalize(imu.angle - previousIMUAngle);
+            previousIMUAngle = imu.angle;
+            opMode.telemetry.addData("Angle change (encoders): ", changeInAngle);
+            opMode.telemetry.addData("Angle change (IMU): ", imuChangeInAngle);
             update(timeElapsed, changeInAngle, leftEncChange, rightEncChange, horiEncChange, false);
             encAngleUpdates++;
         }
-        opMode.telemetry.addData("imu and enc updates: ", imuUpdates+", "+encAngleUpdates);
+        opMode.telemetry.addData("imu and enc updates: ", imuUpdates + ", " + encAngleUpdates);
     }
 
     public void update(double timeElapsed, double changeInAngle, int leftEncChange, int rightEncChange, int horiEncChange, boolean imuAngleUpdate) {

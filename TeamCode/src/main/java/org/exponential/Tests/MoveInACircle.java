@@ -13,7 +13,6 @@ import org.exponential.mechanisms.parametricEQ.State;
 import org.exponential.robots.OurRobot;
 
 import java.io.IOException;
-@Disabled
 @Autonomous
 public class MoveInACircle extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
@@ -34,15 +33,15 @@ public class MoveInACircle extends LinearOpMode {
 
             @Override
             public State getStateAtTime(double t) {
-                double period = 5;
-                double radius = 20;
+                double period = 20;
+                double radius = 30;
                 State returned = new State();
                 returned.fieldX = radius * Math.cos(t / period * Math.PI * 2);
                 returned.fieldY = radius * Math.sin(t / period * Math.PI * 2);
-                returned.angle = 360*t/period;
-                returned.velX = -radius * Math.sin(t / period * Math.PI * 2) / period * Math.PI * 2;
-                returned.velY = radius * Math.cos(t / period * Math.PI * 2) / period * Math.PI * 2;
-                returned.angleVel = 360 / period  + 90;
+                returned.angle = 0; // 360*t/period;
+                returned.velX = 0; // -radius * Math.sin(t / period * Math.PI * 2) / period * Math.PI * 2;
+                returned.velY = 0; // radius * Math.cos(t / period * Math.PI * 2) / period * Math.PI * 2;
+                returned.angleVel = 0; //360 / period  + 90;
 
 
                 return returned;

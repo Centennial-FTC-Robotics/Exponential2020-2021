@@ -134,7 +134,7 @@ public class Drivetrain implements Mechanism {
             disY = (targetY - positioning.yPos);
 
             // angle PID calculations
-            disAngle = IMU.normalize(targetAngle - imu.angle);
+            disAngle = IMU.normalize(targetAngle - positioning.angle);
             areaAngle = disAngle * intervalTime;
             velAngle = disAngle / intervalTime;
 

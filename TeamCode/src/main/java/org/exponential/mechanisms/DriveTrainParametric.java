@@ -1,6 +1,7 @@
 package org.exponential.mechanisms;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 
 import org.exponential.mechanisms.parametricEQ.ParametricEq;
@@ -14,18 +15,18 @@ public class DriveTrainParametric extends Drivetrain {
     // with motion profiling
 
     // feedforward constants
-    public final static double xVelMax = 59.17; // inch per sec per motor power
-    public final static double yVelMax = 63.016; // inch per sec per motor power
-    public final static double rotate = 404.76; // degrees per sec per motor power
-    public final static double xAccelMax = 1761.22334; // inch per sec^2
-    public final static double yAccelMax = 2459.2876; // inch per sec^2
+    public final static double xVelMax = 29.84; // inch per sec per motor power
+    public final static double yVelMax = 48.96; // inch per sec per motor power
+    public final static double rotate = 185.52; // degrees per sec per motor power
+    public final static double xAccelMax = 1230.392; // inch per sec^2
+    public final static double yAccelMax = 2290.862; // inch per sec^2
 
     // feedback constants
-    private final static double KPBACK = 0.5;
-    private final static double KIBACK = 0.1;
+    private final static double KPBACK = 7;
+    private final static double KIBACK = 1;
     private final static double KDBACK = 0;
-    private final static double KPBACKANGLE = 0.5;
-    private final static double KIBACKANGLE = 0.1;
+    private final static double KPBACKANGLE = 5;
+    private final static double KIBACKANGLE = 1;
     private final static double KDBACKANGLE = 0;
 
     public DriveTrainParametric(Odometry positioning) {
@@ -67,10 +68,23 @@ public class DriveTrainParametric extends Drivetrain {
             double distance = Math.sqrt(Math.pow(disX, 2) + Math.pow(disY, 2));
             areaDis += distance * intervalTime;
 
+            if (distance < 5) {
+                areaDis = Range.clip(areaDis, 0, 10);
+            }
+            if(distance<2){
+                areaDis = 0;
+            }
             // Angle PID calculations
-            disAngle = IMU.normalize(targetState.angle - imu.angle);
+            disAngle = IMU.normalize(targetState.angle - positioning.angle);
             areaAngle = disAngle * intervalTime;
             velAngle = disAngle / intervalTime;
+            if (Math.abs(disAngle) > 90) {
+                areaAngle = Range.clip(areaAngle, -1, 1);
+            }
+            if(Math.abs(disAngle)<5){
+                areaAngle = 0;
+            }
+
 
             // Feedback portion
             double xNew = KPBACK * disX + KDBACK * velX;
@@ -78,8 +92,8 @@ public class DriveTrainParametric extends Drivetrain {
             double angleNew = KPBACKANGLE * disAngle + KIBACKANGLE * areaAngle + KDBACKANGLE * velAngle;
             if (distance > 0) {
                 // prevents a divide by 0
-                xNew += areaDis * (disX) / distance;
-                yNew += areaDis * (disY) / distance;
+                xNew += KIBACK * areaDis * (disX) / distance;
+                yNew += KIBACK * areaDis * (disY) / distance;
             }
 
             // Feedforward portion
@@ -93,11 +107,13 @@ public class DriveTrainParametric extends Drivetrain {
             opMode.telemetry.addData("X: ", positioning.xPos);
             opMode.telemetry.addData("Y: ", positioning.yPos);
             opMode.telemetry.addData("Angle: ", positioning.angle);
+            opMode.telemetry.addData("Area: ", areaDis);
+            opMode.telemetry.addData("Area Angle: ", areaAngle);
             opMode.telemetry.addData("Dis X: ", disX);
             opMode.telemetry.addData("Dis Y: ", disY);
             opMode.telemetry.addData("Dis Angle: ", disAngle);
 
-            // opMode.telemetry.update();
+            opMode.telemetry.update();
         }
     }
 

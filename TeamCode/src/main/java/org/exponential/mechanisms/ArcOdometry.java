@@ -16,7 +16,7 @@ public class ArcOdometry extends Odometry {
         // currently in robot centric
         double[] changeInPos;
 
-        if (changeInAngle == 0) {
+        if (Math.abs(changeInAngle) <= 0) {
             changeInPos = new double[]{
                     encToInch(horiEncChange),
                     encToInch(weightedAverage(leftEncChange, rightEncChange))

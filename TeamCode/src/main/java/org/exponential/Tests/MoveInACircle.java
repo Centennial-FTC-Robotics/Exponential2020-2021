@@ -34,7 +34,7 @@ public class MoveInACircle extends LinearOpMode {
 
             @Override
             public State getStateAtTime(double t) {
-                double period = 5;
+                double period = 10;
                 double radius = 20;
                 State returned = new State();
                 returned.fieldX = radius * Math.cos(t / period * Math.PI * 2);

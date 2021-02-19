@@ -24,7 +24,7 @@ public abstract class ExpoOpMode extends LinearOpMode {
     public Turret turret;
     public WobbleGoalMover wobbleGoalMover;
 
-    public void sleepMilliseconds(int milli){
+    public void sleepMilliSeconds(int milli){
         ElapsedTime timer = new ElapsedTime();
         while(milli > timer.milliseconds()){
             odometry.update();

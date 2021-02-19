@@ -42,7 +42,7 @@ public class StraightLine extends ParametricEq {
 
 
         // angle of displacement vector from the robot's perspective
-        double robotDisplacementAngle = Math.atan2(targetY - startY, targetX - startX) - targetAngle + 90;
+        double robotDisplacementAngle = Math.toDegrees(Math.atan2(targetY - startY, targetX - startX)) - targetAngle + 90;
         robotDisplacementAngle = Math.toRadians(robotDisplacementAngle);
         double max = Math.max(
                 Math.abs(Math.sin(robotDisplacementAngle) / yAccelMax - Math.cos(robotDisplacementAngle) / xAccelMax),
@@ -55,10 +55,11 @@ public class StraightLine extends ParametricEq {
                 yVelMax / max * Math.sin(robotDisplacementAngle)};
 
         // field centric
-        accel = rotateCounterClock(accel[0], accel[1], robotDisplacementAngle - Math.PI / 2);
+        accel = rotateCounterClock(accel[0], accel[1], Math.toRadians(targetAngle) - Math.PI / 2);
+
         xFieldAccel = accel[0];
         yFieldAccel = accel[1];
-        maxVel = rotateCounterClock(maxVel[0], maxVel[1], robotDisplacementAngle - Math.PI / 2);
+        maxVel = rotateCounterClock(maxVel[0], maxVel[1], Math.toRadians(targetAngle) - Math.PI / 2);
         xMaxVel = maxVel[0];
         yMaxVel = maxVel[1];
 

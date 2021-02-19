@@ -15,18 +15,18 @@ public class DriveTrainParametric extends Drivetrain {
     // with motion profiling
 
     // feedforward constants
-    public final static double xVelMax = 29.84; // inch per sec per motor power
+    public final static double xVelMax = 40; // inch per sec per motor power
     public final static double yVelMax = 48.96; // inch per sec per motor power
-    public final static double rotate = 185.52; // degrees per sec per motor power
+    public final static double rotate = 380; // degrees per sec per motor power
     public final static double xAccelMax = 1230.392; // inch per sec^2
     public final static double yAccelMax = 2290.862; // inch per sec^2
 
     // feedback constants
     private final static double KPBACK = 7;
-    private final static double KIBACK = 1;
+    private final static double KIBACK = 1.5;
     private final static double KDBACK = 0;
-    private final static double KPBACKANGLE = 5;
-    private final static double KIBACKANGLE = 1;
+    private final static double KPBACKANGLE = 10;
+    private final static double KIBACKANGLE = 2;
     private final static double KDBACKANGLE = 0;
 
     public DriveTrainParametric(Odometry positioning) {
@@ -66,14 +66,16 @@ public class DriveTrainParametric extends Drivetrain {
             velX = disX / intervalTime;
             velY = disY / intervalTime;
             double distance = Math.sqrt(Math.pow(disX, 2) + Math.pow(disY, 2));
-            areaDis += distance * intervalTime;
+            if(disX*targetState.velX+disY*targetState.velY > 0){
+                // robot is behind the target position
+                areaDis+=intervalTime*distance;
 
-            if (distance < 5) {
-                areaDis = Range.clip(areaDis, 0, 10);
-            }
-            if(distance<2){
+            } else {
+                // robot is in front of the target position
                 areaDis = 0;
             }
+            areaDis += distance * intervalTime;
+
             // Angle PID calculations
             disAngle = IMU.normalize(targetState.angle - positioning.angle);
             areaAngle = disAngle * intervalTime;
@@ -82,7 +84,7 @@ public class DriveTrainParametric extends Drivetrain {
                 areaAngle = Range.clip(areaAngle, -1, 1);
             }
             if(Math.abs(disAngle)<5){
-                areaAngle = 0;
+                areaAngle = Range.clip(areaAngle, -0.5, 0.5);
             }
 
 
@@ -115,6 +117,10 @@ public class DriveTrainParametric extends Drivetrain {
 
             opMode.telemetry.update();
         }
+        State targetState = equation.getStateAtTime(timer.seconds());
+        super.moveTo(targetState.fieldX, targetState.fieldY, targetState.angle);
+        performBrake();
+
     }
 
 

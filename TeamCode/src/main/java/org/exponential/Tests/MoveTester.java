@@ -22,7 +22,7 @@ public class MoveTester extends LinearOpMode {
         expo.odometry = new ArcOdometry(expo.imu);
         expo.odometry.initialize(this);
         expo.odometry.setPosition(0,0,0);
-        expo.drivetrain = new Drivetrain(expo.odometry);
+        expo.drivetrain = new DriveTrainParametric(expo.odometry);
         expo.drivetrain.initialize(this);
 
         double[] target = new double[3];

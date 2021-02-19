@@ -164,7 +164,7 @@ public class StraightLine extends ParametricEq {
 
     @Override
     public boolean moveOn(double currentX, double currentY, double currentAngle, double velX, double velY, double velAngle) {
-        return Math.sqrt(Math.pow(targetX - currentX, 2) + Math.pow(targetY - currentY, 2)) < 0.5;
+        return Math.sqrt(Math.pow(targetX - currentX, 2) + Math.pow(targetY - currentY, 2)) < 1;
     }
 
 

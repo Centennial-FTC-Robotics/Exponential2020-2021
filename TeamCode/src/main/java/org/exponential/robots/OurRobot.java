@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.exponential.mechanisms.ArcOdometry;
 import org.exponential.mechanisms.CameraOpenCV;
+import org.exponential.mechanisms.DriveTrainParametric;
 import org.exponential.mechanisms.Drivetrain;
 import org.exponential.mechanisms.IMU;
 import org.exponential.mechanisms.ImprovedArcOdometry;
@@ -65,7 +66,7 @@ public class OurRobot implements Robot {
         odometry = new ImprovedArcOdometry(imu);
         odometry.initialize(opMode);
 
-        drivetrain = new Drivetrain(odometry);
+        drivetrain = new DriveTrainParametric(odometry);
         drivetrain.initialize(opMode);
 
         turret = new Turret(drivetrain);

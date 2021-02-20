@@ -5,11 +5,11 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class CubicSpline extends ParametricEq {
-    static class CubicSplinePoint {
+    public static class CubicSplinePoint {
         State state;
         double time;
 
-        CubicSplinePoint(State state, double time) {
+        public CubicSplinePoint(State state, double time) {
             this.state = state;
             this.time = time;
         }
@@ -40,8 +40,8 @@ public class CubicSpline extends ParametricEq {
             return a * sec * sec * sec + b * sec * sec + c * sec + d;
         }
 
-        public double velAt(double sec){
-            return 3*a*sec*sec+2*b*sec+c;
+        public double velAt(double sec) {
+            return 3 * a * sec * sec + 2 * b * sec + c;
         }
     }
 
@@ -60,15 +60,15 @@ public class CubicSpline extends ParametricEq {
             angle = new Cubic(start.state.angle, start.state.angleVel, start.time, end.state.angle, end.state.angleVel, end.time);
         }
 
-        public State getStateAtTime(double t){
+        public State getStateAtTime(double t) {
             State theState = new State();
 
-            theState.fieldX=x.valueAt(t);
-            theState.fieldY=y.valueAt(t);
-            theState.angle=angle.valueAt(t);
-            theState.velX=x.velAt(t);
-            theState.velY=y.velAt(t);
-            theState.angleVel=angle.velAt(t);
+            theState.fieldX = x.valueAt(t);
+            theState.fieldY = y.valueAt(t);
+            theState.angle = angle.valueAt(t);
+            theState.velX = x.velAt(t);
+            theState.velY = y.velAt(t);
+            theState.angleVel = angle.velAt(t);
             return theState;
 
         }
@@ -80,24 +80,24 @@ public class CubicSpline extends ParametricEq {
     SplineSegment current;
     boolean endedPath = false;
 
-    CubicSpline(ArrayList<CubicSplinePoint> states) {
+    public CubicSpline(ArrayList<CubicSplinePoint> states) {
         // assumes the points are ordered from most recent to latest
-        for(int i=0; i<states.size()-1; i++){
-            segments.push(new SplineSegment(states.get(i), states.get(i+1)));
+        for (int i = 0; i < states.size() - 1; i++) {
+            segments.add(new SplineSegment(states.get(i), states.get(i + 1)));
         }
-        current = segments.pop();
-        end = states.get(states.size()-1);
+        current = segments.remove();
+        end = states.get(states.size() - 1);
     }
 
     @Override
     public State getStateAtTime(double t) {
-        if(t<=end.time){
-            while(current.endTime<t){
-                current=segments.pop();
+        if (t <= end.time) {
+            while (current.endTime < t) {
+                current = segments.remove();
             }
             return current.getStateAtTime(t);
         } else {
-            endedPath=true;
+            endedPath = true;
             return end.state;
         }
     }

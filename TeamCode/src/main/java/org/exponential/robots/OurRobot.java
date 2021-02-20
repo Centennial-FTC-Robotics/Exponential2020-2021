@@ -7,6 +7,7 @@ import org.exponential.mechanisms.ArcOdometry;
 import org.exponential.mechanisms.CameraOpenCV;
 import org.exponential.mechanisms.Drivetrain;
 import org.exponential.mechanisms.IMU;
+import org.exponential.mechanisms.ImprovedArcOdometry;
 import org.exponential.mechanisms.Intake;
 import org.exponential.mechanisms.Loader;
 import org.exponential.mechanisms.Odometry;
@@ -48,16 +49,22 @@ public class OurRobot implements Robot {
         this.opMode = opMode;
         // camera = new CameraOpenCV();
         camera.initialize(opMode);
+
         loader = new Loader();
         loader.initialize(opMode);
+
         shooter = new Shooter();
         shooter.initialize(opMode);
+
         // wobbleGoalMover = new WobbleGoalMover();
         // wobbleGoalMover.initialize(opMode);
+
         imu = new IMU();
         imu.initialize(opMode);
-        odometry = new ArcOdometry(imu);
+
+        odometry = new ImprovedArcOdometry(imu);
         odometry.initialize(opMode);
+
         drivetrain = new Drivetrain(odometry);
         drivetrain.initialize(opMode);
 

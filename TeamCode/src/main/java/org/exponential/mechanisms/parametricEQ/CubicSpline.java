@@ -104,9 +104,6 @@ public class CubicSpline extends ParametricEq {
 
     @Override
     public boolean moveOn(double currentX, double currentY, double currentAngle, double velX, double velY, double velAngle) {
-        if(endedPath){
-            return Math.sqrt(Math.pow(end.state.fieldX - currentX, 2) + Math.pow(end.state.fieldY - currentY, 2)) < 0.5;
-        }
-        return false;
+        return endedPath;
     }
 }

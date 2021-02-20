@@ -2,6 +2,7 @@ package org.exponential.mechanisms.parametricEQ;
 
 
 import org.exponential.mechanisms.DriveTrainParametric;
+import org.exponential.mechanisms.IMU;
 
 public class StraightLine extends ParametricEq {
     // parametric equation to go at a percentage of the fastest theoretical path
@@ -16,6 +17,7 @@ public class StraightLine extends ParametricEq {
     private double targetY;
     private double startX;
     private double startY;
+    private double startAngle;
 
 
     private boolean hitsMaxSpeed;
@@ -39,6 +41,7 @@ public class StraightLine extends ParametricEq {
         this.targetX = targetX;
         this.targetY = targetY;
         this.targetAngle = targetAngle;
+        this.startAngle = startAngle;
 
 
         // angle of displacement vector from the robot's perspective
@@ -98,7 +101,17 @@ public class StraightLine extends ParametricEq {
     public State getStateAtTime(double t) {
         State theState = new State();
         theState.angle = targetAngle;
-        theState.angleVel = 0;
+
+        // sets the rotation velocity (not really that mathematically correct, more like eyeballing it)
+        if(Math.abs(IMU.normalize(targetAngle-startAngle)) / DriveTrainParametric.rotate > t){
+            if(IMU.normalize(targetAngle-startAngle)>0){
+                theState.angleVel = DriveTrainParametric.rotate/2;
+            } else {
+                theState.angleVel = -DriveTrainParametric.rotate/2;
+            }
+        } else {
+            theState.angleVel = 0;
+        }
         if (hitsMaxSpeed) {
             if (t < accelTime) {
                 // speeding up

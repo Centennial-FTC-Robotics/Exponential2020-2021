@@ -29,14 +29,20 @@ public class GetOdometryRatio extends ExpoOpMode {
             previousRightEnc = currentRight;
 
             // telemetry.addData("horizontal enc per degree: ",  changeHori/ imu.angle);
-            telemetry.addData("imu angle: ", imu.angle);
+            /*telemetry.addData("imu angle: ", imu.angle);
             telemetry.addData("encoder angle: ", (odometry.forwardLeftEnc.getCurrentPosition() - odometry.forwardRightEnc.getCurrentPosition())
                     / ((odometry.vertRightEncPerDegree - odometry.vertLeftEncPerDegree)));
             telemetry.addData("imu change in angle: ", imu.angle - pastIMUAngle);
             telemetry.addData("encoder change in angle: ", -(changeRight - changeLeft)
                     / (odometry.vertRightEncPerDegree - odometry.vertLeftEncPerDegree));
             // telemetry.addData("weighted average (in inches): ",
-            //         odometry.encToInch(odometry.weightedAverage(changeLeft, changeRight)));
+            //         odometry.encToInch(odometry.weightedAverage(changeLeft, changeRight)));*/
+            telemetry.addData("left odometry enc ratio: ", odometry.forwardLeftEnc.getCurrentPosition()/imu.angle);
+            telemetry.addData("right odometry enc ratio: ", odometry.forwardRightEnc.getCurrentPosition()/imu.angle);
+            telemetry.addData("hori odometry enc ratio: ", odometry.horizontalEnc.getCurrentPosition()/imu.angle);
+
+
+
             telemetry.update();
             pastIMUAngle = imu.angle;
             sleep(100);

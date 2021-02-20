@@ -37,9 +37,9 @@ public class Odometry implements Runnable, Mechanism {
     public int lastRightEncPos;
     public int lastHoriEncPos;
 
-    public double horiEncPerDegree = 33;
-    public double vertLeftEncPerDegree = -137.342;
-    public double vertRightEncPerDegree = 157.898;
+    public double horiEncPerDegree = 38.90;
+    public double vertLeftEncPerDegree = -133.96;
+    public double vertRightEncPerDegree = 161.28;
 
     ElapsedTime updateTimer;
 

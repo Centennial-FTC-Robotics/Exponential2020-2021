@@ -5,40 +5,41 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.exponential.robots.OurRobot;
+import org.exponential.utility.Log;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@TeleOp(name = "FieldCentricTeleOp", group = "TeleOp")
-public class FieldCentricTeleOp extends LinearOpMode {
+@TeleOp(name = "Recordteleop", group = "TeleOp")
+public class RecordTeleop extends LinearOpMode {
     private double initialAngle;
     private double currentAngle;
-    ElapsedTime wobbleToggleTimer = new ElapsedTime();
-    boolean wobbleState = true;
-    double shooterInaccuracy = 0;
-    ElapsedTime shooterTimer = new ElapsedTime();
+
     double headingRotationPower = 0;
 
     private OurRobot robot;
 
     @Override
     public void runOpMode() throws InterruptedException {
+        Log log = new Log("sampleTeleopRecord", true);
         waitForStart();
 
         robot = new OurRobot();
         robot.initialize(this);
         //comment out this line for non transition (testing) purposes
-        robot.loadPositions();
-
+        //robot.loadPositions();
 
         //comment out the following line for auto to teleop transitions
-        //robot.odometry.setPosition(0, 0, 90);
+        robot.odometry.setPosition(0, 0, 90);
 
         initialAngle = robot.odometry.getAngle() + 270;  // +270 so that the controls are field centric from the red drivers' perspective
 
         robot.setUpServos();
         boolean raised = true;
         boolean clamped = true;
+        boolean paused = false;
+
+        log.start();
         while (opModeIsActive()) {
             robot.odometry.update();
             currentAngle = robot.odometry.getAngle();
@@ -52,13 +53,33 @@ public class FieldCentricTeleOp extends LinearOpMode {
             double inputRightX = .4 * gamepad1.right_stick_x;
             double inputRightY = .4 * gamepad1.right_stick_y;
             double reductionFactor = .5;
+
+            //data added: leftX,leftY,rightX,rightY,a,b,x,y,leftTrig,rightTrig,leftBump,rightBump,dpadR,dpadU,dpadL,dpadD
+            log.addData(inputLeftX);
+            log.addData(inputLeftY);
+            log.addData(inputRightX);
+            log.addData(inputRightY);
+            log.addData(gamepad1.a);
+            log.addData(gamepad1.b);
+            log.addData(gamepad1.x);
+            log.addData(gamepad1.y);
+            log.addData(gamepad1.left_trigger);
+            log.addData(gamepad1.right_trigger);
+            log.addData(gamepad1.left_bumper);
+            log.addData(gamepad1.right_bumper);
+            log.addData(gamepad1.dpad_right);
+            log.addData(gamepad1.dpad_up);
+            log.addData(gamepad1.dpad_left);
+            log.addData(gamepad1.dpad_down);
+            log.update();
+
             // halve values
-            if (gamepad1.left_bumper) {
+            /*if (gamepad1.left_bumper) {  // commented out because of control conflict
                 inputLeftX *= reductionFactor;
                 inputLeftY *= reductionFactor;
                 inputRightX *= reductionFactor;
                 inputRightY *= reductionFactor;
-            }
+            }*/
 
             double theta = currentAngle - initialAngle;
             double rotatedX = inputLeftX * Math.cos(Math.toRadians(theta)) - inputLeftY * Math.sin(Math.toRadians(theta));
@@ -73,127 +94,42 @@ public class FieldCentricTeleOp extends LinearOpMode {
                 //robot.intake.setPowerInput(0);
                 robot.intake.stop();
             }
-
             if (gamepad1.dpad_up) {
-                robot.wobbleGoalMover.raise();
+                robot.wobbleGoalMover.pickupGoal();
             } else if (gamepad1.dpad_down) {
-                robot.wobbleGoalMover.release();
-                sleep(50);
-                robot.wobbleGoalMover.lower();
-            } else if (gamepad1.dpad_right) {
-                if (clamped) {
-                    robot.wobbleGoalMover.release();
-                } else {
-                    robot.wobbleGoalMover.clamp();
-                }
-                clamped = !clamped;
-                sleep(250);
+                robot.wobbleGoalMover.placeGoal();
             }
 
-            if (gamepad2.dpad_right) {
-                robot.odometry.offsetXPos(-2);
-                sleep(150);
-            } else if (gamepad2.dpad_left) {
-                robot.odometry.offsetXPos(2);
-                sleep(150);
-            } else if (gamepad2.dpad_up) {
-                robot.odometry.offsetYPos(-1);
-                sleep(150);
-            } else if (gamepad2.dpad_down) {
-                robot.odometry.offsetYPos(1);
-                sleep(150);
-            }
-
-            /*if (gamepad1.x) { //towards back
-                Runnable myRunnable = new Runnable(){
-                            public void run(){
-                                robot.drivetrain.turnTo(-90);  //(270)
-                            }};
-                Thread thread = new Thread(myRunnable);
-                thread.start();
-            } else if (gamepad1.b) { //towards goals
-                Runnable myRunnable = new Runnable(){
-                    public void run(){
-                        robot.drivetrain.turnTo(90);  //(270)
-                    }};
-                Thread thread = new Thread(myRunnable);
-                thread.start();
-            } else if (gamepad1.a && !gamepad1.start) { //towards drivers
-                Runnable myRunnable = new Runnable(){
-                    public void run(){
-                        robot.drivetrain.turnTo(0);  //(270)
-                    }};
-                Thread thread = new Thread(myRunnable);
-                thread.start();
-            } else if (gamepad1.y) { // away from drivers
-                Runnable myRunnable = new Runnable(){
-                    public void run(){
-                        robot.drivetrain.turnTo(180);  //(270)
-                    }};
-                Thread thread = new Thread(myRunnable);
-                thread.start();
-            }*/
-
-            if (gamepad1.x) {
-                headingRotationPower = robot.headingRotation(-90);
-            } else if (gamepad1.y) {
-                headingRotationPower = robot.headingRotation (180);
-            } else if (gamepad1.a) {
-                headingRotationPower = robot.headingRotation(0);
-            } else if (gamepad1.b) {
-                headingRotationPower = robot.headingRotation (90);
-            }
-            /*if (gamepad2.b && !gamepad2.start) {
-                //robot.shootAtHighGoal("red");
-                robot.drivetrain.moveTo(44, 0, 270);
-                robot.drivetrain.turnTo(270);
-
-            }*/ //we already have another thing for b so I commented this out -John
             //Triple shot
-            if (gamepad2.y) {
+            if (gamepad1.a) {
                 robot.loadAndUnloadAllRings();
             }
             //single shot
             if(gamepad2.x) {
                 robot.loader.loadAndUnload();
             }
-            if (gamepad2.a) {
+            if (gamepad1.x) {
                 robot.shootAtPowerShotTargets("red");
             }
-            if (gamepad2.b) {
+            if (gamepad1.b) {
                 robot.shootAtHighGoal("red");
             }
             /*if (gamepad1.right_bumper) {
                 robot.scoreWobbleGoal("red");
             }*/
-            if (gamepad2.right_bumper) {
+            if (gamepad1.right_bumper) {
                 robot.shooter.shootAtHighGoal();
-            } else if (gamepad2.left_trigger > 0) {
+            } else if (gamepad1.left_bumper) {
                 robot.shooter.shootAtPowerShot();
             } else {
                 robot.shooter.stopShooting();
             }
 
-/*
-            if (gamepad2.dpad_up) {
-                 // aim at high goal
-                robot.drivetrain.moveTo(36, -6, 270);
-
-            } else if (gamepad2.dpad_left) { //left power shot
-                robot.drivetrain.moveTo(2, -6, 270);
-
-            } else if (gamepad2.dpad_down) { //center power shot
-                robot.drivetrain.moveTo(9.5, -6, 270);
-
-            } else if (gamepad2.dpad_right) { //right power shot
-                robot.drivetrain.moveTo(17, -6, 270);
-
-            }*/
-
             telemetry.update();
 
-            robot.drivetrain.setPowerDriveMotors(getMotorPowers(rotatedX, rotatedY, inputRightX + headingRotationPower));
+            robot.drivetrain.setPowerDriveMotors(getMotorPowers(rotatedX, rotatedY, inputRightX));
         }
+        log.close();
         robot.odometry.savePosition();
     }
 

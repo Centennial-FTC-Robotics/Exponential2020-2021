@@ -164,7 +164,7 @@ public class RedRightPath extends LinearOpMode {
     public void sleep(int ms) {
         ElapsedTime timer = new ElapsedTime();
         while (timer.milliseconds() < ms) {
-            //robot.odometry.update();
+            robot.odometry.update();
         }
     }
 }

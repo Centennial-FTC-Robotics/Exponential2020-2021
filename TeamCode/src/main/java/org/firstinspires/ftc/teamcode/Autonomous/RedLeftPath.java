@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.exponential.mechanisms.CameraOpenCV;
 import org.exponential.robots.OurRobot;
 
+@Disabled
 @Autonomous(group="Autonomous", name="RedLeftPath")
 public class RedLeftPath extends LinearOpMode {
     OurRobot ourRobot;

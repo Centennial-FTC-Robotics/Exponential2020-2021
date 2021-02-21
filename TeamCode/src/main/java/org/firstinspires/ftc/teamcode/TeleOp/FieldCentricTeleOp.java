@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -9,8 +10,10 @@ import org.exponential.robots.OurRobot;
 import java.util.HashMap;
 import java.util.Map;
 
+@Disabled
 @TeleOp(name = "FieldCentricTeleOp", group = "TeleOp")
 public class FieldCentricTeleOp extends LinearOpMode {
+    String side;
     private double initialAngle;
     private double currentAngle;
     ElapsedTime wobbleToggleTimer = new ElapsedTime();
@@ -34,8 +37,11 @@ public class FieldCentricTeleOp extends LinearOpMode {
         //comment out the following line for auto to teleop transitions
         //robot.odometry.setPosition(0, 0, 90);
 
-        initialAngle = robot.odometry.getAngle() + 270;  // +270 so that the controls are field centric from the red drivers' perspective
-
+        if (side.equals("red")) {
+            initialAngle = robot.odometry.getAngle() + 270;  // +270 so that the controls are field centric from the red drivers' perspective
+        } else {
+            initialAngle = robot.odometry.getAngle() + 90;
+        }
         robot.setUpServos();
         boolean raised = true;
         boolean clamped = true;
@@ -144,7 +150,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
                 headingRotationPower = robot.headingRotation (90);
             }
             /*if (gamepad2.b && !gamepad2.start) {
-                //robot.shootAtHighGoal("red");
+                //robot.shootAtHighGoal(side);
                 robot.drivetrain.moveTo(44, 0, 270);
                 robot.drivetrain.turnTo(270);
 
@@ -158,13 +164,13 @@ public class FieldCentricTeleOp extends LinearOpMode {
                 robot.loader.loadAndUnload();
             }
             if (gamepad2.a) {
-                robot.shootAtPowerShotTargets("red");
+                robot.shootAtPowerShotTargets(side);
             }
             if (gamepad2.b) {
-                robot.shootAtHighGoal("red");
+                robot.shootAtHighGoal(side);
             }
             /*if (gamepad1.right_bumper) {
-                robot.scoreWobbleGoal("red");
+                robot.scoreWobbleGoal(side);
             }*/
             if (gamepad2.right_bumper) {
                 robot.shooter.shootAtHighGoal();

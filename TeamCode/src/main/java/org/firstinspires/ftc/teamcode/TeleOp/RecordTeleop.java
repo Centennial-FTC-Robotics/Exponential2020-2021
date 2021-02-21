@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -10,8 +11,10 @@ import org.exponential.utility.Log;
 import java.util.HashMap;
 import java.util.Map;
 
+@Disabled
 @TeleOp(name = "Recordteleop", group = "TeleOp")
 public class RecordTeleop extends LinearOpMode {
+    String side;
     private double initialAngle;
     private double currentAngle;
 
@@ -26,13 +29,15 @@ public class RecordTeleop extends LinearOpMode {
 
         robot = new OurRobot();
         robot.initialize(this);
-        //comment out this line for non transition (testing) purposes
-        //robot.loadPositions();
 
-        //comment out the following line for auto to teleop transitions
-        robot.odometry.setPosition(0, 0, 90);
+        if (side.equals("red")) {
+            robot.odometry.setPosition(48, -63, 180);
+            initialAngle = robot.odometry.getAngle() + 270;  // +270 so that the controls are field centric from the red drivers' perspective
+        } else {
+            robot.odometry.setPosition(-48, -63, 180);
+            initialAngle = robot.odometry.getAngle() + 90;
 
-        initialAngle = robot.odometry.getAngle() + 270;  // +270 so that the controls are field centric from the red drivers' perspective
+        }
 
         robot.setUpServos();
         boolean raised = true;
@@ -109,13 +114,13 @@ public class RecordTeleop extends LinearOpMode {
                 robot.loader.loadAndUnload();
             }
             if (gamepad1.x) {
-                robot.shootAtPowerShotTargets("red");
+                robot.shootAtPowerShotTargets(side);
             }
             if (gamepad1.b) {
-                robot.shootAtHighGoal("red");
+                robot.shootAtHighGoal(side);
             }
             /*if (gamepad1.right_bumper) {
-                robot.scoreWobbleGoal("red");
+                robot.scoreWobbleGoal(side);
             }*/
             if (gamepad1.right_bumper) {
                 robot.shooter.shootAtHighGoal();

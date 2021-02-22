@@ -41,7 +41,7 @@ public class SplineTest extends ExpoOpMode {
             state.fieldX = 60;
             state.fieldY = 96;
             state.angle = 180;
-            state.velX = -10;
+            state.velX = -20;
             state.velY = 0;
             state.angleVel = 5;
             spline.add(new CubicSpline.CubicSplinePoint(state, time));
@@ -51,8 +51,8 @@ public class SplineTest extends ExpoOpMode {
             state.fieldX = 24;
             state.fieldY = 96;
             state.angle = 180;
-            state.velX = -10;
-            state.velY = -10;
+            state.velX = -15;
+            state.velY = -15;
             state.angleVel = 5;
             spline.add(new CubicSpline.CubicSplinePoint(state, time));
 

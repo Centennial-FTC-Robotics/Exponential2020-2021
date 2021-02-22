@@ -91,7 +91,7 @@ public class CubicSpline extends ParametricEq {
 
     @Override
     public State getStateAtTime(double t) {
-        if (t <= end.time) {
+        if (t < end.time) {
             while (current.endTime < t) {
                 current = segments.remove();
             }

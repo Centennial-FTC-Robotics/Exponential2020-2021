@@ -2,8 +2,10 @@ package org.exponential.mechanisms;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorControllerEx;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.exponential.superclasses.Mechanism;
@@ -404,4 +406,18 @@ public class Drivetrain implements Mechanism {
         Kd = D;
     }
 
+    public static final double teleOpDrive_P = 22;
+    public static final double teleOpDrive_I = 3.85;
+    public static final double teleOpDrive_D = 3.55;
+
+    public void teleOpMotorPID () {
+        DcMotorControllerEx motorControllerEx = (DcMotorControllerEx)frontLeft.getController();
+
+        // get the port number of our configured motor.
+        int frontLeftMotorIndex = ((DcMotorEx)frontLeft).getPortNumber();
+
+        // change coefficients.
+        PIDCoefficients frontLeftPidNew = new PIDCoefficients(teleOpDrive_P, teleOpDrive_I, teleOpDrive_D);
+        motorControllerEx.setPIDCoefficients(frontLeftMotorIndex, DcMotor.RunMode.RUN_USING_ENCODER, frontLeftPidNew);
+    }
 }

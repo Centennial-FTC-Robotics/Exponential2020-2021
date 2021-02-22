@@ -198,4 +198,35 @@ public class OurRobot implements Robot {
         }
         return rotationPower;
     }
+
+    //These methods are to shoot at different powers depending on distance
+    public void shootThreeFromDistance(double adjustment) {
+        for (int i = 0; i < 2; i++) {
+            loader.loadAndUnload();
+            opMode.sleep(250);
+        }
+        shooter.distancedReadjustHighGoal(adjustment);
+        loader.loadAndUnload();
+    }
+
+    public void shootAtHighGoalFromDistance (String side) {
+        double goalXPosition;
+        double conversionFactor = .01;
+        double motorAdjustment;
+        if (side.equals("red")) {
+            goalXPosition = 38;
+        } else {
+            goalXPosition = -36;
+        }
+
+        double robotX = odometry.getxPos();
+        double robotY = odometry.getyPos();
+
+        motorAdjustment = conversionFactor * Math.sqrt(Math.pow(goalXPosition - robotX,2) + Math.pow(72 - robotY,2));
+
+        shooter.distancedHighGoal(motorAdjustment);
+
+        shootThreeFromDistance(motorAdjustment);
+        shooter.stopShooting();
+    }
 }

@@ -55,8 +55,8 @@ public class FieldCentricTeleOp extends LinearOpMode {
 
             double inputLeftX = -gamepad1.left_stick_x;
             double inputLeftY = -gamepad1.left_stick_y;
-            double inputRightX = .4 * gamepad1.right_stick_x;
-            double inputRightY = .4 * gamepad1.right_stick_y;
+            double inputRightX = .5 * gamepad1.right_stick_x;
+            double inputRightY = .5 * gamepad1.right_stick_y;
             double reductionFactor = .5;
             // halve values
             if (gamepad1.left_bumper) {

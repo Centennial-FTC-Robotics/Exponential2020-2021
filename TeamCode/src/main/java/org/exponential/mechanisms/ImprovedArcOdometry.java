@@ -21,7 +21,7 @@ public class ImprovedArcOdometry extends Odometry {
         double average = weightedAverage(leftEncChange, rightEncChange);
         double horiEncAdjusted = horiEncChange - changeInAngle * super.horiEncPerDegree;
         double arcLength = Math.sqrt(Math.pow(average, 2) + Math.pow(horiEncAdjusted, 2));
-        double alpha = Math.toDegrees(Math.atan2(horiEncAdjusted, average)); // positive alpha means curve goes counterclockwise
+        double alpha = Math.toDegrees(Math.atan2(horiEncAdjusted, average)); // positive alpha to the left of heading
         double[] displacement = {arcLength * (Math.cos(Math.toRadians(changeInAngle)) - 1) / Math.toRadians(changeInAngle),
                 arcLength * Math.sin(Math.toRadians(changeInAngle)) / Math.toRadians(changeInAngle)};
         displacement = rotateCounter(displacement, alpha); // rotate to robot centric
@@ -34,7 +34,5 @@ public class ImprovedArcOdometry extends Odometry {
         yVel = displacement[1] / timeElapsed;
         angle += changeInAngle;
         angleVel = changeInAngle / timeElapsed;
-
-
     }
 }

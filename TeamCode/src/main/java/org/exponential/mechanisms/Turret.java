@@ -16,7 +16,7 @@ import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import java.io.File;
 
 public class Turret implements Mechanism, Runnable {
-    public static final double ENC_PER_DEGREE = (1120.0) / 360.0;
+    public static final double ENC_PER_DEGREE = (288.0) / 360.0;
     public static final int POINT_AT_TARGET = 0;
     public static final int RELOAD = 1;
     public static final int POINT_AT_ANGLE = 2;

@@ -114,6 +114,8 @@ public class DriveTrainParametric extends Drivetrain {
             opMode.telemetry.addData("Dis X: ", disX);
             opMode.telemetry.addData("Dis Y: ", disY);
             opMode.telemetry.addData("Dis Angle: ", disAngle);
+            opMode.telemetry.addData("Distance: ", distance);
+
 
             opMode.telemetry.update();
         }

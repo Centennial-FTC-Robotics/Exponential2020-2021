@@ -243,7 +243,7 @@ public class OurRobot implements Robot {
 
         //Finding distance from the goal
         double deltaZ = targetHeight - 0.24;
-        double deltaX = Math.sqrt(Math.pow(targetX - robotX,2) + Math.pow(72 - robotY,2));
+        double deltaX = 0.0254 * (Math.sqrt(Math.pow(targetX - robotX,2) + Math.pow(72 - robotY,2)));
 
         //Finding Launching velocity of the ring
         double velInitial = Math.sqrt((gravity * Math.pow(deltaX,2) / (2 * Math.pow(Math.cos(theta),2) * (deltaZ - deltaX*Math.tan(theta)))));

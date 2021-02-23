@@ -59,10 +59,10 @@ public class Shooter implements Mechanism {
     }
 
     //These methods are used for adjusting for distance
-    public void distancedHighGoal(double adjustment) { setPower(.368 + adjustment); }
+    public void adjustedHighGoal(double adjustment) { setPower(adjustment); }
 
-    public void distancedReadjustHighGoal (double adjustment) {setPower ( .338 + adjustment); }
+    public void adjustedReadjustHighGoal (double adjustment) {setPower (adjustment - .03); }
 
-    public void distancedPowerShot (double adjustment) { setPower (.355 + adjustment); }
+    public void adjustedPowerShot (double adjustment) { setPower (adjustment - .013); }
 
 }

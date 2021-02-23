@@ -200,19 +200,20 @@ public class OurRobot implements Robot {
     }
 
     //These methods are to shoot at different powers depending on distance
-    public void shootThreeFromDistance(double adjustment) {
+    public void shootThreeFromDistance(double motorPower) {
         for (int i = 0; i < 2; i++) {
             loader.loadAndUnload();
-            opMode.sleep(250);
+            opMode.sleep(100);
         }
-        shooter.distancedReadjustHighGoal(adjustment);
+        shooter.adjustedReadjustHighGoal(motorPower);
         loader.loadAndUnload();
     }
 
     public void shootAtHighGoalFromDistance (String side) {
+        final double goalHeight = 0.91;
         double goalXPosition;
-        double conversionFactor = .01;
-        double motorAdjustment;
+        double motorPower;
+
         if (side.equals("red")) {
             goalXPosition = 38;
         } else {
@@ -222,11 +223,34 @@ public class OurRobot implements Robot {
         double robotX = odometry.getxPos();
         double robotY = odometry.getyPos();
 
-        motorAdjustment = conversionFactor * Math.sqrt(Math.pow(goalXPosition - robotX,2) + Math.pow(72 - robotY,2));
+        motorPower = distanceAdjustedPower(goalXPosition, goalHeight);
 
-        shooter.distancedHighGoal(motorAdjustment);
+        shooter.adjustedHighGoal(motorPower);
 
-        shootThreeFromDistance(motorAdjustment);
+        shootThreeFromDistance(motorPower);
         shooter.stopShooting();
+    }
+
+    public double distanceAdjustedPower (double targetX, double targetHeight) {
+        //Constants defined by our robot design and the Earth
+        final double gravity = -9.8;
+        final double theta = Math.toRadians(33);
+        final double radiusOfFlywheel = 0.1115;
+
+        //Getting robot position
+        double robotY = odometry.getxPos();
+        double robotX = odometry.getyPos();
+
+        //Finding distance from the goal
+        double deltaZ = targetHeight - 0.24;
+        double deltaX = Math.sqrt(Math.pow(targetX - robotX,2) + Math.pow(72 - robotY,2));
+
+        //Finding Launching velocity of the ring
+        double velInitial = Math.sqrt((gravity * Math.pow(deltaX,2) / (2 * Math.pow(Math.cos(theta),2) * (deltaZ - deltaX*Math.tan(theta)))));
+        //Converting launching velocity to angular velocity
+        double omega = velInitial/radiusOfFlywheel;
+        //Converting angular velocity into motor power
+        double adjustedMotorPower = omega/(20 * Math.PI);
+        return adjustedMotorPower;
     }
 }

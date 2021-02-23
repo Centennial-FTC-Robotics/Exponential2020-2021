@@ -25,7 +25,7 @@ public class TurretEncTest extends LinearOpMode {
             telemetry.update();*/
 
             //Testing Hardware Code
-            testInput = gamepad1.left_stick_x * .2;
+            testInput = gamepad1.left_stick_x * .1;
             expo.turret.turretMotor.setPower(testInput);
         }
     }

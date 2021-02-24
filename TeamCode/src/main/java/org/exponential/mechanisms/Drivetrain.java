@@ -194,7 +194,7 @@ public class Drivetrain implements Mechanism {
         ElapsedTime timer = new ElapsedTime();
         double previousTime = 0;
 
-        double angleTowardsTargetPos = Math.atan2(targetY - positioning.getyPos(), targetX - positioning.getxPos());
+        double angleTowardsTargetPos = Math.toDegrees(Math.atan2(targetY - positioning.getyPos(), targetX - positioning.getxPos()));
         //choose whether or not to make the front or back of robot face the target
         double distFromAngle = Math.abs(angleTowardsTargetPos - positioning.getAngle());
         if (distFromAngle > 90) {  // if the robot has to turn more than 90deg to face forward, face backwards instead
@@ -225,6 +225,7 @@ public class Drivetrain implements Mechanism {
                 disAngle = IMU.normalize(targetAngle - positioning.angle);
             } else {  //otherwise, have the robot move straight towards the target
                 disAngle = IMU.normalize(angleTowardsTargetPos - positioning.angle);
+                opMode.telemetry.addData("angleTOwardsTargetPos", angleTowardsTargetPos);
             }
             areaAngle = disAngle * intervalTime;
             velAngle = disAngle / intervalTime;
@@ -288,7 +289,7 @@ public class Drivetrain implements Mechanism {
     public void moveToStraight(double targetX, double targetY) {  // to just go directly towards the target, no targetAngle
         this.targetX = targetX;
         this.targetY = targetY;
-        this.targetAngle = Math.atan2(targetY - positioning.getyPos(), targetX - positioning.getxPos());
+        this.targetAngle = Math.toDegrees(Math.atan2(targetY - positioning.getyPos(), targetX - positioning.getxPos()));
         moveToTargetPosition();
     }
     public void moveToStraight(double targetX, double targetY, double targetAngle, double radius) {

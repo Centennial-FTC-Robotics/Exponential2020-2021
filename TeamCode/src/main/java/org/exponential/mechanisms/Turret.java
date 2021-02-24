@@ -45,7 +45,7 @@ public class Turret implements Mechanism, Runnable {
         */
         turretMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         turretMotor.setTargetPosition(turretMotor.getCurrentPosition());
-        turretMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+        //turretMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         turretMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         turretMotor.setPower(1); //set to 0 to not move
@@ -60,7 +60,7 @@ public class Turret implements Mechanism, Runnable {
         PIDCoefficients pidOrig = motorControllerEx.getPIDCoefficients(motorIndex, DcMotor.RunMode.RUN_USING_ENCODER);
 
         // change coefficients.
-        PIDCoefficients pidNew = new PIDCoefficients(1.5 * pidOrig.p, 4 * pidOrig.i, 1 * pidOrig.d);
+        PIDCoefficients pidNew = new PIDCoefficients(3.5 * pidOrig.p, 5 * pidOrig.i, 1 * pidOrig.d);
         motorControllerEx.setPIDCoefficients(motorIndex, DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
 
         // re-read coefficients and verify change.

@@ -58,10 +58,10 @@ public class RedRightSpline extends LinearOpMode {
         state.fieldX = 56;
         state.fieldY = -24;
         state.angle = 270;
-        state.velX = 13.08;
-        state.velY = 27;
+        state.velX = 8.76;
+        state.velY = 17.8;
         state.angleVel = 0;
-        spline.add(new CubicSpline.CubicSplinePoint(state, 2));
+        spline.add(new CubicSpline.CubicSplinePoint(state, 2.25));
 
         // move to proper zone
         if (numRings == 0) { //zone A
@@ -72,35 +72,35 @@ public class RedRightSpline extends LinearOpMode {
             state.velX = 0;
             state.velY = 0;
             state.angleVel = 0;
-            spline.add(new CubicSpline.CubicSplinePoint(state, 3));
+            spline.add(new CubicSpline.CubicSplinePoint(state, 3.75));
         } else if (numRings == 1) { //zone B
             state = new State();
             state.fieldX = 48;
             state.fieldY = 6;
             state.angle = 270;
-            state.velX = -13.08;
-            state.velY = 27;
+            state.velX = -8.76;
+            state.velY = 17.8;
             state.angleVel = 0;
-            spline.add(new CubicSpline.CubicSplinePoint(state, 3));
+            spline.add(new CubicSpline.CubicSplinePoint(state, 4));
 
             state = new State();
             state.fieldX = 26;
             state.fieldY = 36;
-            state.angle = 300;
+            state.angle = 270;
             state.velX = 0;
             state.velY = 0;
             state.angleVel = 0;
-            spline.add(new CubicSpline.CubicSplinePoint(state, 5));
+            spline.add(new CubicSpline.CubicSplinePoint(state, 6));
         } else { //zone C
             // go to gap between rings and wall (going backwards, wobble goal is on left of robot)
             state = new State();
             state.fieldX = 48;
             state.fieldY = 10;
             state.angle = 270;
-            state.velX = -13.08;
-            state.velY = 27;
+            state.velX = -8.76;
+            state.velY = 17.8;
             state.angleVel = 0;
-            spline.add(new CubicSpline.CubicSplinePoint(state, 3));
+            spline.add(new CubicSpline.CubicSplinePoint(state, 3.5));
 
             // go to gap between rings and wall (going backwards, wobble goal is on left of robot)
             state = new State();
@@ -110,7 +110,7 @@ public class RedRightSpline extends LinearOpMode {
             state.velX = 0;
             state.velY = 0;
             state.angleVel = 0;
-            spline.add(new CubicSpline.CubicSplinePoint(state, 5));
+            spline.add(new CubicSpline.CubicSplinePoint(state, 5.5));
 
         }
         ((DriveTrainParametric)(robot.drivetrain)).moveAlongParametricEq(new CubicSpline(spline));
@@ -182,14 +182,14 @@ public class RedRightSpline extends LinearOpMode {
         if (numRings == 0) {
             //move to gap between half field and rings
             robot.drivetrain.moveTo(11, -6, 270);
-            robot.drivetrain.moveTo(11, -49, 270);
+            robot.drivetrain.moveTo(11, -47.5, 270);
         } else if (numRings == 1) {
             /*robot.odometry.offsetXPos(3);
             robot.odometry.offsetYPos(3);*/
             //robot.drivetrain.moveTo(11, -49, 270);
-            robot.drivetrain.moveToStraight(14, -45);
+            robot.drivetrain.moveToStraight(10, -41);
         } else {
-            robot.drivetrain.moveToStraight(13, -47);
+            robot.drivetrain.moveToStraight(10, -41);
             //robot.drivetrain.moveTo(11, -49, 270);
 
         }
@@ -218,9 +218,9 @@ public class RedRightSpline extends LinearOpMode {
 
         //park on line
         if (numRings == 1) {
-            robot.drivetrain.moveTo(24, 6, 270);
+            robot.drivetrain.moveTo(24, 12, 270);
         } else {
-            robot.drivetrain.moveTo(40, 6, 270);
+            robot.drivetrain.moveTo(40, 12, 270);
         }
         robot.savePositions();
     }

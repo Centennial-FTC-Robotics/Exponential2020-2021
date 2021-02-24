@@ -166,11 +166,11 @@ public class DriveTrainParametric extends Drivetrain {
     }
 
 
-    public void moveTo(double x, double y, double angle) {
+    /*public void moveTo(double x, double y, double angle) {
         // gives a little bit of elbow room so that the robot is not forced to go at the fastest
         // theoretically possible path
         double portionOfMaxAccel = 0.9; // how much leeway to give
         ParametricEq line = new StraightLine(x, y, angle, positioning.xPos, positioning.yPos, positioning.angle, portionOfMaxAccel);
         moveAlongParametricEq(line);
-    }
+    }*/
 }

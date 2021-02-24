@@ -1,5 +1,6 @@
 package org.exponential.Tests;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -7,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.exponential.mechanisms.Turret;
 import org.exponential.robots.OurRobot;
 
+@Disabled
 @TeleOp
 public class turretTest extends LinearOpMode {
     OurRobot expo = new OurRobot();
@@ -37,10 +39,11 @@ public class turretTest extends LinearOpMode {
                 sleep(500);
             }
             expo.drivetrain.setPowerFieldCentric(gamepad1.left_stick_x, -gamepad1.left_stick_y, -gamepad1.right_stick_x);
-            telemetry.addData("Current Position: ", "(" + expo.odometry.getxPos() + ", " + expo.odometry.getyPos() + ")");
-            telemetry.addData("Angle: ", expo.odometry.getAngle());
+            //telemetry.addData("Current Position: ", "(" + expo.odometry.getxPos() + ", " + expo.odometry.getyPos() + ")");
+            //telemetry.addData("Angle: ", expo.odometry.getAngle());
             telemetry.addData("Pointing Towards: ", "(" + targetX + ", " + targetY + ")");
             telemetry.addData("Turret Angle: ", expo.turret.currentAngle);
+            //telemetry.addData("target",)
             telemetry.update();
         }
     }

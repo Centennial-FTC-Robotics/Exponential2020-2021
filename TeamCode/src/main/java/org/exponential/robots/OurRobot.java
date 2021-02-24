@@ -57,8 +57,8 @@ public class OurRobot implements Robot {
         shooter = new Shooter();
         shooter.initialize(opMode);
 
-        // wobbleGoalMover = new WobbleGoalMover();
-        // wobbleGoalMover.initialize(opMode);
+        wobbleGoalMover = new WobbleGoalMover();
+        wobbleGoalMover.initialize(opMode);
 
         imu = new IMU();
         imu.initialize(opMode);
@@ -69,8 +69,8 @@ public class OurRobot implements Robot {
         drivetrain = new DriveTrainParametric(odometry);
         drivetrain.initialize(opMode);
 
-        turret = new Turret(drivetrain);
-        turret.initialize(opMode);
+        /*turret = new Turret(drivetrain);
+        turret.initialize(opMode);*/
 
         intake = new Intake();
         intake.initialize(opMode);
@@ -132,7 +132,7 @@ public class OurRobot implements Robot {
     public void shootAtHighGoal(String side) {
         double goalXPosition;
         if (side.equals("red")) {
-            goalXPosition = 38;
+            goalXPosition = 36;
         } else {
             goalXPosition = -36;
         }
@@ -183,7 +183,7 @@ public class OurRobot implements Robot {
     public void loadAndUnloadAllRings() {
         for (int i = 0; i < 2; i++) {
             loader.loadAndUnload();
-            opMode.sleep(250);
+            opMode.sleep(210);
         }
         shooter.readjustHighGoalPower();
         loader.loadAndUnload();
@@ -215,7 +215,7 @@ public class OurRobot implements Robot {
         double motorPower;
 
         if (side.equals("red")) {
-            goalXPosition = 38;
+            goalXPosition = 36;
         } else {
             goalXPosition = -36;
         }

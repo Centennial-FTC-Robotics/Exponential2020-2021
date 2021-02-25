@@ -96,7 +96,7 @@ public class TurretTeleOp extends LinearOpMode {
                 sleep(250);
             }
 
-            if (gamepad2.dpad_right) {
+            /*if (gamepad2.dpad_right) {
                 robot.odometry.offsetXPos(-2);
                 sleep(150);
             } else if (gamepad2.dpad_left) {
@@ -108,7 +108,7 @@ public class TurretTeleOp extends LinearOpMode {
             } else if (gamepad2.dpad_down) {
                 robot.odometry.offsetYPos(1);
                 sleep(150);
-            }
+            }*/
 
             /*if (gamepad1.x) { //towards back
                 Runnable myRunnable = new Runnable(){
@@ -148,6 +148,8 @@ public class TurretTeleOp extends LinearOpMode {
                 headingRotationPower = robot.headingRotation(0);
             } else if (gamepad1.b) {
                 headingRotationPower = robot.headingRotation(90);
+            } else {
+                headingRotationPower = 0;
             }
             /*if (gamepad2.b && !gamepad2.start) {
                 //robot.shootAtHighGoal(side);
@@ -159,26 +161,8 @@ public class TurretTeleOp extends LinearOpMode {
             /*if (gamepad2.y) {
                 robot.loadAndUnloadAllRings();
             }
-            //single shot
-            if(gamepad2.x) {
-                robot.loader.loadAndUnload();
-            }
-            if (gamepad2.a) {
-                robot.shootAtPowerShotTargets(side);
-            }
-            if (gamepad2.b) {
-                robot.shootAtHighGoal(side);
-            }*/
-            if (gamepad2.y) {
-                //targetX was 36
-                robot.shooter.shootAtHighGoal();
-                robot.turret.setTarget(38, 72); // aim at high goal
-                robot.turret.pointAtTarget();
-                //turretState = "high goal";
-                sleep(200);
-                robot.loadAndUnloadAllRings();
-                robot.shooter.stopShooting();
-                robot.turret.pointToReloadPosition();
+
+            /* //Auto Power Shot
             } else if (gamepad2.x) {
                 //targetX was 2
                 robot.shooter.shootAtPowerShot();
@@ -206,39 +190,42 @@ public class TurretTeleOp extends LinearOpMode {
 
                 robot.shooter.stopShooting();
                 robot.turret.pointToReloadPosition();
-            } else if (gamepad2.a) {
-                //targetX was 9.5
-                robot.turret.setTarget(8, 72); // middle power shot
-                robot.turret.pointAtTarget();
-                //turretState = "middle power shot";
-                sleep(500);
+            }*/
+            //Reload position
+            if (gamepad2.dpad_up) {
+                //Aiming straight at high goal or power shot
+                robot.turnTurretFromCurrent(0, 10);
+            } else if (gamepad2.dpad_down){
+                //Aiming from the middle to high goal
+                robot.turnTurretFromCurrent(20,40);
+            } else if (gamepad2.dpad_right) {
+                //aim to the right power shot from middle
+                robot.turnTurretFromCurrent(7, 48);
+            } else if (gamepad2.dpad_left) {
+                //aim to the left power shot from middle
+                robot.turnTurretFromCurrent(-7, 40);
+            }else if (gamepad2.left_bumper) {
+                robot.turret.pointToReloadPosition();
+            }
+            //single shot
+            if(gamepad2.x) {
                 robot.loader.loadAndUnload();
-                sleep(100);
-                robot.shooter.stopShooting();
-                robot.turret.pointToReloadPosition();
-            } else if (gamepad2.b) {
-                //target was 17
-                robot.turret.setTarget(16, 72); // right power shot
-                robot.turret.pointAtTarget();
-                //turretState = "right power shot";
-                sleep(500);
-                robot.loader.loadAndUnload();
-                sleep(200);
-                robot.shooter.stopShooting();
-                robot.turret.pointToReloadPosition();
-            } else if (gamepad2.left_bumper) {
-                robot.turret.pointToReloadPosition();
+            }
+            //triple shot
+            if (gamepad2.y) {
+                robot.turretShootThree();
+            }
                 //turretState = "reload";
             /*if (gamepad1.right_bumper) {
                 robot.scoreWobbleGoal(side);
             }*/
-                if (gamepad2.right_bumper) {
-                    robot.shooter.shootAtHighGoal();
-                } else if (gamepad2.left_trigger > 0) {
-                    robot.shooter.shootAtPowerShot();
-                } else {
-                    robot.shooter.stopShooting();
-                }
+            if (gamepad2.right_bumper) {
+                robot.shooter.shootAtHighGoal();
+            } else if (gamepad2.right_trigger > 0) {
+                robot.shooter.shootAtPowerShot();
+            } else {
+                robot.shooter.stopShooting();
+            }
 
 /*
             if (gamepad2.dpad_up) {
@@ -262,7 +249,8 @@ public class TurretTeleOp extends LinearOpMode {
             }
             robot.odometry.savePosition();
         }
-    }
+
+
 
     public static double[] rotatePoint(double x, double y, double theta) {
         double newX = x * Math.cos(theta) - y * Math.sin(theta);

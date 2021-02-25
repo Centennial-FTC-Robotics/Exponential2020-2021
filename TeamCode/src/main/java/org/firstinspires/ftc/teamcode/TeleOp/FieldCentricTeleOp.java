@@ -148,6 +148,8 @@ public class FieldCentricTeleOp extends LinearOpMode {
                 headingRotationPower = robot.headingRotation(0);
             } else if (gamepad1.b) {
                 headingRotationPower = robot.headingRotation (90);
+            } else {
+                headingRotationPower = 0;
             }
             /*if (gamepad2.b && !gamepad2.start) {
                 //robot.shootAtHighGoal(side);

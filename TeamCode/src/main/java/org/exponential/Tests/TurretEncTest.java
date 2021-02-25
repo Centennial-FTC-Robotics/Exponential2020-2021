@@ -15,14 +15,12 @@ public class TurretEncTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         expo.initialize(this);
         waitForStart();
-        expo.turret.turretMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         while(opModeIsActive()) {
-            /*if (gamepad1.a) {
+            if (gamepad1.a) {
                 expo.turret.loadPosition();
             }
             telemetry.addData("encoders: ", expo.turret.turretMotor.getCurrentPosition());
-            telemetry.update();*/
-            expo.turret.turretMotor.setPower(-gamepad1.left_stick_x * .2) ;
+            telemetry.update();
         }
 
     }

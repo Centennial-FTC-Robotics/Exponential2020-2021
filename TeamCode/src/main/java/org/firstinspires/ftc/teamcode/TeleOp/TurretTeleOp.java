@@ -192,9 +192,9 @@ public class TurretTeleOp extends LinearOpMode {
                 robot.turret.setTarget(8, 72); // middle power shot
                 robot.turret.pointAtTarget();
                 //turretState = "middle power shot";
-                sleep(500);
+                sleep(800);
                 robot.loader.loadAndUnload();
-                sleep(200);
+                sleep(800);
 
                 robot.turret.setTarget(2, 72); // left power shot
                 robot.turret.pointAtTarget();

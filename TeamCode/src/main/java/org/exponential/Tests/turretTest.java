@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.exponential.mechanisms.Turret;
 import org.exponential.robots.OurRobot;
 
-@Disabled
 @TeleOp
 public class turretTest extends LinearOpMode {
     OurRobot expo = new OurRobot();

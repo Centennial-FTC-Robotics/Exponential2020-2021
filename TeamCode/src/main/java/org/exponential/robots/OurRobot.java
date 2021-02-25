@@ -190,13 +190,26 @@ public class OurRobot implements Robot {
     }
 
     public double headingRotation(double targetAngle) {
-        double kP = .06;
+        double kP = .008;
         double rotationPower = 0;
-        double tolerance = 5;
-        if (Math.abs(targetAngle - IMU.normalize(odometry.getAngle())) > tolerance) {
-            rotationPower = kP * (targetAngle - IMU.normalize(odometry.getAngle()));
+        double tolerance = 3;
+        odometry.update();
+        if (Math.abs(IMU.normalize(targetAngle - IMU.normalize(odometry.getAngle()))) > tolerance) {
+            rotationPower = -kP * (IMU.normalize(targetAngle - IMU.normalize(odometry.getAngle())));
         }
         return rotationPower;
+    }
+
+    public void turnTurret (double xOffset, double yOffset) {
+        odometry.update ();
+        turret.setTarget (odometry.getxPos() + xOffset, odometry.getyPos() + yOffset);
+        turret.pointAtTarget();
+    }
+
+    public void turretShootThree () {
+        loadAndUnloadAllRings();
+        opMode.sleep(100);
+        turret.pointToReloadPosition();
     }
 
     //These methods are to shoot at different powers depending on distance

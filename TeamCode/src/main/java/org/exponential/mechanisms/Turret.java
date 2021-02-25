@@ -57,18 +57,18 @@ public class Turret implements Mechanism, Runnable {
         int motorIndex = ((DcMotorEx) turretMotor).getPortNumber();
 
         // get the PID coefficients for the RUN_USING_ENCODER  modes.
-        PIDCoefficients pidOrig = motorControllerEx.getPIDCoefficients(motorIndex, DcMotor.RunMode.RUN_USING_ENCODER);
+        PIDCoefficients pidOrig = motorControllerEx.getPIDCoefficients(motorIndex, DcMotor.RunMode.RUN_TO_POSITION);
 
         // change coefficients.
         PIDCoefficients pidNew = new PIDCoefficients(3 * pidOrig.p, 3 * pidOrig.i, 1 * pidOrig.d);
-        motorControllerEx.setPIDCoefficients(motorIndex, DcMotor.RunMode.RUN_USING_ENCODER, pidNew);
+        motorControllerEx.setPIDCoefficients(motorIndex, DcMotor.RunMode.RUN_TO_POSITION, pidNew);
 
         // re-read coefficients and verify change.
-        PIDCoefficients pidModified = motorControllerEx.getPIDCoefficients(motorIndex, DcMotor.RunMode.RUN_USING_ENCODER);
+        PIDCoefficients pidModified = motorControllerEx.getPIDCoefficients(motorIndex, DcMotor.RunMode.RUN_TO_POSITION);
 
         turretMotor.setTargetPositionTolerance(0);
     }
-
+    
     public Turret(Drivetrain drivetrain) {
         this.drivetrain = drivetrain;
     }

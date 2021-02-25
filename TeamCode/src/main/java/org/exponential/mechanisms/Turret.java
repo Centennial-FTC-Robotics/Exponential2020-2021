@@ -66,7 +66,7 @@ public class Turret implements Mechanism, Runnable {
         // re-read coefficients and verify change.
         PIDCoefficients pidModified = motorControllerEx.getPIDCoefficients(motorIndex, DcMotor.RunMode.RUN_TO_POSITION);
 
-        turretMotor.setTargetPositionTolerance(0);
+        turretMotor.setTargetPositionTolerance(1);
     }
     
     public Turret(Drivetrain drivetrain) {

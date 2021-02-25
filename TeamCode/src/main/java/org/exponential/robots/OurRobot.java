@@ -200,7 +200,7 @@ public class OurRobot implements Robot {
         return rotationPower;
     }
 
-    public void turnTurret (double xOffset, double yOffset) {
+    public void turnTurretFromCurrent (double xOffset, double yOffset) {
         odometry.update ();
         turret.setTarget (odometry.getxPos() + xOffset, odometry.getyPos() + yOffset);
         turret.pointAtTarget();

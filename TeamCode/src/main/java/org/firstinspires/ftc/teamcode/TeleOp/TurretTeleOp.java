@@ -193,13 +193,17 @@ public class TurretTeleOp extends LinearOpMode {
             }*/
             //Reload position
             if (gamepad2.dpad_up) {
-                robot.turnTurret(0, 10);
+                //Aiming straight at high goal or power shot
+                robot.turnTurretFromCurrent(0, 10);
             } else if (gamepad2.dpad_down){
-                robot.turnTurret(20,40);
+                //Aiming from the middle to high goal
+                robot.turnTurretFromCurrent(20,40);
             } else if (gamepad2.dpad_right) {
-                robot.turnTurret(7, 48);
+                //aim to the right power shot from middle
+                robot.turnTurretFromCurrent(7, 48);
             } else if (gamepad2.dpad_left) {
-                robot.turnTurret(-7, 40);
+                //aim to the left power shot from middle
+                robot.turnTurretFromCurrent(-7, 40);
             }else if (gamepad2.left_bumper) {
                 robot.turret.pointToReloadPosition();
             }

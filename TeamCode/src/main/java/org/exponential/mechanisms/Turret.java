@@ -16,7 +16,7 @@ import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import java.io.File;
 
 public class Turret implements Mechanism, Runnable {
-    public static final double ENC_PER_DEGREE = (288.0) / 360.0;
+    public static final double ENC_PER_DEGREE = (8192.0) / 360.0;
     public static final int POINT_AT_TARGET = 0;
     public static final int RELOAD = 1;
     public static final int POINT_AT_ANGLE = 2;
@@ -60,7 +60,7 @@ public class Turret implements Mechanism, Runnable {
         PIDCoefficients pidOrig = motorControllerEx.getPIDCoefficients(motorIndex, DcMotor.RunMode.RUN_TO_POSITION);
 
         // change coefficients.
-        PIDCoefficients pidNew = new PIDCoefficients(3 * pidOrig.p, 3 * pidOrig.i, 1 * pidOrig.d);
+        PIDCoefficients pidNew = new PIDCoefficients(3 * pidOrig.p * 288.0/8192.0, 3 * pidOrig.i* 288.0/8192.0, 1 * pidOrig.d* 288.0/8192.0);
         motorControllerEx.setPIDCoefficients(motorIndex, DcMotor.RunMode.RUN_TO_POSITION, pidNew);
 
         // re-read coefficients and verify change.

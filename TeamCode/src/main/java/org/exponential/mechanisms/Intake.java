@@ -11,15 +11,15 @@ import org.exponential.superclasses.Mechanism;
 import static java.lang.Thread.sleep;
 
 public class Intake implements Mechanism {
-    public static final double INTAKE_POWER = .9;
-    public static final double OUTTAKE_POWER = -.9;
+    public static final double INTAKE_POWER = .99;
+    public static final double OUTTAKE_POWER = -.99;
     public static final double CONVEYOR_INTAKE_POWER = 1;
     public static final double CONVEYOR_OUTTAKE_POWER = -1;
     public static final double SERVO_INTAKE_POWER = -1;
     public static final double SERVO_OUTTAKE_POWER = 1;
     
     public static final double INTAKE_FACTOR = .8;
-    public static final double CONVEYOR_FACTOR = -.15;
+    public static final double CONVEYOR_FACTOR = -.22;
 
     public static final double LEFT_SERVO_POSITION = .85;
     public static final double RIGHT_SERVO_POSITION = 0;

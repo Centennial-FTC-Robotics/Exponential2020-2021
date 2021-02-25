@@ -69,8 +69,8 @@ public class OurRobot implements Robot {
         drivetrain = new DriveTrainParametric(odometry);
         drivetrain.initialize(opMode);
 
-        /*turret = new Turret(drivetrain);
-        turret.initialize(opMode);*/
+        turret = new Turret(drivetrain);
+        turret.initialize(opMode);
 
         intake = new Intake();
         intake.initialize(opMode);

@@ -10,24 +10,25 @@ import java.util.Map;
 
 @TeleOp(name = "BasicTeleOp", group = "TeleOp")
 public class BasicTeleOp extends LinearOpMode {
-    private OurRobot ourRobot;
+    private OurRobot robot;
 
     @Override
     public void runOpMode() throws InterruptedException {
         waitForStart();
-        ourRobot = new OurRobot();
-        ourRobot.initialize(this);
+        robot = new OurRobot();
+        robot.initialize(this);
+        robot.loadPositions();
         while (opModeIsActive()) {
             double x = gamepad1.left_stick_x;
             double y = -gamepad1.left_stick_y;
             if (gamepad1.right_trigger > 0) {
-                ourRobot.intake.setPowerInput(gamepad1.right_trigger);
+                robot.intake.setPowerInput(gamepad1.right_trigger);
             } else if (gamepad1.left_trigger > 0) {
-                ourRobot.intake.setPowerInput(-gamepad1.left_trigger);
+                robot.intake.setPowerInput(-gamepad1.left_trigger);
             } else {
-                ourRobot.intake.setPowerInput(0);
+                robot.intake.setPowerInput(0);
             }
-            ourRobot.drivetrain.setPowerDriveMotors(getMotorPowers(x, y, gamepad1.right_stick_x));
+            robot.drivetrain.setPowerDriveMotors(getMotorPowers(x, y, gamepad1.right_stick_x));
         }
     }
 

@@ -33,7 +33,7 @@ public class RedRightSpline extends LinearOpMode {
                     }
                 };
         Thread thread = new Thread(myRunnable);
-        thread.start();
+        //thread.start();
 
         int numRings = robot.camera.getNumberOfRings();
         robot.camera.deactivate();
@@ -58,10 +58,10 @@ public class RedRightSpline extends LinearOpMode {
         state.fieldX = 56;
         state.fieldY = -24;
         state.angle = 270;
-        state.velX = 8.76;
-        state.velY = 17.8;
+        state.velX = 6.8;
+        state.velY = 13.37;
         state.angleVel = 0;
-        spline.add(new CubicSpline.CubicSplinePoint(state, 2.25));
+        spline.add(new CubicSpline.CubicSplinePoint(state, 1.2));
 
         // move to proper zone
         if (numRings == 0) { //zone A
@@ -72,16 +72,16 @@ public class RedRightSpline extends LinearOpMode {
             state.velX = 0;
             state.velY = 0;
             state.angleVel = 0;
-            spline.add(new CubicSpline.CubicSplinePoint(state, 3.75));
+            spline.add(new CubicSpline.CubicSplinePoint(state, 3.5));
         } else if (numRings == 1) { //zone B
             state = new State();
             state.fieldX = 48;
             state.fieldY = 6;
             state.angle = 270;
-            state.velX = -8.76;
-            state.velY = 17.8;
+            state.velX = -6.8;
+            state.velY = 13.37;
             state.angleVel = 0;
-            spline.add(new CubicSpline.CubicSplinePoint(state, 4));
+            spline.add(new CubicSpline.CubicSplinePoint(state, 2.75));
 
             state = new State();
             state.fieldX = 26;
@@ -90,17 +90,17 @@ public class RedRightSpline extends LinearOpMode {
             state.velX = 0;
             state.velY = 0;
             state.angleVel = 0;
-            spline.add(new CubicSpline.CubicSplinePoint(state, 6));
+            spline.add(new CubicSpline.CubicSplinePoint(state, 4.45));
         } else { //zone C
             // go to gap between rings and wall (going backwards, wobble goal is on left of robot)
-            state = new State();
+            /*state = new State();
             state.fieldX = 48;
             state.fieldY = 10;
             state.angle = 270;
-            state.velX = -8.76;
-            state.velY = 17.8;
+            state.velX = -6.8;
+            state.velY = 13.37;
             state.angleVel = 0;
-            spline.add(new CubicSpline.CubicSplinePoint(state, 3.5));
+            spline.add(new CubicSpline.CubicSplinePoint(state, 2.9));*/
 
             // go to gap between rings and wall (going backwards, wobble goal is on left of robot)
             state = new State();
@@ -110,7 +110,7 @@ public class RedRightSpline extends LinearOpMode {
             state.velX = 0;
             state.velY = 0;
             state.angleVel = 0;
-            spline.add(new CubicSpline.CubicSplinePoint(state, 5.5));
+            spline.add(new CubicSpline.CubicSplinePoint(state, 4.42));
 
         }
         ((DriveTrainParametric)(robot.drivetrain)).moveAlongParametricEq(new CubicSpline(spline));
@@ -125,6 +125,10 @@ public class RedRightSpline extends LinearOpMode {
 
         //shoot rings at power shot targets (also moves to the designated position on the field)
         //ourRobot.shootPowerShotTargets("red");
+
+        if (numRings == 1) {
+            robot.odometry.offsetXPos(3.5);
+        }
         // if it's 0 rings, go for power shots instead
         if (numRings == 0) {
             robot.shootAtPowerShotTargets("red");
@@ -138,9 +142,9 @@ public class RedRightSpline extends LinearOpMode {
             robot.intake.outtake();  //should be intake, encoders are weird
             robot.shooter.shootAtHighGoal();
 
-            robot.drivetrain.moveTo(36, -16, 270);
+            robot.drivetrain.moveTo(36, -14, 270);
 
-            sleep(1400);
+            sleep(1600);
             robot.intake.stop();
             //shoot the newly picked up rings
             robot.shootAtHighGoal("red");
@@ -155,17 +159,25 @@ public class RedRightSpline extends LinearOpMode {
             robot.drivetrain.moveTo(36, -18, 270); */
             //pickup rings from starter stack
             robot.intake.outtake();  //should be intake, encoders are weird
-            robot.drivetrain.moveTo(36, -18, 270);
-
+            robot.drivetrain.moveTo(36, -15, 270);
             robot.drivetrain.performBrake();
-            sleep(1500);
+
+            robot.drivetrain.moveTo(36, -17, 270);
+            robot.drivetrain.performBrake();
+
+            robot.drivetrain.moveTo(36, -19, 270);
+            robot.drivetrain.performBrake();
+
+
+            //robot.drivetrain.performBrake();
+            //sleep(1100);
             // robot.intake.stop();
             //shoot the newly picked up rings
             robot.shootAtHighGoal("red");
             //pick up the rest of the rings
-            robot.drivetrain.moveTo(36, -21, 270);
-            robot.drivetrain.performBrake();
-            sleep(1000);
+            robot.drivetrain.moveTo(36, -24, 270);
+            //robot.drivetrain.performBrake();
+            sleep(750);
             robot.shootAtHighGoal("red");
             robot.intake.stop();
         }
@@ -187,9 +199,9 @@ public class RedRightSpline extends LinearOpMode {
             /*robot.odometry.offsetXPos(3);
             robot.odometry.offsetYPos(3);*/
             //robot.drivetrain.moveTo(11, -49, 270);
-            robot.drivetrain.moveToStraight(10, -41);
+            robot.drivetrain.moveToStraight(14, -44);
         } else {
-            robot.drivetrain.moveToStraight(10, -41);
+            robot.drivetrain.moveToStraight(15, -43);
             //robot.drivetrain.moveTo(11, -49, 270);
 
         }
@@ -201,7 +213,7 @@ public class RedRightSpline extends LinearOpMode {
 
         // move to proper zone
         if (numRings == 0) { //zone A
-            robot.drivetrain.moveToStraight(44, 12, 270, 12);
+            robot.drivetrain.moveToStraight(44, 12, 270, 18);
         } else if (numRings == 1) { //zone B
             double targetX = 22;
             double targetY = 36;
@@ -210,7 +222,7 @@ public class RedRightSpline extends LinearOpMode {
             double targetX = 44;
             double targetY = 52;
             //double targetAngle = Math.atan2(targetY - robot.odometry.getyPos(), targetX - robot.odometry.getxPos());
-            robot.drivetrain.moveToStraight(targetX, targetY, 270, 12);
+            robot.drivetrain.moveToStraight(targetX, targetY, 270, 24);
         }
         robot.drivetrain.performBrake();
         robot.wobbleGoalMover.placeGoal();

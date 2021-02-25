@@ -32,7 +32,7 @@ public class Drivetrain implements Mechanism {
     private double Kd = 0;
     private double tolerance = 1.5;
     private double angleTolerance = 5;
-    private double angleKp = 0.03;
+    private double angleKp = 0.02;
     private double angleKi = 0.00;
     private double angleKd = 0;
 

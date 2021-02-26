@@ -19,6 +19,7 @@ public class TurretEncTest extends LinearOpMode {
             if (gamepad1.a) {
                 expo.turret.loadPosition();
             }
+
             telemetry.addData("encoders: ", expo.turret.turretMotor.getCurrentPosition());
             telemetry.update();
         }

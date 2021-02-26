@@ -12,7 +12,7 @@ import java.util.Map;
 
 @TeleOp(name = "TurretTeleOp", group = "TeleOp")
 public class TurretTeleOp extends LinearOpMode {
-    //String side;
+    String side = "red";
     private double initialAngle;
     private double currentAngle;
     ElapsedTime wobbleToggleTimer = new ElapsedTime();
@@ -31,11 +31,11 @@ public class TurretTeleOp extends LinearOpMode {
         robot = new OurRobot();
         robot.initialize(this);
         //comment out this line for non transition (testing) purposes
-        robot.loadPositions();
+        //robot.loadPositions();
 
 
         //comment out the following line for auto to teleop transitions
-        robot.odometry.setPosition(0, 0, 180);
+        robot.odometry.setPosition(0, 0, 450);
 
         /*if (side.equals("red")) {
             initialAngle = robot.odometry.getAngle() + 270;  // +270 so that the controls are field centric from the red drivers' perspective
@@ -53,8 +53,8 @@ public class TurretTeleOp extends LinearOpMode {
             /*initialAngle = 0;
             currentAngle = 0;*/
 
-            double inputLeftX = -gamepad1.left_stick_x;
-            double inputLeftY = -gamepad1.left_stick_y;
+            double inputLeftX = gamepad1.left_stick_x;
+            double inputLeftY = gamepad1.left_stick_y;
             double inputRightX = .5 * gamepad1.right_stick_x;
             double inputRightY = .5 * gamepad1.right_stick_y;
             double reductionFactor = .5;

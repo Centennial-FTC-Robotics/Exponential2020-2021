@@ -1,6 +1,7 @@
 package org.exponential.mechanisms;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorControllerEx;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -49,6 +50,7 @@ public class Turret implements Mechanism, Runnable {
         turretMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
         //turretMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         timer.reset();
     }
 
@@ -106,7 +108,7 @@ public class Turret implements Mechanism, Runnable {
         if (Math.abs(displacment) > 60) {
             angleArea = 0;
             // so far away that it shouldn't even have a pid working
-            turretMotor.setPower(0.5 * Math.signum(displacment));
+            turretMotor.setPower(0.65 * Math.signum(displacment));
         } else {
             if (Math.signum(angleArea) != Math.signum(displacment)) {
                 // overshoots, sets angle area to 0
@@ -117,11 +119,17 @@ public class Turret implements Mechanism, Runnable {
             }
 
             double Kp = 0.1;
-            double Ki = 0.01;
+            double Ki = 0.008;
             if(Math.abs(displacment) > 1.0){
                 turretMotor.setPower(Kp * displacment + Ki * angleArea);
+            } else {
+                turretMotor.setPower(0);
+                angleArea = 0;
             }
         }
+        opMode.telemetry.addData("displacement", displacment);
+        opMode.telemetry.addData("angleArea",angleArea);
+        opMode.telemetry.update();
     }
 
     public void setAngle(double angle) {

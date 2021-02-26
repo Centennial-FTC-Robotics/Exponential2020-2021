@@ -103,14 +103,14 @@ public class Turret implements Mechanism, Runnable {
         currentAngle = (turretMotor.getCurrentPosition() - encCountAtAngleZero) / ENC_PER_DEGREE;
 
         // PID Stuff
-        double displacment = IMU.normalize(targetAngleRelativeToRobot) - IMU.normalize(currentAngle);
+        double displacement = IMU.normalize(targetAngleRelativeToRobot) - IMU.normalize(currentAngle);
         double timeChange = -previousTime + (previousTime = timer.seconds());
-        if (Math.abs(displacment) > 60) {
+        if (Math.abs(displacement) > 60) {
             angleArea = 0;
             // so far away that it shouldn't even have a pid working
-            turretMotor.setPower(0.65 * Math.signum(displacment));
+            turretMotor.setPower(0.65 * Math.signum(displacement));
         } else {
-            if (Math.signum(angleArea) != Math.signum(displacment)) {
+            if (Math.signum(angleArea) != Math.signum(displacement)) {
                 // overshoots, sets angle area to 0
                 angleArea = 0;
             } else {
@@ -120,15 +120,15 @@ public class Turret implements Mechanism, Runnable {
 
             double Kp = 0.1;
             double Ki = 0.008;
-            if(Math.abs(displacment) > 1.0){
-                turretMotor.setPower(Kp * displacment + Ki * angleArea);
+            if (Math.abs(displacement) > 1.0) {
+                turretMotor.setPower(Kp * displacement + Ki * angleArea);
             } else {
                 turretMotor.setPower(0);
                 angleArea = 0;
             }
         }
-        opMode.telemetry.addData("displacement", displacment);
-        opMode.telemetry.addData("angleArea",angleArea);
+        opMode.telemetry.addData("displacement", displacement);
+        opMode.telemetry.addData("angleArea", angleArea);
         opMode.telemetry.update();
     }
 

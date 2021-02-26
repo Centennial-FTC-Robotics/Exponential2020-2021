@@ -38,6 +38,7 @@ public class RedRightSpline extends LinearOpMode {
         int numRings = robot.camera.getNumberOfRings();
         robot.camera.deactivate();
         robot.setUpServos();
+        robot.turret.pointToReloadPosition();
 
         robot.odometry.setPosition(48, -63, 180);
 
@@ -110,7 +111,7 @@ public class RedRightSpline extends LinearOpMode {
             state.velX = 0;
             state.velY = 0;
             state.angleVel = 0;
-            spline.add(new CubicSpline.CubicSplinePoint(state, 4.42));
+            spline.add(new CubicSpline.CubicSplinePoint(state, 4.15));
 
         }
         ((DriveTrainParametric)(robot.drivetrain)).moveAlongParametricEq(new CubicSpline(spline));
@@ -128,6 +129,8 @@ public class RedRightSpline extends LinearOpMode {
 
         if (numRings == 1) {
             robot.odometry.offsetXPos(3.5);
+        } if (numRings == 4) {
+            //robot.odometry.offsetXPos(-3.5);
         }
         // if it's 0 rings, go for power shots instead
         if (numRings == 0) {

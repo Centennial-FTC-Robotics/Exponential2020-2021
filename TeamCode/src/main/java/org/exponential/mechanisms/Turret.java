@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.util.ReadWriteFile;
 
@@ -31,6 +32,8 @@ public class Turret implements Mechanism, Runnable {
     public int currentCommand = POINT_AT_TARGET;
     public double currentAngle = 0;
 
+    private ElapsedTime timer = new ElapsedTime();
+
     // if the turret was facing directly forwards, what could the encoder count be?
     public double encCountAtAngleZero = 0;
 
@@ -44,31 +47,11 @@ public class Turret implements Mechanism, Runnable {
         turretMotor.setPIDFCoefficients(DcMotorEx.RunMode.RUN_TO_POSITION, newCoeffi);
         */
         turretMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        turretMotor.setTargetPosition(turretMotor.getCurrentPosition());
         //turretMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        turretMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-        turretMotor.setPower(1); //set to 0 to not move
-
-        turretMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        DcMotorControllerEx motorControllerEx = (DcMotorControllerEx) turretMotor.getController();
-
-        // get the port number of our configured motor.
-        int motorIndex = ((DcMotorEx) turretMotor).getPortNumber();
-
-        // get the PID coefficients for the RUN_USING_ENCODER  modes.
-        PIDCoefficients pidOrig = motorControllerEx.getPIDCoefficients(motorIndex, DcMotor.RunMode.RUN_TO_POSITION);
-
-        // change coefficients.
-        PIDCoefficients pidNew = new PIDCoefficients(3 * pidOrig.p * 288.0/8192.0, 3 * pidOrig.i* 288.0/8192.0, 1 * pidOrig.d* 288.0/8192.0);
-        motorControllerEx.setPIDCoefficients(motorIndex, DcMotor.RunMode.RUN_TO_POSITION, pidNew);
-
-        // re-read coefficients and verify change.
-        PIDCoefficients pidModified = motorControllerEx.getPIDCoefficients(motorIndex, DcMotor.RunMode.RUN_TO_POSITION);
-
-        turretMotor.setTargetPositionTolerance(1);
+        turretMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        timer.reset();
     }
-    
+
     public Turret(Drivetrain drivetrain) {
         this.drivetrain = drivetrain;
     }
@@ -95,34 +78,50 @@ public class Turret implements Mechanism, Runnable {
         readjustTurretAngle();
     }
 
+    private double angleArea = 0;
+    private double previousTime = 0;
+
     public void readjustTurretAngle() {
         // call this constantly in the teleop while loop
+        double targetAngleRelativeToRobot = 0;
         if (currentCommand == RELOAD) {
-            turretMotor.setTargetPosition((int) (encCountAtAngleZero));
+            targetAngleRelativeToRobot = 0;
         } else if (currentCommand == POINT_AT_TARGET) {
-            double targetAngle = IMU.normalize(
+            targetAngleRelativeToRobot = IMU.normalize(
                     Math.toDegrees(Math.atan2(targetYValue - drivetrain.positioning.yPos,
                             targetXValue - drivetrain.positioning.xPos)) - drivetrain.positioning.angle + 180);
-            // redundant, a relic of the past.........+...
-            if (targetAngle > 180) {
-                targetAngle = 180;
-            } else if (targetAngle < -180) {
-                targetAngle = -180;
+            if (targetAngleRelativeToRobot > 180) {
+                targetAngleRelativeToRobot = 180;
+            } else if (targetAngleRelativeToRobot < -180) {
+                targetAngleRelativeToRobot = -180;
             }
-            turretMotor.setTargetPosition((int) (encCountAtAngleZero + ENC_PER_DEGREE * targetAngle));
-            opMode.telemetry.addData("target angle", targetAngle);
         } else if (currentCommand == POINT_AT_ANGLE) {
-            turretMotor.setTargetPosition((int) (encCountAtAngleZero +
-                    ENC_PER_DEGREE * IMU.normalize(targetAngle + 180 - drivetrain.positioning.getAngle())));
+            targetAngleRelativeToRobot = IMU.normalize(targetAngle + 180 - drivetrain.positioning.getAngle());
         }
-        turretMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        turretMotor.setPower(1);
         currentAngle = (turretMotor.getCurrentPosition() - encCountAtAngleZero) / ENC_PER_DEGREE;
-        /*opMode.telemetry.addData("turret enc: ", turretMotor.getCurrentPosition());
-        opMode.telemetry.addData("current turret angle (in terms of field): ", IMU.normalize(currentAngle + drivetrain.positioning.getAngle() + 180));
-        opMode.telemetry.addData("current turret angle (relative to turret): ", currentAngle);
-        opMode.telemetry.addData("delta x: ", targetXValue - drivetrain.positioning.getxPos());
-        opMode.telemetry.addData("delta y: ", targetYValue - drivetrain.positioning.getyPos());*/
+
+        // PID Stuff
+        double displacment = IMU.normalize(targetAngleRelativeToRobot) - IMU.normalize(currentAngle);
+        double timeChange = -previousTime + (previousTime = timer.seconds());
+        if (Math.abs(displacment) > 60) {
+            angleArea = 0;
+            // so far away that it shouldn't even have a pid working
+            turretMotor.setPower(0.5 * Math.signum(displacment));
+        } else {
+            if (Math.signum(angleArea) != Math.signum(displacment)) {
+                // overshoots, sets angle area to 0
+                angleArea = 0;
+            } else {
+                // updates area
+                angleArea += timeChange * angleArea;
+            }
+
+            double Kp = 0.1;
+            double Ki = 0.01;
+            if(Math.abs(displacment) > 1.0){
+                turretMotor.setPower(Kp * displacment + Ki * angleArea);
+            }
+        }
     }
 
     public void setAngle(double angle) {

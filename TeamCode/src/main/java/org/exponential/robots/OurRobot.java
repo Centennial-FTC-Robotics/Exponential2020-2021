@@ -95,7 +95,7 @@ public class OurRobot implements Robot {
     public void shootAtPowerShotTargets(String side) {
         double[] targetXPositions;
         if (side.equals("red")) {
-            targetXPositions = new double[]{4, 11.5, 19};
+            targetXPositions = new double[]{2, 9.5, 17};
         } else {
             targetXPositions = new double[]{-2, -9.5, -17};
         }

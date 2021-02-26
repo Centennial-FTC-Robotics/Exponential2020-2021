@@ -35,7 +35,7 @@ public class TurretTeleOp extends LinearOpMode {
 
 
         //comment out the following line for auto to teleop transitions
-        robot.odometry.setPosition(0, 0, 450);
+        robot.odometry.setPosition(0, 0, 90);
 
         /*if (side.equals("red")) {
             initialAngle = robot.odometry.getAngle() + 270;  // +270 so that the controls are field centric from the red drivers' perspective
@@ -43,6 +43,7 @@ public class TurretTeleOp extends LinearOpMode {
             initialAngle = robot.odometry.getAngle() + 90;
         }*/
         robot.setUpServos();
+        robot.turret.pointToReloadPosition();
         boolean raised = true;
         boolean clamped = true;
         while (opModeIsActive()) {
@@ -151,6 +152,19 @@ public class TurretTeleOp extends LinearOpMode {
             } else {
                 headingRotationPower = 0;
             }
+            robot.turret.readjustTurretAngle();
+            if (gamepad1.right_bumper) {
+                robot.shooter.shootAtHighGoal();
+                robot.turnTurretFromCurrent(0,40);
+                sleep(1000);
+                robot.loadAndUnloadAllRings();
+                sleep(100);
+                robot.turret.pointToReloadPosition();
+                sleep(1000);
+            } else {
+                robot.shooter.setPower(0);
+            }
+
             /*if (gamepad2.b && !gamepad2.start) {
                 //robot.shootAtHighGoal(side);
                 robot.drivetrain.moveTo(44, 0, 270);

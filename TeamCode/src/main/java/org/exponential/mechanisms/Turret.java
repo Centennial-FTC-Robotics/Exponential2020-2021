@@ -103,23 +103,23 @@ public class Turret implements Mechanism, Runnable {
         currentAngle = (turretMotor.getCurrentPosition() - encCountAtAngleZero) / ENC_PER_DEGREE;
 
         // PID Stuff
-        double displacement = IMU.normalize(targetAngleRelativeToRobot) - IMU.normalize(currentAngle);
+        double displacement = IMU.normalize(targetAngleRelativeToRobot) - currentAngle;
         double timeChange = -previousTime + (previousTime = timer.seconds());
         if (Math.abs(displacement) > 60) {
             angleArea = 0;
             // so far away that it shouldn't even have a pid working
-            turretMotor.setPower(0.65 * Math.signum(displacement));
+            turretMotor.setPower(0.8 * Math.signum(displacement));
         } else {
             if (Math.signum(angleArea) != Math.signum(displacement)) {
                 // overshoots, sets angle area to 0
                 angleArea = 0;
             } else {
                 // updates area
-                angleArea += timeChange * angleArea;
+                angleArea += timeChange * displacement;
             }
 
-            double Kp = 0.1;
-            double Ki = 0.008;
+            double Kp = 0.015;
+            double Ki = 0.0053;
             if (Math.abs(displacement) > 1.0) {
                 turretMotor.setPower(Kp * displacement + Ki * angleArea);
             } else {

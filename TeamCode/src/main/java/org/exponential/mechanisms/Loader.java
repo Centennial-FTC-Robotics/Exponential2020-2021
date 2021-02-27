@@ -32,14 +32,14 @@ public class Loader implements Mechanism {
     public void resting() { loaderServo.setPosition(DEFAULT_POSITION); }
     public void loadAndUnload() {
         load();
-        opMode.sleep(120);
+        opMode.sleep(100);
         unload();
     }
 
     public void loadAllRings() {
         for (int i = 0; i < 3; i++) {
             loadAndUnload();
-            opMode.sleep(100);
+            opMode.sleep(125);
         }
 
     }

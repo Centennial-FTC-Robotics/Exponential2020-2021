@@ -23,6 +23,7 @@ public class CalculateVelAndAccel extends LinearOpMode {
         expo.odometry.initialize(this);
         DriveTrainParametric drive = (DriveTrainParametric) (expo.drivetrain = new DriveTrainParametric(expo.odometry));
         expo.drivetrain.initialize(this);
+        expo.intake.initialize(this);
 
         waitForStart();
 
@@ -47,7 +48,9 @@ public class CalculateVelAndAccel extends LinearOpMode {
             maxYAccel = Math.max((currentRobotVel[1] - robotVel[1]) / timeDiff, maxYAccel);
             maxAngleAccel = Math.max((currentRobotVel[2] - robotVel[2]) / timeDiff, maxAngleAccel);
 
-
+            if (gamepad1.left_trigger > 0) {
+                expo.intake.outtake();
+            }
             if (gamepad1.a && !gamepad1.start) {
                 fieldCentric = !fieldCentric;
             }

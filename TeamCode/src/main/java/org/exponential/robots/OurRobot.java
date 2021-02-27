@@ -183,7 +183,7 @@ public class OurRobot implements Robot {
     public void loadAndUnloadAllRings() {
         for (int i = 0; i < 2; i++) {
             loader.loadAndUnload();
-            opMode.sleep(210);
+            opMode.sleep(110);
         }
         shooter.readjustHighGoalPower();
         loader.loadAndUnload();

@@ -47,7 +47,7 @@ public class Shooter implements Mechanism {
     }
 
     public void shootAtHighGoal() {
-        setPower(/*.368*/.375);
+        setPower(/*.368*/.3735);
     }
 
     public void readjustHighGoalPower() {

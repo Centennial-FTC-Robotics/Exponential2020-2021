@@ -162,13 +162,13 @@ public class RedRightSpline extends LinearOpMode {
             robot.drivetrain.moveTo(36, -18, 270); */
             //pickup rings from starter stack
             robot.intake.outtake();  //should be intake, encoders are weird
-            robot.drivetrain.moveTo(36, -15, 270);
+            robot.drivetrain.moveTo(36, -13, 270);
             robot.drivetrain.performBrake();
 
-            robot.drivetrain.moveTo(36, -17, 270);
+            robot.drivetrain.moveTo(36, -14.5, 270);
             robot.drivetrain.performBrake();
 
-            robot.drivetrain.moveTo(36, -19, 270);
+            robot.drivetrain.moveTo(36, -16, 270);
             robot.drivetrain.performBrake();
 
 
@@ -178,9 +178,20 @@ public class RedRightSpline extends LinearOpMode {
             //shoot the newly picked up rings
             robot.shootAtHighGoal("red");
             //pick up the rest of the rings
-            robot.drivetrain.moveTo(36, -24, 270);
+            robot.odometry.offsetXPos(1.5);
+            robot.drivetrain.moveTo(36, -20, 270);
+            robot.drivetrain.performBrake();
+
+            robot.drivetrain.moveTo(36, -21.8, 270);
+            robot.drivetrain.performBrake();
+
+            robot.drivetrain.moveTo(36, -23, 270);
+            robot.drivetrain.performBrake();
             //robot.drivetrain.performBrake();
-            sleep(750);
+            sleep(850);;
+
+            robot.odometry.offsetXPos(2);
+            robot.odometry.offsetYPos(-1.5);
             robot.shootAtHighGoal("red");
             robot.intake.stop();
         }
@@ -204,7 +215,7 @@ public class RedRightSpline extends LinearOpMode {
             //robot.drivetrain.moveTo(11, -49, 270);
             robot.drivetrain.moveToStraight(14, -44);
         } else {
-            robot.drivetrain.moveToStraight(15, -43);
+            robot.drivetrain.moveToStraight(15.5, -44);
             //robot.drivetrain.moveTo(11, -49, 270);
 
         }

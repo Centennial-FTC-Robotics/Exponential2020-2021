@@ -45,6 +45,7 @@ public class TurretTeleOp extends LinearOpMode {
         } else {
             initialAngle = robot.odometry.getAngle() + 90;
         }*/
+        robot.loader.resting();
         robot.setUpServos();
         robot.turret.pointToReloadPosition();
         boolean raised = true;
@@ -56,16 +57,15 @@ public class TurretTeleOp extends LinearOpMode {
             // uncomment to change to robot centric
             /*initialAngle = 0;
             currentAngle = 0;*/
-            xPos = robot.odometry.getxPos();
-            yPos = robot. odometry. getyPos();
+
             if (gamepad2.dpad_up) {
                 //Aiming straight at high goal or power shot
-                robot.turret.setTarget(xPos, yPos + 40);
-                robot.turret.pointAtTarget();
+                robot.turret.setTargetAngle(90);
+                robot.turret.pointAtAngle();
             } else if (gamepad2.dpad_down){
                 //Aiming from the middle to high goal
-                robot.turret.setTarget(xPos + 18, yPos + 40);
-                robot.turret.pointAtTarget();
+                robot.turret.setTargetAngle(87);
+                robot.turret.pointAtAngle();
             } else if (gamepad2.dpad_right) {
                 //aim to the right power shot from middle
                 robot.turret.setTarget(xPos + 7, yPos + 40);
@@ -133,14 +133,15 @@ public class TurretTeleOp extends LinearOpMode {
             }
 
             if (gamepad1.right_bumper) {
-                rotatedX = 0;
-                rotatedY = 0;
-                inputRightX = 0;
+                robot.drivetrain.performBrake();
 
                 robot.shooter.shootAtHighGoal();
-                sleep(1000);
-                robot.loadAndUnloadAllRings();
+                robot.turret.setTarget(xPos, yPos + 40);
+                robot.turret.pointAtTarget();
 
+            } else if (gamepad1.dpad_left) {
+                robot.loadAndUnloadAllRings();
+                robot.turret.pointToReloadPosition();
             } else {
                 robot.shooter.setPower(0);
             }
@@ -225,6 +226,8 @@ public class TurretTeleOp extends LinearOpMode {
                 robot.drivetrain.moveTo(17, -6, 270);
 
             }*/
+            telemetry.addData("xVel", robot.odometry.getxVel());
+            telemetry.addData("xVel", robot.odometry.getyVel());
             telemetry.addData("bumper", gamepad2.right_bumper);
             telemetry.update();
 

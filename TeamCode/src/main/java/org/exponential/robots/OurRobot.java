@@ -187,6 +187,7 @@ public class OurRobot implements Robot {
         }
         shooter.readjustHighGoalPower();
         loader.loadAndUnload();
+        loader.resting();
     }
 
     public double headingRotation(double targetAngle) {
@@ -205,7 +206,10 @@ public class OurRobot implements Robot {
         turret.setTarget (odometry.getxPos() + xOffset, odometry.getyPos() + yOffset);
         turret.readjustTurretAngle();
         turret.pointAtTarget();
+        turret.readjustTurretAngle();
     }
+
+
 
     public void turretShootThree () {
         loadAndUnloadAllRings();
@@ -217,7 +221,7 @@ public class OurRobot implements Robot {
     public void shootThreeFromDistance(double motorPower) {
         for (int i = 0; i < 2; i++) {
             loader.loadAndUnload();
-            opMode.sleep(100);
+            opMode.sleep(70);
         }
         shooter.adjustedReadjustHighGoal(motorPower);
         loader.loadAndUnload();

@@ -92,16 +92,15 @@ public class Turret implements Mechanism, Runnable {
             targetAngleRelativeToRobot = IMU.normalize(
                     Math.toDegrees(Math.atan2(targetYValue - drivetrain.positioning.yPos,
                             targetXValue - drivetrain.positioning.xPos)) - drivetrain.positioning.angle + 180);
-            if (targetAngleRelativeToRobot > 180) {
-                targetAngleRelativeToRobot = 180;
-            } else if (targetAngleRelativeToRobot < -180) {
-                targetAngleRelativeToRobot = -180;
-            }
         } else if (currentCommand == POINT_AT_ANGLE) {
             targetAngleRelativeToRobot = IMU.normalize(targetAngle + 180 - drivetrain.positioning.getAngle());
         }
         currentAngle = (turretMotor.getCurrentPosition() - encCountAtAngleZero) / ENC_PER_DEGREE;
-
+        if (targetAngleRelativeToRobot > 180) {
+            targetAngleRelativeToRobot = 180;
+        } else if (targetAngleRelativeToRobot < -150) {
+            targetAngleRelativeToRobot = -150;
+        }
         // PID Stuff
         double displacement = IMU.normalize(targetAngleRelativeToRobot) - currentAngle;
         double timeChange = -previousTime + (previousTime = timer.seconds());
@@ -118,9 +117,9 @@ public class Turret implements Mechanism, Runnable {
                 angleArea += timeChange * displacement;
             }
 
-            double Kp = 0.015;
-            double Ki = 0.0053;
-            if (Math.abs(displacement) > 1.0) {
+            double Kp = 0.014;
+            double Ki = 0.008;
+            if (Math.abs(displacement) > .5) {
                 turretMotor.setPower(Kp * displacement + Ki * angleArea);
             } else {
                 turretMotor.setPower(0);

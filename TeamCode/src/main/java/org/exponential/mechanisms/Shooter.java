@@ -12,7 +12,7 @@ public class Shooter implements Mechanism {
 
     DcMotorEx shooterMotor;
 
-    public static final double NEW_P = 22;
+    public static final double NEW_P = 23;
     public static final double NEW_I = 3.85;
     public static final double NEW_D = 3.55;
 
@@ -63,6 +63,6 @@ public class Shooter implements Mechanism {
 
     public void adjustedReadjustHighGoal (double adjustment) {setPower (adjustment - .03); }
 
-    public void adjustedPowerShot (double adjustment) { setPower (adjustment - .013); }
+    public void adjustedPowerShot () { setPower (.343); }
 
 }

@@ -18,7 +18,7 @@ public class TurretTeleOp extends LinearOpMode {
     ElapsedTime wobbleToggleTimer = new ElapsedTime();
     boolean wobbleState = true;
     ElapsedTime turretTimer = new ElapsedTime();
-    double shooterInaccuracy = 0;
+    double turretInaccuracy = 0;
     ElapsedTime shooterTimer = new ElapsedTime();
     double headingRotationPower = 0;
     double xPos;
@@ -30,59 +30,90 @@ public class TurretTeleOp extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         waitForStart();
-
         robot = new OurRobot();
+        OurRobot expo = robot;
         robot.initialize(this);
         //comment out this line for non transition (testing) purposes
         //robot.loadPositions();
 
 
         //comment out the following line for auto to teleop transitions
-        robot.odometry.setPosition(0, 0, 90);
+        //robot.odometry.setPosition(0, 0, 90);
 
-        /*if (side.equals("red")) {
-            initialAngle = robot.odometry.getAngle() + 270;  // +270 so that the controls are field centric from the red drivers' perspective
+        if (side.equals("red")) {
+            initialAngle = robot.odometry.getAngle() + 90;  // +270 so that the controls are field centric from the red drivers' perspective
         } else {
-            initialAngle = robot.odometry.getAngle() + 90;
-        }*/
+            initialAngle = robot.odometry.getAngle() + 270;
+        }
         robot.loader.resting();
         robot.setUpServos();
         robot.turret.pointToReloadPosition();
         boolean raised = true;
         boolean clamped = true;
+        double targetAngle = 180;
         while (opModeIsActive()) {
-            robot.odometry.update();
-            currentAngle = robot.odometry.getAngle();
 
-            // uncomment to change to robot centric
-            /*initialAngle = 0;
-            currentAngle = 0;*/
+            expo.odometry.update();
+            expo.turret.readjustTurretAngle();
 
             if (gamepad2.dpad_up) {
+                robot.shooter.shootAtHighGoal();
                 //Aiming straight at high goal or power shot
-                robot.turret.setTargetAngle(90);
+                robot.turret.setTargetAngle(180 + turretInaccuracy);
                 robot.turret.pointAtAngle();
-            } else if (gamepad2.dpad_down){
+            } else if (gamepad2.dpad_down) {
                 //Aiming from the middle to high goal
-                robot.turret.setTargetAngle(87);
+                robot.turret.setTargetAngle(170);
                 robot.turret.pointAtAngle();
-            } else if (gamepad2.dpad_right) {
-                //aim to the right power shot from middle
-                robot.turret.setTarget(xPos + 7, yPos + 40);
-                robot.turret.pointAtTarget();
+            } else if (gamepad2.a) {
+                robot.shooter.shootAtPowerShot();
+                sleep(400);
+                robot.turret.setTargetAngle(173.6);
+                robot.turret.pointAtAngle();
+                sleep(300);
+                robot.loader.loadAndUnload();
+
+                robot.turret.setTargetAngle(166);
+                robot.turret.pointAtAngle();
+                sleep(300);
+                robot.loader.loadAndUnload();
+
+                robot.turret.setTargetAngle(161);
+                robot.turret.pointAtAngle();
+                sleep(300);
+                robot.loader.loadAndUnload();
+            } else if (gamepad2.left_bumper) {
+                robot.turret.pointToReloadPosition();
+                expo.shooter.stopShooting();
+            }
+
+
+            if (gamepad2.dpad_right) {
+                    if (turretTimer.milliseconds() > 150) {
+                        turretInaccuracy -= 5;
+                        robot.turret.setTargetAngle(180 + turretInaccuracy);
+                        turretTimer.reset();
+                    }
+                robot.turret.pointAtAngle();
             } else if (gamepad2.dpad_left) {
                 //aim to the left power shot from middle
-                robot.turret.setTarget(xPos - 7, yPos + 40);
-                robot.turret.pointAtTarget();
-            }else if (gamepad2.left_bumper) {
-                robot.turret.pointToReloadPosition();
+                if (turretTimer.milliseconds() > 150) {
+                    turretInaccuracy += 5;
+                    robot.turret.setTargetAngle(180 + turretInaccuracy);
+                    turretTimer.reset();
+                }
+                robot.turret.pointAtAngle();
+            } else if (turretTimer.milliseconds() > 5000) {
+                turretTimer.reset();
             }
+
+            currentAngle = robot.odometry.getAngle();
 
             double inputLeftX = gamepad1.left_stick_x;
             double inputLeftY = gamepad1.left_stick_y;
             double inputRightX = .5 * gamepad1.right_stick_x;
             double inputRightY = .5 * gamepad1.right_stick_y;
-            double reductionFactor = .5;
+            double reductionFactor = .3;
             // halve values
             if (gamepad1.left_bumper) {
                 inputLeftX *= reductionFactor;
@@ -90,14 +121,13 @@ public class TurretTeleOp extends LinearOpMode {
                 inputRightX *= reductionFactor;
                 inputRightY *= reductionFactor;
             }
-
             double theta = currentAngle - initialAngle;
             double rotatedX = inputLeftX * Math.cos(Math.toRadians(theta)) - inputLeftY * Math.sin(Math.toRadians(theta));
             double rotatedY = inputLeftX * Math.sin(Math.toRadians(theta)) + inputLeftY * Math.cos(Math.toRadians(theta));
 
-            if (gamepad1.right_trigger > 0 || gamepad2.left_stick_y < 0) {
+            if (gamepad1.right_trigger > 0) {
                 robot.intake.intake();
-            } else if (gamepad1.left_trigger > 0 || gamepad2.left_stick_y > 0) {
+            } else if (gamepad1.left_trigger > 0) {
                 //robot.intake.setPowerInput(-gamepad1.left_trigger);
                 robot.intake.outtake();
             } else {
@@ -120,17 +150,47 @@ public class TurretTeleOp extends LinearOpMode {
                 clamped = !clamped;
                 sleep(250);
             }
+
             if (gamepad1.x) {
-                headingRotationPower = robot.headingRotation(-90);
-            } else if (gamepad1.y) {
-                headingRotationPower = robot.headingRotation(180);
-            } else if (gamepad1.a) {
                 headingRotationPower = robot.headingRotation(0);
-            } else if (gamepad1.b) {
+            } else if (gamepad1.y) {
+                headingRotationPower = robot.headingRotation(-90);
+            } else if (gamepad1.a) {
                 headingRotationPower = robot.headingRotation(90);
+            } else if (gamepad1.b) {
+                headingRotationPower = robot.headingRotation(180);
             } else {
                 headingRotationPower = 0;
             }
+
+            if (gamepad2.y) {
+                robot.loadAndUnloadAllRings();
+            }
+
+            //single shot
+            if(gamepad2.x) {
+
+                robot.loader.loadAndUnload();
+                robot.loader.resting();
+            }
+            //triple shot
+            if (gamepad2.y) {
+                robot.turretShootThree();
+            }
+
+            if (gamepad2.right_bumper) {
+                robot.shooter.shootAtHighGoal();
+            } else if (gamepad2.right_trigger > 0) {
+                robot.shooter.shootAtPowerShot();
+            }
+
+            telemetry.addData("target angle (in terms of the field): ", targetAngle);
+            telemetry.addData("current angle (in terms of the robot): ", expo.turret.currentAngle);
+            telemetry.update();
+            robot.drivetrain.setPowerDriveMotors(getMotorPowers(rotatedX, rotatedY, inputRightX + headingRotationPower));
+        }
+        /*while (opModeIsActive()) {
+            robot.odometry.update();
 
             if (gamepad1.right_bumper) {
                 robot.drivetrain.performBrake();
@@ -153,9 +213,7 @@ public class TurretTeleOp extends LinearOpMode {
 
             }*/ //we already have another thing for b so I commented this out -John
             //Triple shot
-            /*if (gamepad2.y) {
-                robot.loadAndUnloadAllRings();
-            }
+            /*
 
             /* //Auto Power Shot
             } else if (gamepad2.x) {
@@ -189,50 +247,18 @@ public class TurretTeleOp extends LinearOpMode {
             //Reload position
 
 
-            //single shot
-            if(gamepad2.x) {
-                robot.drivetrain.performBrake();
-                robot.loader.loadAndUnload();
-            }
-            //triple shot
-            if (gamepad2.y) {
-                robot.drivetrain.performBrake();
-                robot.turretShootThree();
-            }
                 //turretState = "reload";
             /*if (gamepad1.right_bumper) {
                 robot.scoreWobbleGoal(side);
             }*/
-            if (gamepad2.right_bumper) {
-                robot.shooter.shootAtHighGoal();
-            } else if (gamepad2.right_trigger > 0) {
-                robot.shooter.shootAtPowerShot();
-            } else if (gamepad2.left_trigger > 0){
-                robot.shooter.stopShooting();
-            }
+            /*
 
-/*
-            if (gamepad2.dpad_up) {
-                 // aim at high goal
-                robot.drivetrain.moveTo(36, -6, 270);
-
-            } else if (gamepad2.dpad_left) { //left power shot
-                robot.drivetrain.moveTo(2, -6, 270);
-
-            } else if (gamepad2.dpad_down) { //center power shot
-                robot.drivetrain.moveTo(9.5, -6, 270);
-
-            } else if (gamepad2.dpad_right) { //right power shot
-                robot.drivetrain.moveTo(17, -6, 270);
-
-            }*/
+            telemetry.addData("turretMode", robot.turret.currentCommand);
             telemetry.addData("xVel", robot.odometry.getxVel());
             telemetry.addData("xVel", robot.odometry.getyVel());
             telemetry.addData("bumper", gamepad2.right_bumper);
             telemetry.update();
-
-                robot.drivetrain.setPowerDriveMotors(getMotorPowers(rotatedX, rotatedY, inputRightX + headingRotationPower));
-            }
+            }*/
             //robot.odometry.savePosition();
         }
 

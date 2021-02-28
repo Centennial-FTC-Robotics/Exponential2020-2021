@@ -128,13 +128,16 @@ public class RedRightSpline extends LinearOpMode {
         //ourRobot.shootPowerShotTargets("red");
 
         if (numRings == 1) {
-            robot.odometry.offsetXPos(3.5);
+            robot.odometry.offsetXPos(1.5);
         } if (numRings == 4) {
             //robot.odometry.offsetXPos(-3.5);
         }
         // if it's 0 rings, go for power shots instead
         if (numRings == 0) {
+            robot.odometry.offsetXPos(-5);
             robot.shootAtPowerShotTargets("red");
+            robot.odometry.offsetXPos(5);
+            robot.odometry.offsetYPos(1);
         } else {
             robot.shootAtHighGoal("red");  //ends at 38, -6
 
@@ -147,11 +150,11 @@ public class RedRightSpline extends LinearOpMode {
 
             robot.drivetrain.moveTo(36, -14, 270);
 
-            sleep(1600);
+            sleep(3000);
             robot.intake.stop();
             //shoot the newly picked up rings
             robot.shootAtHighGoal("red");
-
+            robot.odometry.offsetXPos(1);
             //robot.odometry.offsetXPos(-2);
         } else if (numRings == 4) {
             robot.shooter.shootAtHighGoal();
@@ -162,24 +165,72 @@ public class RedRightSpline extends LinearOpMode {
             robot.drivetrain.moveTo(36, -18, 270); */
             //pickup rings from starter stack
             robot.intake.outtake();  //should be intake, encoders are weird
-            robot.drivetrain.moveTo(36, -13, 270);
+
+            /*robot.drivetrain.moveTo(36, -13, 270);
             robot.drivetrain.performBrake();
 
             robot.drivetrain.moveTo(36, -14.5, 270);
             robot.drivetrain.performBrake();
 
             robot.drivetrain.moveTo(36, -16, 270);
-            robot.drivetrain.performBrake();
+            robot.drivetrain.performBrake();*/
 
+            spline = new ArrayList<CubicSpline.CubicSplinePoint>();
+            // starting on rightmost red tape, facing left
+            state = new State();
+            state.fieldX = robot.odometry.getxPos();
+            state.fieldY = robot.odometry.getyPos();
+            state.angle = 270;
+            state.velX = 0;
+            state.velY = 0;
+            state.angleVel = 0;
+            spline.add(new CubicSpline.CubicSplinePoint(state, 0));
+
+
+            // go to gap between rings and wall (going backwards, wobble goal is on left of robot)
+            state = new State();
+            state.fieldX = 36;
+            state.fieldY = -18;
+            state.angle = 270;
+            state.velX = 0;
+            state.velY = -4;
+            state.angleVel = 0;
+            spline.add(new CubicSpline.CubicSplinePoint(state, 1.5));
+
+            ((DriveTrainParametric)(robot.drivetrain)).moveAlongParametricEq(new CubicSpline(spline));
+            //moving back and forth for intaking 1st and 2nd rings
+            robot.drivetrain.moveTo(robot.odometry.getxPos(),robot.odometry.getyPos() + 1, robot.odometry.getAngle(), 2);
+
+            state.fieldX = robot.odometry.getxPos();
+            state.fieldY = robot.odometry.getyPos();
+            state.angle = 270;
+            state.velX = 0;
+            state.velY = 0;
+            state.angleVel = 0;
+            spline.add(new CubicSpline.CubicSplinePoint(state, 0));
+
+
+            // go to gap between rings and wall (going backwards, wobble goal is on left of robot)
+            state = new State();
+            state.fieldX = 36;
+            state.fieldY = -19;
+            state.angle = 270;
+            state.velX = 0;
+            state.velY = -4;
+            state.angleVel = 0;
+            spline.add(new CubicSpline.CubicSplinePoint(state, 1.5));
+
+            ((DriveTrainParametric)(robot.drivetrain)).moveAlongParametricEq(new CubicSpline(spline));
 
             //robot.drivetrain.performBrake();
             //sleep(1100);
             // robot.intake.stop();
             //shoot the newly picked up rings
+            robot.odometry.offsetYPos(-1);
             robot.shootAtHighGoal("red");
             //pick up the rest of the rings
             robot.odometry.offsetXPos(1.5);
-            robot.drivetrain.moveTo(36, -20, 270);
+            /*robot.drivetrain.moveTo(36, -20, 270);
             robot.drivetrain.performBrake();
 
             robot.drivetrain.moveTo(36, -21.8, 270);
@@ -188,7 +239,55 @@ public class RedRightSpline extends LinearOpMode {
             robot.drivetrain.moveTo(36, -23, 270);
             robot.drivetrain.performBrake();
             //robot.drivetrain.performBrake();
-            sleep(850);;
+            sleep(850);*/
+            spline = new ArrayList<CubicSpline.CubicSplinePoint>();
+
+            state = new State();
+            state.fieldX = robot.odometry.getxPos();
+            state.fieldY = robot.odometry.getyPos();
+            state.angle = 270;
+            state.velX = 0;
+            state.velY = 0;
+            state.angleVel = 0;
+            spline.add(new CubicSpline.CubicSplinePoint(state, 0));
+
+            // go to gap between rings and wall (going backwards, wobble goal is on left of robot)
+            state = new State();
+            state.fieldX = 36;
+            state.fieldY = -26;
+            state.angle = 270;
+            state.velX = 0;
+            state.velY = -4;
+            state.angleVel = 0;
+            spline.add(new CubicSpline.CubicSplinePoint(state, 1.5));
+
+            ((DriveTrainParametric)(robot.drivetrain)).moveAlongParametricEq(new CubicSpline(spline));
+
+            //moving back and forth for intaking 3rd and 4tf rings
+            robot.drivetrain.moveTo(robot.odometry.getxPos(),robot.odometry.getyPos() + 2, robot.odometry.getAngle(), 2);
+
+            spline = new ArrayList<CubicSpline.CubicSplinePoint>();
+
+            state = new State();
+            state.fieldX = robot.odometry.getxPos();
+            state.fieldY = robot.odometry.getyPos();
+            state.angle = 270;
+            state.velX = 0;
+            state.velY = 0;
+            state.angleVel = 0;
+            spline.add(new CubicSpline.CubicSplinePoint(state, 0));
+
+            // go to gap between rings and wall (going backwards, wobble goal is on left of robot)
+            state = new State();
+            state.fieldX = 36;
+            state.fieldY = -28;
+            state.angle = 270;
+            state.velX = 0;
+            state.velY = -4;
+            state.angleVel = 0;
+            spline.add(new CubicSpline.CubicSplinePoint(state, 1.5));
+
+            ((DriveTrainParametric)(robot.drivetrain)).moveAlongParametricEq(new CubicSpline(spline));
 
             robot.odometry.offsetXPos(2);
             robot.odometry.offsetYPos(-1.5);

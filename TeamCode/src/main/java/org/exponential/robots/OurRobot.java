@@ -95,9 +95,9 @@ public class OurRobot implements Robot {
     public void shootAtPowerShotTargets(String side) {
         double[] targetXPositions;
         if (side.equals("red")) {
-            targetXPositions = new double[]{2, 9.5, 17};
+            targetXPositions = new double[]{3, 10.5, 18.75};
         } else {
-            targetXPositions = new double[]{-2, -9.5, -17};
+            targetXPositions = new double[]{-3, -10.5, -18.75};
         }
 
         for (double targetXPosition : targetXPositions) {
@@ -181,19 +181,21 @@ public class OurRobot implements Robot {
     }
 
     public void loadAndUnloadAllRings() {
+        drivetrain.performBrake();
         for (int i = 0; i < 2; i++) {
             loader.loadAndUnload();
-            opMode.sleep(110);
+            opMode.sleep(150);
         }
         shooter.readjustHighGoalPower();
         loader.loadAndUnload();
         loader.resting();
+        turret.pointToReloadPosition();
     }
 
     public double headingRotation(double targetAngle) {
-        double kP = .008;
+        double kP = .013;
         double rotationPower = 0;
-        double tolerance = 3;
+        double tolerance = .5;
         odometry.update();
         if (Math.abs(IMU.normalize(targetAngle - IMU.normalize(odometry.getAngle()))) > tolerance) {
             rotationPower = -kP * (IMU.normalize(targetAngle - IMU.normalize(odometry.getAngle())));
@@ -215,6 +217,11 @@ public class OurRobot implements Robot {
         loadAndUnloadAllRings();
         opMode.sleep(100);
         turret.pointToReloadPosition();
+    }
+
+    public void turretShootOne () {
+        drivetrain.performBrake();
+        loader.loadAndUnload();
     }
 
     //These methods are to shoot at different powers depending on distance

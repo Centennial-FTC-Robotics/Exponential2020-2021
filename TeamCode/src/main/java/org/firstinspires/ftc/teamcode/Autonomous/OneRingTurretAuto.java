@@ -22,6 +22,7 @@ public class OneRingTurretAuto extends LinearOpMode {
         robot.initialize(this);
         //ourRobot.camera.setCameraBounds(300, 250, 150, 150);
         robot.camera.activate();
+
         waitForStart();
 
         int numRings = robot.camera.getNumberOfRings();

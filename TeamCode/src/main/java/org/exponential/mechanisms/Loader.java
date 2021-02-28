@@ -9,8 +9,8 @@ import org.exponential.superclasses.Mechanism;
 
 public class Loader implements Mechanism {
     public static final double LOAD_POSITION = 0;
-    public static final double DEFAULT_POSITION = .565;
-    public static final double UNLOAD_POSITION = 6;
+    public static final double DEFAULT_POSITION = .67;
+    public static final double UNLOAD_POSITION = .8;
     Servo loaderServo;
     LinearOpMode opMode;
 
@@ -32,14 +32,14 @@ public class Loader implements Mechanism {
     public void resting() { loaderServo.setPosition(DEFAULT_POSITION); }
     public void loadAndUnload() {
         load();
-        opMode.sleep(100);
+        opMode.sleep(90);
         unload();
     }
 
     public void loadAllRings() {
         for (int i = 0; i < 3; i++) {
             loadAndUnload();
-            opMode.sleep(125);
+            opMode.sleep(110);
         }
 
     }

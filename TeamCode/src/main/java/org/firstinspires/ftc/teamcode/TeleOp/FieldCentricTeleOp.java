@@ -45,7 +45,10 @@ public class FieldCentricTeleOp extends LinearOpMode {
         robot.setUpServos();
         boolean raised = true;
         boolean clamped = true;
+        robot.turret.pointToReloadPosition();
+
         while (opModeIsActive()) {
+            robot.turret.readjustTurretAngle();
             robot.odometry.update();
             currentAngle = robot.odometry.getAngle();
 
@@ -166,11 +169,23 @@ public class FieldCentricTeleOp extends LinearOpMode {
                 robot.loader.loadAndUnload();
             }
             if (gamepad2.a) {
-                robot.shootAtPowerShotTargets(side);
+                robot.loader.loadAndUnload();
+                sleep(100);
+                robot.shooter.adjustedPowerShot();
+
+                robot.drivetrain.moveTo(robot.odometry.getxPos() - 5, robot.odometry.getyPos(), 270);
+                robot.drivetrain.performBrake();
+                sleep(500);
+                robot.loader.loadAndUnload();
+
+                robot.drivetrain.moveTo(robot.odometry.getxPos() - 6.5, robot.odometry.getyPos(), 270);
+                robot.drivetrain.performBrake();
+                sleep(500);
+                robot.loader.loadAndUnload();
             }
-            if (gamepad2.b) {
+            /*if (gamepad2.b) {
                 robot.shootAtHighGoal(side);
-            }
+            }*/
             /*if (gamepad1.right_bumper) {
                 robot.scoreWobbleGoal(side);
             }*/

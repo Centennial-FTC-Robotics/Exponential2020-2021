@@ -14,6 +14,7 @@ public class WobbleGoalMover implements Mechanism {
     Servo clampServo;
 
     public static final double RAISE_POSITION = .0;
+    public static final double STANDBY_POSITION = 0.15;
     public static final double LOWER_POSITION = .45;
     public static final double CLAMP_POSITION = .6;
     public static final double RELEASE_POSITION = .2;
@@ -33,6 +34,8 @@ public class WobbleGoalMover implements Mechanism {
     public void release() {
         clampServo.setPosition(RELEASE_POSITION);
     }
+
+    public void standby() { clampServo.setPosition(STANDBY_POSITION);}
 
     public void raise() {
         raiseServo.setPosition(RAISE_POSITION);

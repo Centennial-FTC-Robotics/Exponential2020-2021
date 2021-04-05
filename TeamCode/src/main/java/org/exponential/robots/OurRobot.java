@@ -15,8 +15,11 @@ import org.exponential.mechanisms.Odometry;
 import org.exponential.mechanisms.Shooter;
 import org.exponential.mechanisms.Turret;
 import org.exponential.mechanisms.WobbleGoalMover;
+import org.exponential.mechanisms.parametricEQ.CubicSpline;
+import org.exponential.mechanisms.parametricEQ.State;
 import org.exponential.superclasses.Robot;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OurRobot implements Robot {
@@ -108,25 +111,6 @@ public class OurRobot implements Robot {
             loader.loadAndUnload();
         }
         shooter.stopShooting();
-    }
-
-    public void shootPowerShotTargetsTurret(String side) {
-        double turretTargetEncoders[];
-        shooter.shootAtPowerShot();
-        if (side.equals("red")) {
-            drivetrain.moveTo(12, -6, 270);
-            turretTargetEncoders = new double[]{turret.encCountAtAngleZero - 100,
-                    turret.encCountAtAngleZero,
-                    turret.encCountAtAngleZero + 100};
-        } else {
-            turretTargetEncoders = new double[]{};
-        }
-        for (double targetEncoderValue : turretTargetEncoders) {
-            turret.turretMotor.setTargetPosition((int) targetEncoderValue);
-            turret.turretMotor.setPower(1);
-            opMode.sleep(500);
-            loader.loadAndUnload();
-        }
     }
 
     public void shootAtHighGoal(String side) {
@@ -234,26 +218,67 @@ public class OurRobot implements Robot {
         loader.loadAndUnload();
     }
 
-    public void shootAtHighGoalFromDistance (String side) {
-        final double goalHeight = 0.91;
-        double goalXPosition;
-        double motorPower;
+    //Start at the wall and automaticall moves to shoot the first power shot
+    public void shootPowerShotTeleOp() {
+        shooter.shootAtPowerShot();
+        double xPos = odometry.getxPos();
+        double yPos = odometry.getyPos();
+        ArrayList<CubicSpline.CubicSplinePoint> spline = new ArrayList<CubicSpline.CubicSplinePoint>();
+        // starting on rightmost red tape, facing left
+        State state = new State();
+        state = new State();
+        state.fieldX = xPos;
+        state.fieldY = yPos;
+        state.angle = 270;
+        state.velX = 0;
+        state.velY = 0;
+        state.angleVel = 0;
+        spline.add(new CubicSpline.CubicSplinePoint(state, 0));
 
-        if (side.equals("red")) {
-            goalXPosition = 36;
-        } else {
-            goalXPosition = -36;
-        }
+        //Shoot left Power Shot
+        state = new State();
+        state.fieldX = xPos + 20;
+        state.fieldY = yPos;
+        state.angle = 270;
+        state.velX = 3;
+        state.velY = 0;
+        state.angleVel = 5;
+        spline.add(new CubicSpline.CubicSplinePoint(state, 3));
+        ((DriveTrainParametric)(drivetrain)).moveAlongParametricEq(new CubicSpline(spline));
 
-        double robotX = odometry.getxPos();
-        double robotY = odometry.getyPos();
+        drivetrain.turnTo(270,.5);
+        loader.loadAndUnload();
+    }
 
-        motorPower = distanceAdjustedPower(goalXPosition, goalHeight);
+    //Used after shooting the first power shot to shoot the middle, then the right power shots.
+    public void shootOtherPowerShot() {
+        shooter.shootAtPowerShot();
+        double xPos = odometry.getxPos();
+        double yPos = odometry.getyPos();
+        ArrayList<CubicSpline.CubicSplinePoint> spline = new ArrayList<CubicSpline.CubicSplinePoint>();
+        // starting on rightmost red tape, facing left
+        State state = new State();
+        state = new State();
+        state.fieldX = xPos;
+        state.fieldY = yPos;
+        state.angle = 270;
+        state.velX = 3;
+        state.velY = 0;
+        state.angleVel = 1;
+        spline.add(new CubicSpline.CubicSplinePoint(state, 0));
 
-        shooter.adjustedHighGoal(motorPower);
+        //Shoot left Power Shot
+        state = new State();
+        state.fieldX = xPos + 7;
+        state.fieldY = yPos;
+        state.angle = 270;
+        state.velX = 4;
+        state.velY = .5;
+        state.angleVel = 3;
+        spline.add(new CubicSpline.CubicSplinePoint(state, 1.3));
+        ((DriveTrainParametric)(drivetrain)).moveAlongParametricEq(new CubicSpline(spline));
 
-        shootThreeFromDistance(motorPower);
-        shooter.stopShooting();
+        loader.loadAndUnload();
     }
 
     public double distanceAdjustedPower (double targetX, double targetHeight) {

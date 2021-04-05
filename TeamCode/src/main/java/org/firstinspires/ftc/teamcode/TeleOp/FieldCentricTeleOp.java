@@ -92,6 +92,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
             } else if (gamepad1.dpad_right) {
                 if (clamped) {
                     robot.wobbleGoalMover.release();
+                    robot.wobbleGoalMover.standby();
                 } else {
                     robot.wobbleGoalMover.clamp();
                 }
@@ -169,7 +170,10 @@ public class FieldCentricTeleOp extends LinearOpMode {
                 robot.loader.loadAndUnload();
             }
             if (gamepad2.a) {
-                robot.loader.loadAndUnload();
+                robot.shootPowerShotTeleOp();
+                robot.shootOtherPowerShot();
+                robot.shootOtherPowerShot();
+                /*robot.loader.loadAndUnload();
                 sleep(100);
                 robot.shooter.adjustedPowerShot();
 
@@ -181,7 +185,7 @@ public class FieldCentricTeleOp extends LinearOpMode {
                 robot.drivetrain.moveTo(robot.odometry.getxPos() - 6.5, robot.odometry.getyPos(), 270);
                 robot.drivetrain.performBrake();
                 sleep(500);
-                robot.loader.loadAndUnload();
+                robot.loader.loadAndUnload();*/
             }
             /*if (gamepad2.b) {
                 robot.shootAtHighGoal(side);

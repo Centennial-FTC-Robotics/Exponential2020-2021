@@ -113,6 +113,7 @@ public class RedRightSpline extends LinearOpMode {
             state.angleVel = 0;
             spline.add(new CubicSpline.CubicSplinePoint(state, 4.15));
 
+            robot.odometry.offsetXPos(-3);
         }
         ((DriveTrainParametric)(robot.drivetrain)).moveAlongParametricEq(new CubicSpline(spline));
         
@@ -293,6 +294,8 @@ public class RedRightSpline extends LinearOpMode {
             robot.odometry.offsetYPos(-1.5);
             robot.shootAtHighGoal("red");
             robot.intake.stop();
+
+            robot.odometry.offsetXPos(3);
         }
 
         //shootathighgoal moves robot to 36, -6
